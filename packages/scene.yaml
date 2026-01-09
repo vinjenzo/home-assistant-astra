@@ -279,6 +279,13 @@ template:
                   'led_camera_da_letto': 100
                 }
               },
+              'bed_evening': {
+                'name': 'Letto Sera',
+                'brightness': {
+                  'led_sopra_al_letto': 45,
+                  'led_camera_da_letto': 59
+                }
+              },
               'bed_soft': {
                 'name': 'Letto Relax',
                 'brightness': {

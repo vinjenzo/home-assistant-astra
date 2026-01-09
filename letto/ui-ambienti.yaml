@@ -1,1 +1,209 @@
-l
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Giorno
+        icon: mdi:white-balance-sunny
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_bed_day"
+              friendly_name: "Letto Giorno"
+        styles:
+          card:
+            - background: rgba(255,245,157,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,204,0,0.10)
+          icon:
+            - width: 60px
+            - color: "#fff59d"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Sera
+        icon: mdi:weather-sunset
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_bed_evening"
+              friendly_name: "Letto Sera"
+        styles:
+          card:
+            - background: rgba(255,204,128,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,153,51,0.10)
+          icon:
+            - width: 60px
+            - color: "#ffb74d"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Lettura
+        icon: mdi:book-open-page-variant
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_bed_read"
+              friendly_name: "Letto Lettura"
+        styles:
+          card:
+            - background: rgba(255,245,230,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,200,120,0.10)
+          icon:
+            - width: 60px
+            - color: "#ffcc80"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Relax
+        icon: mdi:bed-queen-outline
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_bed_relax"
+              friendly_name: "Letto Relax"
+        styles:
+          card:
+            - background: rgba(128,203,196,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(64,160,150,0.10)
+          icon:
+            - width: 60px
+            - color: "#80cbc4"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Notte
+        icon: mdi:weather-night
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_bed_night"
+              friendly_name: "Letto Notte"
+        styles:
+          card:
+            - background: rgba(33,33,33,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(55,71,79,0.12)
+          icon:
+            - width: 60px
+            - color: "#90a4ae"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Spegni
+        icon: mdi:power-off
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.scene_bed_off
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,255,255,0.15)
+          icon:
+            - width: 60px
+            - color: "#ef9a9a"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none

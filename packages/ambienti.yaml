@@ -63,6 +63,7 @@ script:
             - script.scene_camera_off
             # Bed scenes
             - script.scene_bed_day
+            - script.scene_bed_evening
             - script.scene_bed_read
             - script.scene_bed_relax
             - script.scene_bed_night
@@ -369,6 +370,13 @@ script:
       - service: script.set_ambiente
         data:
           scene_key: "bed_day"
+
+  scene_bed_evening:
+    alias: "Letto Sera"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_evening"
 
   scene_bed_read:
     alias: "Letto Lettura"
