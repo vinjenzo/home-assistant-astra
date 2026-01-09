@@ -180,6 +180,24 @@ template:
                   'tv': 2
                 }
               },
+              'livingroom_computer_hdmi1': {
+                'name': 'Soggiorno Computer HDMI 1',
+                'brightness': {
+                  'tv': 2
+                }
+              },
+              'livingroom_computer_hdmi2': {
+                'name': 'Soggiorno Computer HDMI 2',
+                'brightness': {
+                  'tv': 2
+                }
+              },
+              'livingroom_computer_hdmi3': {
+                'name': 'Soggiorno Computer HDMI 3',
+                'brightness': {
+                  'tv': 2
+                }
+              },
               'livingroom_night': {
                 'name': 'Soggiorno Notte',
                 'brightness': {

@@ -46,6 +46,10 @@ script:
             - script.scene_livingroom_balanced
             - script.scene_livingroom_football
             - script.scene_livingroom_computer
+            - script.scene_livingroom_computer_hdmi1
+            - script.scene_livingroom_computer_hdmi2
+            - script.scene_livingroom_computer_hdmi3
+            - script.scene_livingroom_computer_hdmi4
             - script.scene_livingroom_night
             - script.scene_livingroom_off
             # Kitchen scenes
@@ -246,14 +250,104 @@ script:
           - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
             timeout: "00:00:10"
           - delay:
-              seconds: 2
-      # Imposta source su HDMI 1
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
+              seconds: 3
+      # Delay aggiuntivo per stabilizzazione
+      - delay:
+          seconds: 1
+      # Invia HOME + Seleziona HDMI 2
+      - service: script.select_hdmi_2
+      # Imposta luci computer
+      - service: script.set_ambiente
         data:
-          source: "HDMI1"
-        continue_on_error: true
+          scene_key: "livingroom_computer"
+
+  scene_livingroom_computer_hdmi1:
+    alias: "Computer HDMI 1"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 3
+      # Delay aggiuntivo per stabilizzazione
+      - delay:
+          seconds: 1
+      # Invia HOME + Seleziona HDMI 1
+      - service: script.select_hdmi_1
+      # Imposta luci computer
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_computer"
+
+  scene_livingroom_computer_hdmi2:
+    alias: "Computer HDMI 2"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 3
+      # Delay aggiuntivo per stabilizzazione
+      - delay:
+          seconds: 1
+      # Invia HOME + Seleziona HDMI 2
+      - service: script.select_hdmi_2
+      # Imposta luci computer
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_computer"
+
+  scene_livingroom_computer_hdmi3:
+    alias: "Computer HDMI 3"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 3
+      # Delay aggiuntivo per stabilizzazione
+      - delay:
+          seconds: 1
+      # Invia HOME + Seleziona HDMI 3
+      - service: script.select_hdmi_3
+      # Imposta luci computer
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_computer"
+
+  scene_livingroom_computer_hdmi4:
+    alias: "Computer HDMI 4"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 3
+      # Delay aggiuntivo per stabilizzazione
+      - delay:
+          seconds: 1
+      # Invia HOME + Seleziona HDMI 4
+      - service: script.select_hdmi_4
       # Imposta luci computer
       - service: script.set_ambiente
         data:

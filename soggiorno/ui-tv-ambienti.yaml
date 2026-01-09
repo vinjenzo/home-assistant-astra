@@ -117,3 +117,122 @@ cards:
             - cursor: default
         tap_action:
           action: none
+  # ============================================================
+  # HDMI 1, 2, 3 - RIGA SOTTOSTANTE
+  # ============================================================
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: HDMI 1
+        icon: mdi:hdmi-port
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_computer_hdmi1
+              friendly_name: Soggiorno Computer HDMI 1
+        styles:
+          card:
+            - background: rgba(33,150,243,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(33,150,243,0.12)
+          icon:
+            - width: 60px
+            - color: "#42a5f5"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: HDMI 2
+        icon: mdi:hdmi-port
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_computer_hdmi2
+              friendly_name: Soggiorno Computer HDMI 2
+        styles:
+          card:
+            - background: rgba(76,175,80,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(76,175,80,0.12)
+          icon:
+            - width: 60px
+            - color: "#81c784"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: HDMI 3
+        icon: mdi:hdmi-port
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_computer_hdmi3
+              friendly_name: Soggiorno Computer HDMI 3
+        styles:
+          card:
+            - background: rgba(255,152,0,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,152,0,0.12)
+          icon:
+            - width: 60px
+            - color: "#ffb74d"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: HDMI 4
+        icon: mdi:hdmi-port
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_computer_hdmi4
+              friendly_name: Soggiorno Computer HDMI 4
+        styles:
+          card:
+            - background: rgba(156,39,176,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(156,39,176,0.12)
+          icon:
+            - width: 60px
+            - color: "#ab47bc"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
