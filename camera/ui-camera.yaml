@@ -21,7 +21,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Luce Camera';

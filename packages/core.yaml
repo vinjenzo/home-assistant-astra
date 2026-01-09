@@ -314,6 +314,7 @@ script:
 
             - wait_template: "{{ is_state('script.set_zone_brightness', 'off') }}"
               timeout: "00:00:10"
+              continue_on_timeout: true
 
             - delay: "00:00:00.5"
 
@@ -340,6 +341,7 @@ script:
             sequence:
               - wait_template: "{{ is_state('light.luci','off') }}"
                 timeout: "00:00:10"
+                continue_on_timeout: true
 
               - choose:
                   - conditions: "{{ not is_state('light.luci','off') }}"
@@ -353,3 +355,9 @@ script:
                 data:
                   entity_id: input_text.ultima_zona_led
                   value: "OFF"
+
+      # Safety: ensure bulk mode is cleared even if something above misbehaves
+      - delay: "00:00:01"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode

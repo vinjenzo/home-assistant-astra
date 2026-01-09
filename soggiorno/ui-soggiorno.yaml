@@ -25,7 +25,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Soggiorno';
@@ -90,7 +89,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Gregg Soggiorno';
@@ -182,7 +180,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_tv_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'TV';
@@ -247,7 +244,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_museo_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Museo';
@@ -312,7 +308,6 @@ cards:
           action: call-service
           service: |
             [[[
-              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
               const zonaAccesa = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Libreria';
