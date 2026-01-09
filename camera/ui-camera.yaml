@@ -96,130 +96,167 @@ cards:
       - entity: binary_sensor.zona_camera_slider_visibile
         state: "on"
     card:
-      type: horizontal-stack
+      type: vertical-stack
       cards:
-        - type: custom:button-card
-          styles:
-            card:
-              - width: 12px
-              - background: transparent
-              - border: none
-              - box-shadow: none
-              - padding: 0
-              - cursor: default
-          tap_action:
-            action: none
-        - type: light
-          entity: light.luci
-          name: Luci Camera
+        # ⭐ PRESET ORIZZONTALI - ALTA/MEDIA/BASSA/SPEGNI
+        - type: horizontal-stack
+          cards:
+            - type: custom:button-card
+              styles:
+                card:
+                  - width: 12px
+                  - background: transparent
+                  - border: none
+                  - box-shadow: none
+                  - padding: 0
+                  - cursor: default
+                  - flex-shrink: 0
+              tap_action:
+                action: none
+            # ALTA
+            - type: custom:button-card
+              icon: mdi:brightness-7
+              tap_action:
+                action: call-service
+                service: |
+                  [[[ 
+                    return 'script.hw_room_led_high';
+                  ]]]
+              styles:
+                card:
+                  - background: rgba(255,255,255,0.06)
+                  - border-radius: 8px
+                  - border: 1px solid rgba(255,255,255,0.12)
+                  - padding: 8px
+                  - flex: 1
+                icon:
+                  - width: 24px
+                  - color: "#fff59d"
+
+            # MEDIA
+            - type: custom:button-card
+              icon: mdi:brightness-5
+              tap_action:
+                action: call-service
+                service: |
+                  [[[ 
+                    return 'script.hw_room_led_medium';
+                  ]]]
+              styles:
+                card:
+                  - background: rgba(255,255,255,0.06)
+                  - border-radius: 8px
+                  - border: 1px solid rgba(255,255,255,0.12)
+                  - padding: 8px
+                  - flex: 1
+                icon:
+                  - width: 24px
+                  - color: "#ffe082"
+
+            # BASSA
+            - type: custom:button-card
+              icon: mdi:brightness-3
+              tap_action:
+                action: call-service
+                service: |
+                  [[[ 
+                    return 'script.hw_room_led_low';
+                  ]]]
+              styles:
+                card:
+                  - background: rgba(255,255,255,0.06)
+                  - border-radius: 8px
+                  - border: 1px solid rgba(255,255,255,0.12)
+                  - padding: 8px
+                  - flex: 1
+                icon:
+                  - width: 24px
+                  - color: "#ffb74d"
+
+            # SPEGNI
+            - type: custom:button-card
+              icon: mdi:power-off
+              tap_action:
+                action: call-service
+                service: |
+                  [[[ 
+                    const zona = states['input_text.ultima_zona_led']?.state || 'Luce Camera';
+                    const binaries = {
+                      'Luce Camera': states['binary_sensor.zona_led_camera_accesa']?.state === 'on',
+                    };
+                    
+                    // Se la luce è già spenta, return noop
+                    if (!binaries[zona]) {
+                      return 'script.noop';
+                    }
+                    
+                    return 'script.hw_room_led_off';
+                  ]]]
+              styles:
+                card:
+                  - background: rgba(244,67,54,0.10)
+                  - border-radius: 8px
+                  - border: 1px solid rgba(244,67,54,0.25)
+                  - padding: 8px
+                  - flex: 1
+                icon:
+                  - width: 24px
+                  - color: "#ef5350"
+            - type: custom:button-card
+              styles:
+                card:
+                  - width: 12px
+                  - background: transparent
+                  - border: none
+                  - box-shadow: none
+                  - padding: 0
+                  - cursor: default
+                  - flex-shrink: 0
+              tap_action:
+                action: none
+
+        # ⭐ SLIDER
+        - type: horizontal-stack
           card_mod:
             style: |
               ha-card {
-                flex: 1 1 100% !important;
-                background: rgba(255,255,255,0.08) !important;
-                border-radius: 12px !important;
-                border: 1px solid rgba(255,255,255,0.15) !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
               }
-        - type: custom:button-card
-          styles:
-            card:
-              - width: 12px
-              - background: transparent
-              - border: none
-              - box-shadow: none
-              - padding: 0
-              - cursor: default
-          tap_action:
-            action: none
-
-  # ============================================================
-  # ⭐ PRESET (Bassa • Media • Alta) - sotto lo slider
-  # ============================================================
-  - type: conditional
-    conditions:
-      - entity: binary_sensor.zona_camera_slider_visibile
-        state: "on"
-    card:
-      type: horizontal-stack
-      cards:
-        - type: custom:button-card
-          styles:
-            card:
-              - width: 12px
-              - background: transparent
-              - border: none
-              - box-shadow: none
-              - padding: 0
-              - cursor: default
-          tap_action:
-            action: none
-        # ⭐ BASSA
-        - type: custom:button-card
-          name: Bassa
-          icon: mdi:brightness-3
-          tap_action:
-            action: call-service
-            service: script.hw_room_led_low
-          styles:
-            card:
-              - background: rgba(255,255,255,0.08)
-              - border-radius: 12px
-              - border: 1px solid rgba(255,255,255,0.15)
-            icon:
-              - width: 30px
-              - color: "#ffb74d"
-            name:
-              - color: white
-              - font-size: 13px
-              - margin-top: 6px
-
-        # ⭐ MEDIA
-        - type: custom:button-card
-          name: Media
-          icon: mdi:brightness-5
-          tap_action:
-            action: call-service
-            service: script.hw_room_led_medium
-          styles:
-            card:
-              - background: rgba(255,255,255,0.08)
-              - border-radius: 12px
-              - border: 1px solid rgba(255,255,255,0.15)
-            icon:
-              - width: 30px
-              - color: "#ffe082"
-            name:
-              - color: white
-              - font-size: 13px
-              - margin-top: 6px
-
-        # ⭐ ALTA
-        - type: custom:button-card
-          name: Alta
-          icon: mdi:brightness-7
-          tap_action:
-            action: call-service
-            service: script.hw_room_led_high
-          styles:
-            card:
-              - background: rgba(255,255,255,0.08)
-              - border-radius: 12px
-              - border: 1px solid rgba(255,255,255,0.15)
-            icon:
-              - width: 30px
-              - color: "#fff59d"
-            name:
-              - color: white
-              - font-size: 13px
-              - margin-top: 6px
-        - type: custom:button-card
-          styles:
-            card:
-              - width: 12px
-              - background: transparent
-              - border: none
-              - box-shadow: none
-              - padding: 0
-              - cursor: default
-          tap_action:
-            action: none
+          cards:
+            - type: custom:button-card
+              styles:
+                card:
+                  - width: 12px
+                  - background: transparent
+                  - border: none
+                  - box-shadow: none
+                  - padding: 0
+                  - cursor: default
+                  - flex-shrink: 0
+              tap_action:
+                action: none
+            - type: light
+              entity: light.luci
+              name: Luci Camera
+              card_mod:
+                style: |
+                  ha-card {
+                    flex: 1 1 100% !important;
+                    background: rgba(255,255,255,0.08) !important;
+                    border-radius: 12px !important;
+                    border: 1px solid rgba(255,255,255,0.15) !important;
+                  }
+            - type: custom:button-card
+              styles:
+                card:
+                  - width: 12px
+                  - background: transparent
+                  - border: none
+                  - box-shadow: none
+                  - padding: 0
+                  - cursor: default
+                  - flex-shrink: 0
+              tap_action:
+                action: none

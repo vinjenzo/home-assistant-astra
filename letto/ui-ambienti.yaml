@@ -26,12 +26,12 @@ cards:
               friendly_name: "Letto Giorno"
         styles:
           card:
-            - background: rgba(255,245,157,0.08)
+            - background: rgba(255,235,59,0.10)
             - border-radius: 12px
-            - border: 1px solid rgba(255,204,0,0.10)
+            - border: 1px solid rgba(255,235,59,0.20)
           icon:
             - width: 60px
-            - color: "#fff59d"
+            - color: "#ffeb3b"
           name:
             - color: white
             - font-size: 14px
@@ -49,12 +49,12 @@ cards:
               friendly_name: "Letto Sera"
         styles:
           card:
-            - background: rgba(255,204,128,0.08)
+            - background: rgba(255,152,0,0.10)
             - border-radius: 12px
-            - border: 1px solid rgba(255,153,51,0.10)
+            - border: 1px solid rgba(255,152,0,0.20)
           icon:
             - width: 60px
-            - color: "#ffb74d"
+            - color: "#ff9800"
           name:
             - color: white
             - font-size: 14px
@@ -96,12 +96,12 @@ cards:
               friendly_name: "Letto Lettura"
         styles:
           card:
-            - background: rgba(255,245,230,0.08)
+            - background: rgba(255,111,0,0.10)
             - border-radius: 12px
-            - border: 1px solid rgba(255,200,120,0.10)
+            - border: 1px solid rgba(255,111,0,0.20)
           icon:
             - width: 60px
-            - color: "#ffcc80"
+            - color: "#ff6f00"
           name:
             - color: white
             - font-size: 14px
@@ -119,12 +119,12 @@ cards:
               friendly_name: "Letto Relax"
         styles:
           card:
-            - background: rgba(128,203,196,0.08)
+            - background: rgba(0,150,136,0.10)
             - border-radius: 12px
-            - border: 1px solid rgba(64,160,150,0.10)
+            - border: 1px solid rgba(0,150,136,0.20)
           icon:
             - width: 60px
-            - color: "#80cbc4"
+            - color: "#009688"
           name:
             - color: white
             - font-size: 14px
@@ -186,12 +186,12 @@ cards:
             entity_id: script.scene_bed_off
         styles:
           card:
-            - background: rgba(255,255,255,0.08)
+            - background: rgba(244,67,54,0.10)
             - border-radius: 12px
-            - border: 1px solid rgba(255,255,255,0.15)
+            - border: 1px solid rgba(244,67,54,0.25)
           icon:
             - width: 60px
-            - color: "#ef9a9a"
+            - color: "#f44336"
           name:
             - color: white
             - font-size: 14px
