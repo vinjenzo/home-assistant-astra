@@ -31,6 +31,52 @@ card:
               - cursor: default
           tap_action:
             action: none
+        # Test pulizia per segmento
+        - type: custom:button-card
+          name: TEST SEGMENTO
+          styles:
+            card:
+              - background: none
+              - box-shadow: none
+              - border: none
+              - padding: 6px 0 0 0
+              - margin: 0 8px
+            name:
+              - color: rgba(255,255,255,0.6)
+              - font-size: 14px
+              - font-weight: 700
+              - text-align: left
+        - type: entities
+          entities:
+            - entity: input_select.robot_segment_test
+              name: "ID Segmento Test"
+          card_mod:
+            style: |
+              ha-card {
+                background: rgba(255,255,255,0.07);
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,0.15);
+                margin-right: 8px;
+              }
+        - type: custom:button-card
+          icon: mdi:target
+          name: Avvia Test
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.robot_pulisci_segmento_test
+          styles:
+            card:
+              - background: rgba(255,255,255,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#ffffff"
+            name:
+              - color: #e3f2fd
         - type: custom:button-card
           entity: sensor.robot_stato_pulizia
           name: Stato

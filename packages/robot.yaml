@@ -164,6 +164,41 @@ script:
       - service: script.hw_robot_localizza
 
   # ========================================
+  # TEST PULIZIA SEGMENTO (ID da dropdown)
+  # ========================================
+  robot_pulisci_segmento_test:
+    alias: "Robot Pulisci Segmento (Test)"
+    mode: single
+    sequence:
+      # Variabile per usare l'entity_id in template
+      - variables:
+          robot_id: !secret robot_entity_id
+      # Avvia se fermo/alla base
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ states(robot_id) in ['paused','idle','docked'] }}"
+            sequence:
+              - service: vacuum.start
+                target:
+                  entity_id: !secret robot_entity_id
+      # Pulisci il segmento selezionato
+      - service: vacuum.send_command
+        target:
+          entity_id: !secret robot_entity_id
+        data:
+          command: app_segment_clean
+          params:
+            - segments:
+                ["{{ states('input_select.robot_segment_test') | int }}"]
+              repeats: 1
+      # Notifica di avvio test
+      - service: !secret notify_service
+        data:
+          title: "🧪 Test segmento"
+          message: "Avvio pulizia segmento ID: {{ states('input_select.robot_segment_test') }}"
+
+  # ========================================
   # PULIZIA TURBO STANZE (senza mocio)
   # ========================================
   robot_pulisci_cucina_turbo:
@@ -379,3 +414,62 @@ input_boolean:
     name: "Robot DND Notturno"
     icon: mdi:moon-waning-crescent
     initial: true
+
+# ============================================
+# INPUT_SELECT per test ID segmento
+# ============================================
+input_select:
+  robot_segment_test:
+    name: "ID Segmento Test"
+    options:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "6"
+      - "7"
+      - "8"
+      - "9"
+      - "10"
+      - "11"
+      - "12"
+      - "13"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+      - "18"
+      - "19"
+      - "20"
+      - "21"
+      - "22"
+      - "23"
+      - "24"
+      - "25"
+      - "26"
+      - "27"
+      - "28"
+      - "29"
+      - "30"
+      - "31"
+      - "32"
+      - "33"
+      - "34"
+      - "35"
+      - "36"
+      - "37"
+      - "38"
+      - "39"
+      - "40"
+      - "41"
+      - "42"
+      - "43"
+      - "44"
+      - "45"
+      - "46"
+      - "47"
+      - "48"
+      - "49"
+      - "50"
+    initial: "7"
