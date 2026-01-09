@@ -1,0 +1,247 @@
+# ============================================================
+# AUTOMATION ZONE LUCI VARIE (A U, LINEA)
+# ============================================================
+automation:
+  - alias: Luci Zone Brightness - Altri
+    mode: restart
+    description: "Monitora cambiamenti input_number zone varie"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.hw_bedroom_sopra_al_letto_level
+          - input_number.hw_bedroom_camera_da_letto_level
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+    action:
+      - variables:
+          zone_key: >-
+            {% set raw = trigger.entity_id.split('hw_bedroom_')[-1].replace('_level', '') %}
+            {% set map = {'sopra_al_letto': 'led_sopra_al_letto', 'camera_da_letto': 'led_camera_da_letto'} %}
+            {{ map.get(raw, raw) }}
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "{{ zone_key }}"
+          brightness: "{{ states(trigger.entity_id) | int }}"
+
+  - alias: Luci Device Brightness Sync - Altri
+    description: "Sincronizza gli input_number quando si modifica la luminosità della luce fisica (UI/telecomando) sulla zona selezionata"
+    trigger:
+      - platform: state
+        entity_id: light.luci
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+      - condition: template
+        value_template: "{{ state_attr('light.luci', 'brightness') not in [None, ''] }}"
+      - condition: template
+        value_template: "{{ states('input_text.ultima_zona_led') in ['Luce Sopra al Letto','Luce Camera da Letto'] }}"
+    action:
+      - delay: "00:00:00.3"
+      - variables:
+          brightness_pct: "{{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}"
+          zona: "{{ states('input_text.ultima_zona_led') }}"
+          input_map:
+            {
+              "Luce Sopra al Letto": "input_number.hw_bedroom_sopra_al_letto_level",
+              "Luce Camera da Letto": "input_number.hw_bedroom_camera_da_letto_level",
+            }
+          target_input: "{{ input_map[zona] }}"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_number.set_value
+        target:
+          entity_id: "{{ target_input }}"
+        data:
+          value: "{{ brightness_pct | int }}"
+      - delay: "00:00:00.2"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+# ============================================================
+# BINARY SENSORS - UI HELPERS
+# ============================================================
+template:
+  - binary_sensor:
+      - name: "zona_led_sopra_al_letto_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Luce Sopra al Letto'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_led_camera_da_letto_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Luce Camera da Letto'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_letto_slider_visibile"
+        state: >
+          {% set ultima = states('input_text.ultima_zona_led') %}
+          {{ ultima != '' and ultima in ['Luce Sopra al Letto','Luce Camera da Letto'] }}
+
+# ============================================================
+# INPUT_NUMBER - ZONE BRIGHTNESS SLIDERS
+# ============================================================
+input_number:
+  hw_bedroom_sopra_al_letto_level:
+    name: "Livello Luce Sopra al Letto"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_bedroom_camera_da_letto_level:
+    name: "Livello Luce Camera da Letto"
+    min: 0
+    max: 100
+    step: 1
+
+script:
+  # ========================================
+  # WRAPPER SCRIPTS - LUCE SOPRA AL LETTO
+  # ========================================
+  hw_bedroom_sopra_al_letto_on:
+    alias: "Accendi Luce Sopra al Letto"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "led_sopra_al_letto"
+
+  hw_bedroom_sopra_al_letto_low:
+    alias: "Luce Sopra al Letto Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_sopra_al_letto"
+          preset_level: "low"
+
+  hw_bedroom_sopra_al_letto_medium:
+    alias: "Luce Sopra al Letto Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_sopra_al_letto"
+          preset_level: "medium"
+
+  hw_bedroom_sopra_al_letto_high:
+    alias: "Luce Sopra al Letto Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_sopra_al_letto"
+          preset_level: "high"
+
+  hw_bedroom_sopra_al_letto_off:
+    alias: "Spegni Luce Sopra al Letto"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "led_sopra_al_letto"
+
+  hw_bedroom_sopra_al_letto_up:
+    alias: "Aumenta Luce Sopra al Letto"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_sopra_al_letto"
+          delta: 10
+
+  hw_bedroom_sopra_al_letto_down:
+    alias: "Diminuisci Luce Sopra al Letto"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_sopra_al_letto"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - LUCE CAMERA DA LETTO
+  # ========================================
+  hw_bedroom_camera_da_letto_on:
+    alias: "Accendi Luce Camera da Letto"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "led_camera_da_letto"
+
+  hw_bedroom_camera_da_letto_low:
+    alias: "Luce Camera da Letto Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera_da_letto"
+          preset_level: "low"
+
+  hw_bedroom_camera_da_letto_medium:
+    alias: "Luce Camera da Letto Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera_da_letto"
+          preset_level: "medium"
+
+  hw_bedroom_camera_da_letto_high:
+    alias: "Luce Camera da Letto Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera_da_letto"
+          preset_level: "high"
+
+  hw_bedroom_camera_da_letto_off:
+    alias: "Spegni Luce Camera da Letto"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "led_camera_da_letto"
+
+  hw_bedroom_camera_da_letto_up:
+    alias: "Aumenta Luce Camera da Letto"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_camera_da_letto"
+          delta: 10
+
+  hw_bedroom_camera_da_letto_down:
+    alias: "Diminuisci Luce Camera da Letto"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_camera_da_letto"
+          delta: -10
+
+  # ========================================
+  # ALL OFF - LETTO
+  # ========================================
+  hw_bedroom_all_off:
+    alias: "Spegni Tutto Letto"
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+      - parallel:
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "led_sopra_al_letto"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "led_camera_da_letto"
+              brightness: 0
+
+      - delay: "00:00:01.5"
+
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.ultima_zona_led
+        data:
+          value: "OFF"
+
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode

@@ -1,0 +1,11 @@
+# ============================================================
+# CUSTOM SENTENCES - DISABILITATO
+# ============================================================
+# HA Assist locale con custom_sentences ha problemi di sintassi hassil.
+# Usa Homeway/Sage che funziona già perfettamente con gli script esposti.
+#
+# Se in futuro vuoi riattivare HA Assist locale, la sintassi corretta
+# di hassil è molto specifica e mal documentata. Meglio aspettare
+# che HA migliori il supporto per custom_sentences in italiano.
+# ============================================================
+

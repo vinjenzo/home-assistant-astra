@@ -1,0 +1,492 @@
+type: custom:mod-card
+card:
+  type: vertical-stack
+  cards:
+    - type: custom:button-card
+      name: Robot Aspirapolvere
+      styles:
+        card:
+          - background: none
+          - box-shadow: none
+          - border: none
+          - padding: 4px 0 0 0
+          - margin: 0 8px
+        name:
+          - color: #e3f2fd
+          - font-size: 22px
+          - font-weight: 700
+          - text-align: left
+
+    # Stato
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: custom:button-card
+          entity: sensor.robot_stato_pulizia
+          name: Stato
+          icon: mdi:robot-vacuum
+          show_state: true
+          styles:
+            card:
+              - background: rgba(100,181,246,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(100,181,246,0.3)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: |
+                  [[[
+                    const s = states['vacuum.dreame_de_447291331_p2029']?.state;
+                    if (s === 'cleaning') return '#4caf50';
+                    if (s === 'docked') return '#64b5f6';
+                    if (s === 'error') return '#ef5350';
+                    return '#90caf9';
+                  ]]]
+            name:
+              - color: #e3f2fd
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          entity: sensor.robot_batteria
+          name: Batteria
+          icon: mdi:battery
+          show_state: true
+          styles:
+            card:
+              - background: rgba(38,198,218,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(38,198,218,0.3)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: |
+                  [[[
+                    const b = parseFloat(entity?.state);
+                    if (b > 80) return '#4caf50';
+                    if (b > 30) return '#ffb300';
+                    return '#ef5350';
+                  ]]]
+            name:
+              - color: #e3f2fd
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+    # Modalità / DND
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: entities
+          entities:
+            - entity: select.dreame_de_447291331_p2029_mode_p_2_3
+              name: Modalità
+            - entity: select.dreame_de_447291331_p2029_mop_mode_p_4_5
+              name: Mocio
+            - entity: switch.dreame_de_447291331_p2029_enable_p_5_1
+              name: Non Disturbare
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+                  border-radius: 12px;
+                  border: 1px solid rgba(255,255,255,0.18);
+                  margin-right: 8px;
+                }
+              hui-generic-entity-row$: |
+                .text-content {
+                  color: #e3f2fd !important;
+                }
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+    # Comandi principali
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: custom:button-card
+          name: Avvia
+          icon: mdi:play-circle
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.robot_pulizia_avvia
+          styles:
+            card:
+              - background: rgba(129,199,132,0.20)
+              - border-radius: 12px
+              - border: 1px solid rgba(129,199,132,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#66bb6a"
+            name:
+              - color: #e3f2fd
+        - type: custom:button-card
+          name: Pausa
+          icon: mdi:pause-circle
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.robot_pausa
+          styles:
+            card:
+              - background: rgba(255,193,7,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,193,7,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#ffb300"
+            name:
+              - color: #e3f2fd
+        - type: custom:button-card
+          name: Stop
+          icon: mdi:stop-circle
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.hw_robot_stop_robusto
+          styles:
+            card:
+              - background: rgba(239,83,80,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(239,83,80,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#ef5350"
+            name:
+              - color: #e3f2fd
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: custom:button-card
+          icon: mdi:home-import-outline
+          name: Base
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.robot_torna_base
+          styles:
+            card:
+              - background: rgba(100,181,246,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(100,181,246,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#64b5f6"
+            name:
+              - color: #e3f2fd
+        - type: custom:button-card
+          name: Localizza
+          icon: mdi:map-marker-radius
+          tap_action:
+            action: call-service
+            service: script.turn_on
+            service_data:
+              entity_id: script.robot_localizza
+          styles:
+            card:
+              - background: rgba(156,104,255,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(156,104,255,0.35)
+              - padding: 14px
+            icon:
+              - width: 40px
+              - color: "#ba68c8"
+            name:
+              - color: #e3f2fd
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+    # Statistiche
+    - type: custom:button-card
+      name: STATISTICHE
+      styles:
+        card:
+          - background: none
+          - box-shadow: none
+          - border: none
+          - padding: 6px 0 0 0
+          - margin: 0 8px
+        name:
+          - color: rgba(255,255,255,0.6)
+          - font-size: 14px
+          - font-weight: 700
+          - text-align: left
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: custom:button-card
+          entity: sensor.robot_area_pulita
+          name: Area
+          icon: mdi:floor-plan
+          show_state: true
+          styles:
+            card:
+              - background: rgba(0,188,212,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(0,188,212,0.35)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: "#00bcd4"
+            name:
+              - color: #e3f2fd
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          entity: sensor.robot_tempo_pulizia
+          name: Tempo
+          icon: mdi:timer
+          show_state: true
+          styles:
+            card:
+              - background: rgba(251,192,45,0.20)
+              - border-radius: 12px
+              - border: 1px solid rgba(251,192,45,0.35)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: "#fbc02d"
+            name:
+              - color: #e3f2fd
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+    # Manutenzione
+    - type: custom:button-card
+      name: MANUTENZIONE
+      styles:
+        card:
+          - background: none
+          - box-shadow: none
+          - border: none
+          - padding: 6px 0 0 0
+          - margin: 0 8px
+        name:
+          - color: rgba(255,255,255,0.6)
+          - font-size: 14px
+          - font-weight: 700
+          - text-align: left
+
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: custom:button-card
+          entity: sensor.robot_spazzola_vita
+          name: Spazzola Princ.
+          icon: mdi:brush
+          show_state: true
+          tap_action:
+            action: more-info
+          styles:
+            card:
+              - background: rgba(129,199,132,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(129,199,132,0.35)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: |
+                  [[[
+                    const v = parseFloat(entity?.state);
+                    if (v > 50) return '#66bb6a';
+                    if (v > 20) return '#ffb300';
+                    return '#ef5350';
+                  ]]]
+            name:
+              - color: #e3f2fd
+              - font-size: 11px
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          entity: sensor.robot_spazzola_laterale_vita
+          name: Spazzola Lat.
+          icon: mdi:brush-variant
+          show_state: true
+          tap_action:
+            action: more-info
+          styles:
+            card:
+              - background: rgba(129,199,132,0.18)
+              - border-radius: 12px
+              - border: 1px solid rgba(129,199,132,0.35)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: |
+                  [[[
+                    const v = parseFloat(entity?.state);
+                    if (v > 50) return '#66bb6a';
+                    if (v > 20) return '#ffb300';
+                    return '#ef5350';
+                  ]]]
+            name:
+              - color: #e3f2fd
+              - font-size: 11px
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          entity: sensor.robot_filtro_vita
+          name: Filtro
+          icon: mdi:air-filter
+          show_state: true
+          tap_action:
+            action: more-info
+          styles:
+            card:
+              - background: rgba(255,183,77,0.20)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,183,77,0.35)
+              - padding: 12px
+            icon:
+              - width: 38px
+              - color: |
+                  [[[
+                    const v = parseFloat(entity?.state);
+                    if (v > 50) return '#ffb74d';
+                    if (v > 20) return '#ffb300';
+                    return '#ef5350';
+                  ]]]
+            name:
+              - color: #e3f2fd
+            state:
+              - color: #e3f2fd
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 8px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+card_mod:
+  style: |
+    ha-card {
+      background: none;
+      border: none;
+      box-shadow: none;
+      margin: 0 8px;
+    }

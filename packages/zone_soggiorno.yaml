@@ -1,0 +1,494 @@
+# ============================================================
+# AUTOMATION STANZA-SPECIFICA (SOGGIORNO LUCI)
+# ============================================================
+automation:
+  - alias: Luci Zone Brightness - Soggiorno
+    mode: restart
+    description: "Monitora cambiamenti input_number zone soggiorno"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.hw_livingroom_soggiorno_level
+          - input_number.hw_livingroom_tv_level
+          - input_number.hw_livingroom_museum_level
+          - input_number.hw_livingroom_library_level
+          - input_number.hw_livingroom_gregg_level
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+    action:
+      - variables:
+          zone_key: >-
+            {% set raw = trigger.entity_id.split('hw_livingroom_')[-1].split('_level')[0] %}
+            {% set map = {'soggiorno': 'soggiorno', 'tv': 'tv', 'museum': 'museo', 'library': 'libreria', 'gregg': 'gregg_soggiorno'} %}
+            {{ map.get(raw, raw) }}
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "{{ zone_key }}"
+          brightness: "{{ states(trigger.entity_id) | int }}"
+
+  - alias: Luci Device Brightness Sync - Soggiorno
+    description: "Sincronizza gli input_number quando si modifica la luminosità della luce fisica (UI/telecomando) sulla zona selezionata"
+    trigger:
+      - platform: state
+        entity_id: light.luci
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+      - condition: template
+        value_template: "{{ state_attr('light.luci', 'brightness') not in [None, ''] }}"
+      - condition: template
+        value_template: "{{ states('input_text.ultima_zona_led') in ['Soggiorno','TV','Museo','Libreria','Gregg Soggiorno'] }}"
+    action:
+      - delay: "00:00:00.3"
+      - variables:
+          brightness_pct: "{{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}"
+          zona: "{{ states('input_text.ultima_zona_led') }}"
+          input_map:
+            {
+              "Soggiorno": "input_number.hw_livingroom_soggiorno_level",
+              "TV": "input_number.hw_livingroom_tv_level",
+              "Museo": "input_number.hw_livingroom_museum_level",
+              "Libreria": "input_number.hw_livingroom_library_level",
+              "Gregg Soggiorno": "input_number.hw_livingroom_gregg_level",
+            }
+          target_input: "{{ input_map[zona] }}"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_number.set_value
+        target:
+          entity_id: "{{ target_input }}"
+        data:
+          value: "{{ brightness_pct | int }}"
+      - delay: "00:00:00.2"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+# ============================================================
+# BINARY SENSORS - UI HELPERS (SOGGIORNO)
+# ============================================================
+template:
+  - binary_sensor:
+      - name: "zona_in_alto_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Soggiorno'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_tv_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'TV'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_museo_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Museo'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_libreria_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Libreria'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_gregg_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Gregg Soggiorno'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_soggiorno_slider_visibile"
+        state: >
+          {% set ultima = states('input_text.ultima_zona_led') %}
+          {{ ultima != '' and ultima in ['Soggiorno','TV','Museo','Libreria','Gregg Soggiorno'] }}
+
+# ============================================================
+# INPUT_NUMBER - ZONE BRIGHTNESS SLIDERS
+# ============================================================
+input_number:
+  hw_livingroom_soggiorno_level:
+    name: "Livello Luce Soggiorno"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_livingroom_tv_level:
+    name: "Livello TV"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_livingroom_museum_level:
+    name: "Livello Museo"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_livingroom_library_level:
+    name: "Livello Libreria"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_livingroom_gregg_level:
+    name: "Livello Gregg Soggiorno"
+    min: 0
+    max: 100
+    step: 1
+
+script:
+  # ========================================
+  # HELPER SCRIPT - CAMBIO ZONA CON BULK MODE
+  # ========================================
+  select_zone_soggiorno:
+    alias: "Seleziona Zona Soggiorno (con protezione bulk)"
+    mode: restart
+    fields:
+      zone_name:
+        description: "Nome della zona da selezionare"
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.ultima_zona_led
+        data:
+          value: "{{ zone_name }}"
+      - delay: "00:00:00.3"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+  # ========================================
+  # WRAPPER SCRIPTS - LUCE SOGGIORNO
+  # ========================================
+  hw_livingroom_soggiorno_on:
+    alias: "Accendi Luce Soggiorno"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "soggiorno"
+
+  hw_livingroom_soggiorno_low:
+    alias: "Luce Soggiorno Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "soggiorno"
+          preset_level: "low"
+
+  hw_livingroom_soggiorno_medium:
+    alias: "Luce Soggiorno Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "soggiorno"
+          preset_level: "medium"
+
+  hw_livingroom_soggiorno_high:
+    alias: "Luce Soggiorno Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "soggiorno"
+          preset_level: "high"
+
+  hw_livingroom_soggiorno_off:
+    alias: "Spegni Luce Soggiorno"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "soggiorno"
+
+  hw_livingroom_soggiorno_up:
+    alias: "Aumenta Luce Soggiorno"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "soggiorno"
+          delta: 10
+
+  hw_livingroom_soggiorno_down:
+    alias: "Diminuisci Luce Soggiorno"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "soggiorno"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - TV
+  # ========================================
+  hw_livingroom_tv_on:
+    alias: "Accendi Luce TV"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "tv"
+
+  hw_livingroom_tv_low:
+    alias: "Luce TV Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "tv"
+          preset_level: "low"
+
+  hw_livingroom_tv_medium:
+    alias: "Luce TV Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "tv"
+          preset_level: "medium"
+
+  hw_livingroom_tv_high:
+    alias: "Luce TV Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "tv"
+          preset_level: "high"
+
+  hw_livingroom_tv_off:
+    alias: "Spegni TV"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "tv"
+
+  hw_livingroom_tv_up:
+    alias: "Aumenta TV"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "tv"
+          delta: 10
+
+  hw_livingroom_tv_down:
+    alias: "Diminuisci TV"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "tv"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - MUSEO
+  # ========================================
+  hw_livingroom_museum_on:
+    alias: "Accendi Luce Museo"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "museo"
+
+  hw_livingroom_museum_low:
+    alias: "Luce Museo Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "museo"
+          preset_level: "low"
+
+  hw_livingroom_museum_medium:
+    alias: "Luce Museo Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "museo"
+          preset_level: "medium"
+
+  hw_livingroom_museum_high:
+    alias: "Luce Museo Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "museo"
+          preset_level: "high"
+
+  hw_livingroom_museum_off:
+    alias: "Spegni Museo"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "museo"
+
+  hw_livingroom_museum_up:
+    alias: "Aumenta Museo"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "museo"
+          delta: 10
+
+  hw_livingroom_museum_down:
+    alias: "Diminuisci Museo"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "museo"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - LIBRERIA
+  # ========================================
+  hw_livingroom_library_on:
+    alias: "Accendi Luce Libreria"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "libreria"
+
+  hw_livingroom_library_low:
+    alias: "Luce Libreria Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "libreria"
+          preset_level: "low"
+
+  hw_livingroom_library_medium:
+    alias: "Luce Libreria Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "libreria"
+          preset_level: "medium"
+
+  hw_livingroom_library_high:
+    alias: "Luce Libreria Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "libreria"
+          preset_level: "high"
+
+  hw_livingroom_library_off:
+    alias: "Spegni Libreria"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "libreria"
+
+  hw_livingroom_library_up:
+    alias: "Aumenta Libreria"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "libreria"
+          delta: 10
+
+  hw_livingroom_library_down:
+    alias: "Diminuisci Libreria"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "libreria"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - GREGG SOGGIORNO
+  # ========================================
+  hw_livingroom_gregg_on:
+    alias: "Accendi Gregg Soggiorno"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "gregg_soggiorno"
+
+  hw_livingroom_gregg_low:
+    alias: "Gregg Soggiorno Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_soggiorno"
+          preset_level: "low"
+
+  hw_livingroom_gregg_medium:
+    alias: "Gregg Soggiorno Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_soggiorno"
+          preset_level: "medium"
+
+  hw_livingroom_gregg_high:
+    alias: "Gregg Soggiorno Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_soggiorno"
+          preset_level: "high"
+
+  hw_livingroom_gregg_off:
+    alias: "Spegni Gregg Soggiorno"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "gregg_soggiorno"
+
+  hw_livingroom_gregg_up:
+    alias: "Aumenta Gregg Soggiorno"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "gregg_soggiorno"
+          delta: 10
+
+  hw_livingroom_gregg_down:
+    alias: "Diminuisci Gregg Soggiorno"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "gregg_soggiorno"
+          delta: -10
+
+  # ========================================
+  # TUTTO SPENTO
+  # ========================================
+  hw_livingroom_all_off:
+    alias: "Spegni Tutto Soggiorno"
+    mode: parallel
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+      - parallel:
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "main"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "tv"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "museo"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "libreria"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "gregg_soggiorno"
+              brightness: 0
+
+      - delay: "00:00:01.5"
+
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.ultima_zona_led
+        data:
+          value: "OFF"
+
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode

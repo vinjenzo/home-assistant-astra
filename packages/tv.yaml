@@ -1,0 +1,29 @@
+# ============================================================
+# TV LG WebOS - CONFIGURAZIONE E AUTOMAZIONI
+# ============================================================
+# Questo file contiene tutta la logica relativa alla TV:
+# - Automazioni per l'accensione/spegnimento
+# - Sincronizzazione luci TV
+# - Controllo WoL
+# ============================================================
+
+# ============================================================
+# AUTOMATION
+# ============================================================
+automation:
+  - alias: "TV On - Accendi Luci TV a 1%"
+    description: "Quando la TV si accende (manualmente), imposta la luce TV a 1%"
+    trigger:
+      - platform: state
+        entity_id: media_player.lg_webos_tv_oled48c31la
+        to: "playing"
+    condition:
+      # Non agire se una scena è in esecuzione (led_bulk_mode attivo)
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+    action:
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "tv"
+          brightness: 1

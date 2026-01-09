@@ -1,0 +1,40 @@
+# Badge luci Soggiorno (lista per !include)
+- type: entity
+  entity: input_number.hw_livingroom_soggiorno_level
+  name: Soggiorno
+  icon: mdi:led-strip-variant
+  show_name: true
+  show_state: true
+  show_icon: true
+
+- type: entity
+  entity: input_number.hw_livingroom_gregg_level
+  name: Gregg
+  icon: mdi:egg-outline
+  show_name: true
+  show_state: true
+  show_icon: true
+
+- type: entity
+  entity: input_number.hw_livingroom_tv_level
+  name: TV
+  icon: mdi:television-ambient-light
+  show_name: true
+  show_state: true
+  show_icon: true
+
+- type: entity
+  entity: input_number.hw_livingroom_museum_level
+  name: Museo
+  icon: mdi:wall-sconce-round
+  show_name: true
+  show_state: true
+  show_icon: true
+
+- type: entity
+  entity: input_number.hw_livingroom_library_level
+  name: Libreria
+  icon: mdi:bookshelf
+  show_name: true
+  show_state: true
+  show_icon: true

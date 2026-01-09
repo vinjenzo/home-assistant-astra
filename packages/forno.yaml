@@ -1,0 +1,236 @@
+# ============================================================
+# FORNO - Programma rapido "Tosta pane"
+# ============================================================
+# Richiede entità Home Connect già presenti:
+# - switch.forno_potenza
+# - select.forno_programma_selezionato
+# - select.forno_active_program
+# Il programma usa "Grill ventilato" (hot air grilling).
+# Nota: number.forno_alarm_clock è in secondi (0-100s) e serve solo
+# come timer di allarme a fine cottura, non per controllare la durata
+# del programma (che è impostata dal forno stesso).
+# ============================================================
+
+template:
+  # ---------------------------------------------------
+  #   FORNO — TEMPERATURA °C
+  # ---------------------------------------------------
+  - sensor:
+      - name: "Forno Temperatura °C"
+        unique_id: forno_temperatura_celsius
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state: >
+          {% set f = states('sensor.forno_temperatura_del_forno_attuale') | float(0) %}
+          {{ ((f - 32) * 5 / 9) | round(1) }}
+
+  # ---------------------------------------------------
+  #   FORNO — TEMPO RIMANENTE (da orario di fine)
+  # ---------------------------------------------------
+  - sensor:
+      - name: "Forno Tempo Rimanente"
+        unique_id: forno_tempo_rimanente
+        icon: mdi:timer
+        state: >
+          {% set fine = states('sensor.forno_orario_di_fine_del_programma') %}
+          {% if fine not in ['unavailable', 'unknown', '', none] %}
+            {% set ts = as_timestamp(fine) %}
+            {% set seconds = (ts - now().timestamp()) | int %}
+            {% set seconds = 0 if seconds < 0 else seconds %}
+            {% set hours = (seconds // 3600) | int %}
+            {% set minutes = ((seconds % 3600) // 60) | int %}
+            {% set secs = (seconds % 60) | int %}
+            {% if hours > 0 %}
+              {{ hours }}h {{ minutes }}m
+            {% elif minutes > 0 %}
+              {{ minutes }}m {{ secs }}s
+            {% else %}
+              {{ secs }}s
+            {% endif %}
+          {% else %}
+            unavailable
+          {% endif %}
+        attributes:
+          seconds_remaining: >
+            {% set fine = states('sensor.forno_orario_di_fine_del_programma') %}
+            {% if fine not in ['unavailable', 'unknown', '', none] %}
+              {% set ts = as_timestamp(fine) %}
+              {% set seconds = (ts - now().timestamp()) | int %}
+              {{ 0 if seconds < 0 else seconds }}
+            {% else %}
+              {{ none }}
+            {% endif %}
+
+  # ---------------------------------------------------
+  #   TOSTATURA — TEMPO RIMANENTE (timer locale)
+  # ---------------------------------------------------
+  - sensor:
+      - name: "Forno Tostatura Tempo Rimanente"
+        unique_id: forno_tosta_tempo_rimanente
+        icon: mdi:timer-sand
+        state: >
+          {% set rem = state_attr('timer.forno_tosta','remaining') %}
+          {% if rem %}
+            {{ rem }}
+          {% else %}
+            unavailable
+          {% endif %}
+        attributes:
+          seconds_remaining: >
+            {% set r = state_attr('timer.forno_tosta','remaining') %}
+            {% if r %}
+              {% set parts = r.split(':') %}
+              {% set h = parts[0] | int(0) %}
+              {% set m = parts[1] | int(0) %}
+              {% set s = parts[2] | int(0) %}
+              {{ h*3600 + m*60 + s }}
+            {% else %}
+              {{ none }}
+            {% endif %}
+
+script:
+  forno_tosta_pane:
+    alias: "Forno - Tosta pane"
+    mode: restart
+    sequence:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.forno_potenza
+
+      - delay: "00:00:01"
+
+      - service: select.select_option
+        data:
+          entity_id: select.forno_programma_selezionato
+          option: "cooking_oven_program_heating_mode_hot_air_grilling"
+
+      - delay: "00:00:01"
+
+      - service: select.select_option
+        data:
+          entity_id: select.forno_active_program
+          option: "cooking_oven_program_heating_mode_hot_air_grilling"
+
+  forno_tosta_pane_timer:
+    alias: "Forno Tostatura Avvia"
+    mode: restart
+    sequence:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.forno_potenza
+
+      - delay: "00:00:01"
+
+      - service: select.select_option
+        data:
+          entity_id: select.forno_programma_selezionato
+          option: "cooking_oven_program_heating_mode_hot_air_grilling"
+
+      - delay: "00:00:01"
+
+      # NOTE: Impostazione temperatura rimossa - entità non più disponibile
+      # L'entità number.forno_setpoint_temperature non esiste
+      # La temperatura viene gestita dal programma del forno stesso
+      # - service: number.set_value
+      #   data:
+      #     entity_id: number.forno_setpoint_temperature
+      #     value: >
+      #       {% set c = states('input_number.forno_tosta_celsius') | float(220) %}
+      #       {{ ((c * 9 / 5) + 32) | round(0) }}
+
+      - service: select.select_option
+        data:
+          entity_id: select.forno_active_program
+          option: "cooking_oven_program_heating_mode_hot_air_grilling"
+
+      - service: timer.start
+        data:
+          entity_id: timer.forno_tosta
+          duration: >
+            {{ (states('input_number.forno_tosta_minuti') | int(3)) * 60 }}
+
+  forno_tostatura_stop:
+    alias: "Forno Tostatura Stop"
+    mode: single
+    sequence:
+      - service: timer.cancel
+        data:
+          entity_id: timer.forno_tosta
+      - service: button.press
+        data:
+          entity_id: button.forno_stop_program
+
+input_number:
+  forno_tosta_minuti:
+    name: "Forno Tostatura Minuti"
+    min: 1
+    max: 12
+    step: 1
+    unit_of_measurement: "min"
+
+  forno_tosta_celsius:
+    name: "Forno Tostatura Temperatura °C"
+    min: 180
+    max: 240
+    step: 5
+    unit_of_measurement: "°C"
+
+timer:
+  forno_tosta:
+    name: "Forno Tostatura Timer"
+    restore: false
+    duration: "00:00:00"
+
+automation:
+  - id: forno_start_notification
+    alias: "Forno - Notifica inizio cottura"
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: select.forno_active_program
+        from: "off"
+    condition:
+      - condition: template
+        value_template: "{{ not is_state('media_player.lg_webos_tv_oled48c31la','off') }}"
+    action:
+      - delay: "00:00:01"
+      - service: notify.lg_webos_tv_oled48c31la
+        data:
+          message: "Programma avviato"
+          title: "🔥 Forno in cottura"
+
+  - id: forno_end_notification
+    alias: "Forno - Notifica fine cottura"
+    mode: restart
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.forno_tosta
+    condition:
+      - condition: template
+        value_template: "{{ not is_state('media_player.lg_webos_tv_oled48c31la','off') }}"
+    action:
+      - delay: "00:00:01"
+      - service: notify.lg_webos_tv_oled48c31la
+        data:
+          message: "Programma completato"
+          title: "✅ Forno pronto"
+      # Aumenta luminosità luce TV a 20%
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "tv"
+          brightness: 20
+
+  - id: forno_stop_on_timer_end
+    alias: "Forno - Stop su fine timer"
+    mode: restart
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.forno_tosta
+    action:
+      - service: button.press
+        data:
+          entity_id: button.forno_stop_program

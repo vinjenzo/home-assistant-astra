@@ -1,0 +1,119 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Cinema
+        icon: mdi:movie-open
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_cinema
+              friendly_name: Soggiorno Cinema
+        styles:
+          card:
+            - background: rgba(255,225,215,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,170,120,0.10)
+          icon:
+            - width: 60px
+            - color: "#ffccbc"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Calcio
+        icon: mdi:soccer
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_football
+              friendly_name: Soggiorno Calcio
+        styles:
+          card:
+            - background: rgba(76,175,80,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(76,175,80,0.12)
+          icon:
+            - width: 60px
+            - color: "#81c784"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Computer
+        icon: mdi:monitor
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: script.scene_livingroom_computer
+              friendly_name: Soggiorno Computer
+        styles:
+          card:
+            - background: rgba(156,39,176,0.08)
+            - border-radius: 12px
+            - border: 1px solid rgba(156,39,176,0.12)
+          icon:
+            - width: 60px
+            - color: "#ab47bc"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none

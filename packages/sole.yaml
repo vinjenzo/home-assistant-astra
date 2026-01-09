@@ -1,0 +1,30 @@
+template:
+  - sensor:
+      # ⭐ Sensori individuali per badge
+      - name: "Alba Oggi"
+        unique_id: alba_oggi
+        icon: mdi:weather-sunset-up
+        state: >
+          {% set sunrise = states('sensor.sun_next_rising') %}
+          {% if sunrise != 'unknown' %}{{ sunrise | as_timestamp | timestamp_custom('%H:%M') }}{% else %}N/A{% endif %}
+
+      - name: "Aurora Oggi"
+        unique_id: aurora_oggi
+        icon: mdi:weather-sunset
+        state: >
+          {% set dawn = states('sensor.sun_next_dawn') %}
+          {% if dawn != 'unknown' %}{{ dawn | as_timestamp | timestamp_custom('%H:%M') }}{% else %}N/A{% endif %}
+
+      - name: "Tramonto Oggi"
+        unique_id: tramonto_oggi
+        icon: mdi:weather-sunset-down
+        state: >
+          {% set sunset = states('sensor.sun_next_setting') %}
+          {% if sunset != 'unknown' %}{{ sunset | as_timestamp | timestamp_custom('%H:%M') }}{% else %}N/A{% endif %}
+
+      - name: "Crepuscolo Oggi"
+        unique_id: crepuscolo_oggi
+        icon: mdi:weather-night
+        state: >
+          {% set dusk = states('sensor.sun_next_dusk') %}
+          {% if dusk != 'unknown' %}{{ dusk | as_timestamp | timestamp_custom('%H:%M') }}{% else %}N/A{% endif %}

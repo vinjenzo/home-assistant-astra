@@ -1,0 +1,43 @@
+# Ignora file con dati sensibili
+secrets.yaml
+
+# Ignora file temporanei di Home Assistant
+*.log
+*.db
+*.db-shm
+*.db-wal
+
+# Ignora backup e snapshots
+.storage/
+.cloud/
+backups/
+
+# Ignora file IDE
+.vscode/
+.idea/
+
+# Ignora file di sistema
+.DS_Store
+Thumbs.db
+
+
+/.HA_VERSION
+/.cloud
+/.ha_run.lock
+/.storage
+/automations.yaml
+/blueprints
+/custom_components
+/custom_sentences
+/deps
+/home-assistant.log.fault
+/home-assistant_v2.db
+/home-assistant_v2.db-shm
+/home-assistant_v2.db-wal
+/image
+/scenes.yaml
+/scripts.yaml
+/secrets.yaml
+/templates.yaml
+/tts
+/www

@@ -1,0 +1,130 @@
+# ============================================================
+# LED ZONES PRESETS - CONFIGURAZIONE CENTRALIZZATA (Template Sensor)
+# ============================================================
+# Mappa GLOBALE: zone_key → {name, scene, input_number, presets}
+# Usata da: script e automazioni in led_system_core.yaml
+# ============================================================
+
+template:
+  - sensor:
+      - name: "LED Config"
+        unique_id: led_config
+        state: "ok"
+        attributes:
+          zones: >-
+            {% set zones = {
+              'soggiorno': {
+                'name': 'Soggiorno',
+                'scene': 'scene.led_principale',
+                'input_number': 'input_number.hw_livingroom_soggiorno_level',
+                'presets': {
+                  'low': 40,
+                  'medium': 70,
+                  'high': 90,
+                  'default': 80
+                }
+              },
+              'tv': {
+                'name': 'TV',
+                'scene': 'scene.led_tv',
+                'input_number': 'input_number.hw_livingroom_tv_level',
+                'presets': {
+                  'low': 2,
+                  'medium': 15,
+                  'high': 40,
+                  'default': 10
+                }
+              },
+              'museo': {
+                'name': 'Museo',
+                'scene': 'scene.led_museo',
+                'input_number': 'input_number.hw_livingroom_museum_level',
+                'presets': {
+                  'low': 7,
+                  'medium': 34,
+                  'high': 50,
+                  'default': 25
+                }
+              },
+              'libreria': {
+                'name': 'Libreria',
+                'scene': 'scene.led_libreria',
+                'input_number': 'input_number.hw_livingroom_library_level',
+                'presets': {
+                  'low': 10,
+                  'medium': 40,
+                  'high': 70,
+                  'default': 30
+                }
+              },
+              'gregg_soggiorno': {
+                'name': 'Gregg Soggiorno',
+                'scene': 'scene.lampade_gregg',
+                'input_number': 'input_number.hw_livingroom_gregg_level',
+                'presets': {
+                  'low': 10,
+                  'medium': 35,
+                  'high': 70,
+                  'default': 20
+                }
+              },
+
+              'led_cucina': {
+                'name': 'Luce Cucina',
+                'scene': 'scene.led_cucina',
+                'input_number': 'input_number.hw_kitchen_led_level',
+                'presets': {
+                  'low': 20,
+                  'medium': 50,
+                  'high': 90,
+                  'default': 60
+                }
+              },
+              'gregg_cucina': {
+                'name': 'Gregg Cucina',
+                'scene': 'scene.lampada_gregg',
+                'input_number': 'input_number.hw_kitchen_gregg_level',
+                'presets': {
+                  'low': 23,
+                  'medium': 56,
+                  'high': 87,
+                  'default': 50
+                }
+              },
+
+              'led_sopra_al_letto': {
+                'name': 'Luce Sopra al Letto',
+                'scene': 'scene.led_a_u',
+                'input_number': 'input_number.hw_bedroom_sopra_al_letto_level',
+                'presets': {
+                  'low': 30,
+                  'medium': 50,
+                  'high': 90,
+                  'default': 60
+                }
+              },
+              'led_camera_da_letto': {
+                'name': 'Luce Camera da Letto',
+                'scene': 'scene.led_linea',
+                'input_number': 'input_number.hw_bedroom_camera_da_letto_level',
+                'presets': {
+                  'low': 20,
+                  'medium': 45,
+                  'high': 70,
+                  'default': 55
+                }
+              },
+
+              'led_camera': {
+                'name': 'Luce Camera',
+                'scene': 'scene.led_camera',
+                'input_number': 'input_number.hw_room_led_level',
+                'presets': {
+                  'low': 40,
+                  'medium': 70,
+                  'high': 90,
+                  'default': 80
+                }
+              }
+            } %}
+            {{ zones | tojson }}

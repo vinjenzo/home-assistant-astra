@@ -1,0 +1,272 @@
+# ============================================================
+# AUTOMATION STANZA-SPECIFICA (CUCINA)
+# ============================================================
+automation:
+  - alias: Luci Zone Brightness - Cucina
+    mode: restart
+    description: "Monitora cambiamenti input_number zone cucina"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.hw_kitchen_led_level
+          - input_number.hw_kitchen_gregg_level
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+    action:
+      - variables:
+          zone_key: >-
+            {% set raw = trigger.entity_id.split('hw_kitchen_')[-1].split('_level')[0] %}
+            {% set map = {'led': 'led_cucina', 'gregg': 'gregg_cucina'} %}
+            {{ map.get(raw, raw) }}
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "{{ zone_key }}"
+          brightness: "{{ states(trigger.entity_id) | int }}"
+
+  - alias: Luci Device Brightness Sync - Cucina
+    description: "Sincronizza gli input_number quando si modifica la luminosità della luce fisica (UI/telecomando) sulla zona selezionata"
+    trigger:
+      - platform: state
+        entity_id: light.luci
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+      - condition: template
+        value_template: "{{ state_attr('light.luci', 'brightness') not in [None, ''] }}"
+      - condition: template
+        value_template: "{{ states('input_text.ultima_zona_led') in ['Luce Cucina','Gregg Cucina'] }}"
+    action:
+      - delay: "00:00:00.3"
+      - variables:
+          brightness_pct: "{{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}"
+          zona: "{{ states('input_text.ultima_zona_led') }}"
+          input_map:
+            {
+              "Luce Cucina": "input_number.hw_kitchen_led_level",
+              "Gregg Cucina": "input_number.hw_kitchen_gregg_level",
+            }
+          target_input: "{{ input_map[zona] }}"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_number.set_value
+        target:
+          entity_id: "{{ target_input }}"
+        data:
+          value: "{{ brightness_pct | int }}"
+      - delay: "00:00:00.2"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+# ============================================================
+# BINARY SENSORS - UI HELPERS (CUCINA)
+# ============================================================
+template:
+  - binary_sensor:
+      - name: "zona_led_cucina_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Luce Cucina'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_gregg_cucina_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Gregg Cucina'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_cucina_slider_visibile"
+        state: >
+          {% set ultima = states('input_text.ultima_zona_led') %}
+          {{ ultima != '' and ultima in ['Luce Cucina','Gregg Cucina'] }}
+
+# ============================================================
+# INPUT_NUMBER - ZONE BRIGHTNESS SLIDERS
+# ============================================================
+input_number:
+  hw_kitchen_led_level:
+    name: "Livello Luce Cucina"
+    min: 0
+    max: 100
+    step: 1
+
+  hw_kitchen_gregg_level:
+    name: "Livello Gregg Cucina"
+    min: 0
+    max: 100
+    step: 1
+
+script:
+  # ========================================
+  # HELPER SCRIPT - CAMBIO ZONA CON BULK MODE
+  # ========================================
+  select_zone_cucina:
+    alias: "Seleziona Zona Cucina (con protezione bulk)"
+    mode: restart
+    fields:
+      zone_name:
+        description: "Nome della zona da selezionare"
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.ultima_zona_led
+        data:
+          value: "{{ zone_name }}"
+      - delay: "00:00:00.3"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+  # ========================================
+  # WRAPPER SCRIPTS - LUCE CUCINA
+  # ========================================
+  hw_kitchen_led_on:
+    alias: "Accendi Luce Cucina"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "led_cucina"
+
+  hw_kitchen_led_low:
+    alias: "Luce Cucina Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_cucina"
+          preset_level: "low"
+
+  hw_kitchen_led_medium:
+    alias: "Luce Cucina Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_cucina"
+          preset_level: "medium"
+
+  hw_kitchen_led_high:
+    alias: "Luce Cucina Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_cucina"
+          preset_level: "high"
+
+  hw_kitchen_led_off:
+    alias: "Spegni Luce Cucina"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "led_cucina"
+
+  hw_kitchen_led_up:
+    alias: "Aumenta Luce Cucina"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_cucina"
+          delta: 10
+
+  hw_kitchen_led_down:
+    alias: "Diminuisci Luce Cucina"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_cucina"
+          delta: -10
+
+  # ========================================
+  # WRAPPER SCRIPTS - GREGG CUCINA
+  # ========================================
+  hw_kitchen_gregg_on:
+    alias: "Accendi Gregg Cucina"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "gregg_cucina"
+
+  hw_kitchen_gregg_low:
+    alias: "Gregg Cucina Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_cucina"
+          preset_level: "low"
+
+  hw_kitchen_gregg_medium:
+    alias: "Gregg Cucina Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_cucina"
+          preset_level: "medium"
+
+  hw_kitchen_gregg_high:
+    alias: "Gregg Cucina Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "gregg_cucina"
+          preset_level: "high"
+
+  hw_kitchen_gregg_off:
+    alias: "Spegni Gregg Cucina"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "gregg_cucina"
+
+  hw_kitchen_gregg_up:
+    alias: "Aumenta Gregg Cucina"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "gregg_cucina"
+          delta: 10
+
+  hw_kitchen_gregg_down:
+    alias: "Diminuisci Gregg Cucina"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "gregg_cucina"
+          delta: -10
+
+  # ========================================
+  # TUTTO SPENTO
+  # ========================================
+  hw_kitchen_all_off:
+    alias: "Spegni Tutto Cucina"
+    mode: parallel
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+      - parallel:
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "led_cucina"
+              brightness: 0
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "gregg_cucina"
+              brightness: 0
+
+      - delay: "00:00:01.5"
+
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.ultima_zona_led
+        data:
+          value: "OFF"
+
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode

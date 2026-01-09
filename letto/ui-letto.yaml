@@ -1,0 +1,332 @@
+type: vertical-stack
+cards:
+  # ============================================================
+  # ⭐ ZONE LUCI (SOPRA AL LETTO • CAMERA DA LETTO)
+  # ============================================================
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      # ⭐ LUCE CAMERA DA LETTO
+      - type: custom:button-card
+        entity: binary_sensor.zona_led_camera_da_letto_accesa
+        name: Camera da Letto
+        icon: mdi:lightbulb-spot
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Luce Camera da Letto';
+              
+              if (!zonaAccesa) return 'script.hw_bedroom_camera_da_letto_on';
+              if (zonaAccesa && isSelected) return 'script.hw_bedroom_camera_da_letto_off';
+              return 'input_text.set_value';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Luce Camera da Letto';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  entity_id: 'input_text.ultima_zona_led',
+                  value: 'Luce Camera da Letto'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #a5d6a7'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on';
+                  const selected = last === 'Luce Camera da Letto' || binary;
+                  return selected ? '0 0 14px #a5d6a7' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on';
+                  const selected = last === 'Luce Camera da Letto' || binary;
+                  return selected ? '#a5d6a7' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on';
+                  const selected = last === 'Luce Camera da Letto' || binary;
+                  return selected ? '#a5d6a7' : 'white';
+                ]]]
+            - margin-top: 8px
+
+      # ⭐ LUCE SOPRA AL LETTO
+      - type: custom:button-card
+        entity: binary_sensor.zona_led_sopra_al_letto_accesa
+        name: Sopra al Letto
+        icon: mdi:wall-sconce-round-variant
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_led_sopra_al_letto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Luce Sopra al Letto';
+              
+              if (!zonaAccesa) return 'script.hw_bedroom_sopra_al_letto_on';
+              if (zonaAccesa && isSelected) return 'script.hw_bedroom_sopra_al_letto_off';
+              return 'input_text.set_value';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_led_sopra_al_letto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Luce Sopra al Letto';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  entity_id: 'input_text.ultima_zona_led',
+                  value: 'Luce Sopra al Letto'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #ffcc80'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_a_u_accesa']?.state === 'on';
+                  const selected = last === 'Luce Sopra al Letto' || binary;
+                  return selected ? '0 0 14px #ffcc80' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_a_u_accesa']?.state === 'on';
+                  const selected = last === 'Luce Sopra al Letto' || binary;
+                  return selected ? '#ffcc80' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_led_a_u_accesa']?.state === 'on';
+                  const selected = last === 'Luce Sopra al Letto' || binary;
+                  return selected ? '#ffcc80' : 'white';
+                ]]]
+            - margin-top: 8px
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  # ============================================================
+  # ⭐ SLIDER (visibile quando una luce è selezionata)
+  # ============================================================
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.zona_letto_slider_visibile
+        state: "on"
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: light
+          entity: light.luci
+          name: Luci Letto
+          card_mod:
+            style: |
+              ha-card {
+                flex: 1 1 100% !important;
+                background: rgba(255,255,255,0.08) !important;
+                border-radius: 12px !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
+              }
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+  # ============================================================
+  # ⭐ PRESET (Bassa • Media • Alta) - sotto lo slider
+  # ============================================================
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.zona_letto_slider_visibile
+        state: "on"
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        # ⭐ BASSA
+        - type: custom:button-card
+          name: Bassa
+          icon: mdi:brightness-3
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Luce Sopra al Letto': states['binary_sensor.zona_led_sopra_al_letto_accesa']?.state === 'on',
+                  'Luce Camera da Letto': states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Luce Sopra al Letto';
+                const map = {
+                  'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_low',
+                  'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_low',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#ffb74d"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+
+        # ⭐ MEDIA
+        - type: custom:button-card
+          name: Media
+          icon: mdi:brightness-5
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Luce Sopra al Letto': states['binary_sensor.zona_led_sopra_al_letto_accesa']?.state === 'on',
+                  'Luce Camera da Letto': states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Luce Sopra al Letto';
+                const map = {
+                  'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_medium',
+                  'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_medium',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#ffe082"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+
+        # ⭐ ALTA
+        - type: custom:button-card
+          name: Alta
+          icon: mdi:brightness-7
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Luce Sopra al Letto': states['binary_sensor.zona_led_sopra_al_letto_accesa']?.state === 'on',
+                  'Luce Camera da Letto': states['binary_sensor.zona_led_camera_da_letto_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Luce Sopra al Letto';
+                const map = {
+                  'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_high',
+                  'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_high',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#fff59d"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none

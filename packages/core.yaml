@@ -1,0 +1,355 @@
+# ============================================================
+# LED SYSTEM CORE - FILE UNICO
+# ============================================================
+# Questo file contiene TUTTA la logica del sistema LED.
+# NON modificare questo file quando aggiungi nuove zone/scene/camere.
+#
+# Per aggiungere:
+# - Nuova zona LED → Modifica led_config.yaml + crea wrapper in zone_room.yaml
+# - Nuova scena/ambiente → Modifica scene.yaml
+# - Nuova stanza → Crea nuovo zone_room.yaml con wrapper
+# ============================================================
+
+# ============================================================
+# ENTITIES GLOBALI (condivise da tutte le stanze)
+# ============================================================
+input_boolean:
+  led_bulk_mode:
+    name: "LED Bulk Mode"
+    initial: off
+  scene_execution_mode:
+    name: "Scene Execution Mode"
+    initial: off
+    icon: mdi:play-circle
+
+input_text:
+  current_ambiente:
+    name: "Ambiente corrente"
+    initial: ""
+  ultima_zona_led:
+    name: "Ultima zona luci selezionata"
+    initial: ""
+
+# ============================================================
+# AUTOMATION
+# ============================================================
+# Le automation sono SPECIFICHE PER STANZA in room.yaml
+# (non servono nel core)
+
+# ============================================================
+# SCRIPTS UNIVERSALI - LED ZONES
+# ============================================================
+script:
+  # ========================================
+  # SET ZONE BRIGHTNESS (core logic)
+  # ========================================
+  set_zone_brightness:
+    alias: "Set Zone Brightness (Universal)"
+    mode: restart
+    max: 10
+    fields:
+      zone_key:
+        description: "Chiave zona da led_config.yaml"
+      brightness:
+        description: "Luminosità 0-100"
+    sequence:
+      # Estrai configurazione zona dal JSON
+      - variables:
+          zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+          zone_config: "{{ zones.get(zone_key, {}) if zone_key is defined else {} }}"
+          scene_entity: "{{ zone_config.get('scene', '') }}"
+          zone_name: "{{ zone_config.get('name', '') }}"
+          input_number_entity: "{{ zone_config.get('input_number', '') }}"
+
+      - condition: template
+        value_template: "{{ zone_config != {} and scene_entity != '' }}"
+
+      # Seleziona SEMPRE la zona per evitare mismatch sul bridge Tuya
+      - service: scene.turn_on
+        target:
+          entity_id: "{{ scene_entity }}"
+
+      - delay: "00:00:02"
+
+      - service: input_text.set_value
+        target:
+          entity_id: "input_text.ultima_zona_led"
+        data:
+          value: "{{ zone_name }}"
+
+      # Imposta luminosità
+      - choose:
+          - conditions: "{{ brightness | int == 0 }}"
+            sequence:
+              - service: scene.turn_on
+                target:
+                  entity_id: scene.off
+              - wait_template: "{{ is_state('light.luci','off') }}"
+                timeout: "00:00:05"
+              - service: input_number.set_value
+                target:
+                  entity_id: "{{ input_number_entity }}"
+                data:
+                  value: 0
+
+          - conditions: "{{ brightness | int > 0 }}"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.luci
+                data:
+                  brightness_pct: "{{ brightness }}"
+
+              - wait_template: "{{ is_state('light.luci','on') or state_attr('light.luci','brightness') is not none }}"
+                timeout: "00:00:03"
+
+              - delay: "00:00:00.5"
+
+              - choose:
+                  - conditions: "{{ zone_key in ['led_cucina', 'museo'] }}"
+                    sequence:
+                      - service: scene.turn_on
+                        target:
+                          entity_id: "{{ scene_entity }}"
+                      - delay: "00:00:00.5"
+                      - service: light.turn_on
+                        target:
+                          entity_id: light.luci
+                        data:
+                          brightness_pct: "{{ brightness }}"
+
+              - service: input_number.set_value
+                target:
+                  entity_id: "{{ input_number_entity }}"
+                data:
+                  value: "{{ brightness | int }}"
+
+  # ========================================
+  # SET ZONE PRESET (reads from led_config.yaml)
+  # ========================================
+  set_zone_preset:
+    alias: "Set Zone Preset (Universal)"
+    mode: queued
+    description: "Chiama set_zone_brightness con brightness da led_config.yaml"
+    fields:
+      zone_key:
+        description: "Chiave zona (main, tv, museo, libreria, ecc.)"
+        example: "main"
+      preset_level:
+        description: "Preset level (low, medium, high, default)"
+        example: "high"
+    variables:
+      zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+      zone_config: "{{ zones.get(zone_key, {}) }}"
+      brightness: "{{ zone_config.get('presets', {}).get(preset_level, 50) }}"
+    sequence:
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "{{ zone_key }}"
+          brightness: "{{ brightness }}"
+
+  # ========================================
+  # ZONE ON/OFF (universal wrappers)
+  # ========================================
+  zone_on:
+    alias: "Zone On (Universal)"
+    mode: restart
+    fields:
+      zone_key:
+        description: "Key della zona in led_zones_presets (es. 'soggiorno', 'tv', 'museo', 'libreria')"
+    sequence:
+      - variables:
+          zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+          zone_config: "{{ zones.get(zone_key, {}) }}"
+          current_level: >-
+            {{ states(zone_config.get('input_number', '')) | int(0) }}
+          default_brightness: >-
+            {{ zone_config.get('presets', {}).get('default', 50) }}
+          is_led_on: >-
+            {{ is_state('light.luci', 'on') and (state_attr('light.luci', 'brightness') | int(0)) > 0 }}
+
+      - choose:
+          - conditions: "{{ is_led_on and current_level > 0 }}"
+            sequence:
+              # LED già acceso e input_number > 0: solo riseleziona la zona senza cambiare brightness
+              - variables:
+                  zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+                  zone_config: "{{ zones.get(zone_key, {}) }}"
+              - service: scene.turn_on
+                target:
+                  entity_id: "{{ zone_config.get('scene', '') }}"
+              - delay: "00:00:00.6"
+              - service: input_text.set_value
+                target:
+                  entity_id: input_text.ultima_zona_led
+                data:
+                  value: "{{ zone_config.get('name', '') }}"
+
+          - conditions: "{{ is_led_on and current_level == 0 }}"
+            sequence:
+              # LED acceso fisicamente ma input_number a 0 (acceso da telecomando): forza default
+              - service: script.set_zone_brightness
+                data:
+                  zone_key: "{{ zone_key }}"
+                  brightness: "{{ default_brightness }}"
+
+          - conditions: "{{ not is_led_on and current_level > 0 }}"
+            sequence:
+              # LED spento ma input_number > 0: accendi con current_level
+              - service: script.set_zone_brightness
+                data:
+                  zone_key: "{{ zone_key }}"
+                  brightness: "{{ current_level }}"
+
+          - conditions: "{{ not is_led_on and current_level == 0 }}"
+            sequence:
+              # LED spento e input_number = 0: accendi con default
+              - service: input_number.set_value
+                target:
+                  entity_id: "{{ zone_config.get('input_number', '') }}"
+                data:
+                  value: "{{ default_brightness }}"
+
+  zone_off:
+    alias: "Zone Off (Universal)"
+    mode: restart
+    fields:
+      zone_key:
+        description: "Key della zona in led_zones_presets (es. 'soggiorno', 'tv', 'museo', 'libreria')"
+    sequence:
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "{{ zone_key }}"
+          brightness: 0
+
+  adjust_zone_level:
+    alias: "Adjust Zone Level (Universal)"
+    mode: restart
+    fields:
+      zone_key:
+        description: "Zone key (main, tv, museo, libreria)"
+      delta:
+        description: "Signed percent delta, e.g. +10 or -10"
+    sequence:
+      - variables:
+          zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+          zone_config: "{{ zones.get(zone_key, {}) }}"
+          input_number_entity: "{{ zone_config.get('input_number', '') }}"
+          current: "{{ states(input_number_entity) | int(0) }}"
+          new_value: >-
+            {% set v = current + (delta | int) %}
+            {% if v < 0 %} 0 {% elif v > 100 %} 100 {% else %} {{ v }} {% endif %}
+      - condition: template
+        value_template: "{{ input_number_entity != '' }}"
+      - service: input_number.set_value
+        target:
+          entity_id: "{{ input_number_entity }}"
+        data:
+          value: "{{ new_value }}"
+
+  # ============================================================
+  # SCRIPTS UNIVERSALI - AMBIENTI/SCENE
+  # ============================================================
+  set_ambiente:
+    alias: "Set Ambiente (Universal Scene Setter)"
+    mode: restart
+    fields:
+      scene_key:
+        description: "Key della scena in ambiente_scenes (es. 'night', 'day', 'cinema')"
+      friendly_name:
+        description: "Nome leggibile ambiente (opzionale, altrimenti letto da config)"
+    sequence:
+      # Read scene config from variable
+      - variables:
+          scenes: "{{ state_attr('sensor.scenes_config', 'scenes') or {} }}"
+          scene_config: "{{ scenes.get(scene_key, {}) }}"
+          scene_name: >-
+            {% if friendly_name is defined and friendly_name != '' %}
+              {{ friendly_name }}
+            {% else %}
+              {{ scenes.get(scene_key, {}).get('name', 'Unknown') }}
+            {% endif %}
+          led_zones: "{{ state_attr('sensor.led_config', 'zones') or {} }}"
+          brightness_map: "{{ scene_config.get('brightness', {}) }}"
+          scene_order: "{{ scene_config.get('zone_order', brightness_map.keys() | list) }}"
+
+      # Update current ambiente display
+      - service: input_text.set_value
+        data:
+          entity_id: input_text.current_ambiente
+          value: "{{ scene_name }}"
+
+      # Enable bulk mode to prevent individual automations
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+      # Apply brightness ONLY to zones explicitly defined in the scene's brightness_map
+      - variables:
+          previous_brightness: 0
+          brightness_keys: "{{ brightness_map.keys() | list }}"
+      - repeat:
+          for_each: "{{ brightness_keys }}"
+          sequence:
+            - variables:
+                zone_key: "{{ repeat.item }}"
+                zone_config: "{{ led_zones[zone_key] }}"
+                raw_brightness: "{{ brightness_map.get(zone_key) }}"
+                brightness_value: >-
+                  {% set raw = raw_brightness | int(0) %}
+                  {% if raw > 0 and raw == previous_brightness %}
+                    {% if raw >= 100 %}
+                      {{ raw - 1 }}
+                    {% else %}
+                      {{ raw + 1 }}
+                    {% endif %}
+                  {% else %}
+                    {{ raw }}
+                  {% endif %}
+
+            - service: script.set_zone_brightness
+              data:
+                zone_key: "{{ zone_key }}"
+                brightness: "{{ brightness_value }}"
+
+            - wait_template: "{{ is_state('script.set_zone_brightness', 'off') }}"
+              timeout: "00:00:10"
+
+            - delay: "00:00:00.5"
+
+            - variables:
+                previous_brightness: "{{ brightness_value | int(0) }}"
+
+      # Disable bulk mode
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+      # Notifica sulla TV se accesa
+      - condition: template
+        value_template: "{{ not is_state('media_player.lg_webos_tv_oled48c31la','off') }}"
+      - delay: "00:00:01"
+      - service: notify.lg_webos_tv_oled48c31la
+        data:
+          title: "💡 Ambiente"
+          message: "Ambiente: {{ scene_name }}"
+
+      # Special handling for "off" scene
+      - choose:
+          - conditions: "{{ scene_key == 'off' }}"
+            sequence:
+              - wait_template: "{{ is_state('light.luci','off') }}"
+                timeout: "00:00:10"
+
+              - choose:
+                  - conditions: "{{ not is_state('light.luci','off') }}"
+                    sequence:
+                      - service: persistent_notification.create
+                        data:
+                          title: "LED: tutto_spento - applicazione incompleta"
+                          message: "Almeno una zona non è risultata spenta correttamente. Controllare device Tuya."
+
+              - service: input_text.set_value
+                data:
+                  entity_id: input_text.ultima_zona_led
+                  value: "OFF"

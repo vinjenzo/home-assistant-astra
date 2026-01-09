@@ -1,0 +1,66 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Cucina
+        icon: mdi:silverware-fork-knife
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.robot_pulisci_cucina_turbo
+        styles:
+          card:
+            - background: rgba(255,183,77,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,183,77,0.35)
+          icon:
+            - width: 60px
+            - color: "#ffb74d"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Soggiorno
+        icon: mdi:sofa
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.robot_pulisci_soggiorno_turbo
+        styles:
+          card:
+            - background: rgba(129,212,250,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(129,212,250,0.35)
+          icon:
+            - width: 60px
+            - color: "#81d4fa"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none

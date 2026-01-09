@@ -1,0 +1,133 @@
+# ============================================================
+# AUTOMATION STANZA-SPECIFICA (CAMERA)
+# ============================================================
+automation:
+  - alias: Luci Zone Brightness - Camera
+    mode: restart
+    description: "Monitora cambiamenti input_number zone camera"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_number.hw_room_led_level
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+    action:
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "led_camera"
+          brightness: "{{ states(trigger.entity_id) | int }}"
+
+  - alias: Luci Device Brightness Sync - Camera
+    description: "Sincronizza gli input_number quando si modifica la luminosità della luce fisica (UI/telecomando) sulla zona selezionata"
+    trigger:
+      - platform: state
+        entity_id: light.luci
+    condition:
+      - condition: state
+        entity_id: input_boolean.led_bulk_mode
+        state: "off"
+      - condition: template
+        value_template: "{{ state_attr('light.luci', 'brightness') not in [None, ''] }}"
+      - condition: template
+        value_template: "{{ states('input_text.ultima_zona_led') == 'Luce Camera' }}"
+    action:
+      - variables:
+          brightness_pct: "{{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.led_bulk_mode
+      - delay: "00:00:00.1"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.hw_room_led_level
+        data:
+          value: "{{ brightness_pct | int }}"
+      - delay: "00:00:00.2"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.led_bulk_mode
+
+# ============================================================
+# BINARY SENSORS - UI HELPERS (CAMERA)
+# ============================================================
+template:
+  - binary_sensor:
+      - name: "zona_led_camera_accesa"
+        state: >
+          {{ states('input_text.ultima_zona_led') == 'Luce Camera'
+             and states('light.luci') == 'on' }}
+
+      - name: "zona_camera_slider_visibile"
+        state: >
+          {% set ultima = states('input_text.ultima_zona_led') %}
+          {{ ultima != '' and ultima == 'Luce Camera' }}
+
+# ============================================================
+# INPUT_NUMBER - ZONE BRIGHTNESS SLIDERS
+# ============================================================
+input_number:
+  hw_room_led_level:
+    name: "Livello Luce Camera"
+    min: 0
+    max: 100
+    step: 1
+
+script:
+  # ========================================
+  # WRAPPER SCRIPTS - LUCE CAMERA
+  # ========================================
+  hw_room_led_on:
+    alias: "Accendi Luce Camera"
+    sequence:
+      - service: script.zone_on
+        data:
+          zone_key: "led_camera"
+
+  hw_room_led_low:
+    alias: "Luce Camera Bassa"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera"
+          preset_level: "low"
+
+  hw_room_led_medium:
+    alias: "Luce Camera Media"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera"
+          preset_level: "medium"
+
+  hw_room_led_high:
+    alias: "Luce Camera Alta"
+    sequence:
+      - service: script.set_zone_preset
+        data:
+          zone_key: "led_camera"
+          preset_level: "high"
+
+  hw_room_led_off:
+    alias: "Spegni Luce Camera"
+    sequence:
+      - service: script.zone_off
+        data:
+          zone_key: "led_camera"
+
+  hw_room_led_up:
+    alias: "Aumenta Luce Camera"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_camera"
+          delta: 10
+
+  hw_room_led_down:
+    alias: "Diminuisci Luce Camera"
+    sequence:
+      - service: script.adjust_zone_level
+        data:
+          zone_key: "led_camera"
+          delta: -10

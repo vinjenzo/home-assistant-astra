@@ -1,0 +1,49 @@
+default_config:
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+homeassistant:
+  packages: !include_dir_named packages
+
+# Wake-on-LAN per accendere dispositivi via rete
+wake_on_lan:
+
+automation:
+  - alias: Notifica Internet Offline
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.9_9_9_9
+        to: "off"
+        for: "00:05:00"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "🌐 Internet Offline"
+          message: "La connessione WAN non risponde da almeno 5 minuti."
+
+  - alias: Notifica Internet Online
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.9_9_9_9
+        to: "on"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "✅ Internet Ripristinato"
+          message: "La connessione è tornata online."
+rest:
+  - resource: https://api.ipify.org
+    scan_interval: 300
+    sensor:
+      - name: "IP Pubblico"
+        value_template: "{{ value }}"
+
+alexa:
+  smart_home:
+
+google_assistant:
+  project_id: homewayio
+  service_account:
+    private_key: "nokey"
+    client_email: "support@homeway.io"

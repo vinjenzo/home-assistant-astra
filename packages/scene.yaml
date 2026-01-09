@@ -1,0 +1,311 @@
+# ============================================================
+# AMBIENTI/SCENE - CONFIGURAZIONE CENTRALIZZATA (Template Sensor)
+# ============================================================
+# Mappa: scene_key → { name, brightness: { zone_key: value } }
+# Usata da: script.set_ambiente in led_system_core.yaml
+# ============================================================
+
+template:
+  - sensor:
+      - name: "Scenes Config"
+        unique_id: scenes_config
+        state: "ok"
+        attributes:
+          scenes: >-
+            {% set scenes = {
+              'night': {
+                'name': 'Casa Notte',
+                'brightness': {
+                  'soggiorno': 1,
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'led_cucina': 25,
+                  'gregg_cucina': 0,
+                  'led_camera': 15,
+                  'led_camera_da_letto': 0,
+                  'led_sopra_al_letto': 12
+                }
+              },
+              'day': {
+                'name': 'Casa Luminoso',
+                'brightness': {
+                  'tv': 25,
+                  'museo': 30,
+                  'libreria': 25,
+                  'led_camera_da_letto': 100,
+                  'led_sopra_al_letto': 55,
+                  'led_camera': 100,
+                  'led_cucina': 88,
+                  'gregg_cucina': 30,
+                  'soggiorno': 85,
+                  'gregg_soggiorno': 22
+                }
+              },
+              'guests': {
+                'name': 'Casa Ospiti',
+                'brightness': {
+                  'tv': 30,
+                  'museo': 40,
+                  'libreria': 35,
+                  'led_camera_da_letto': 80,
+                  'led_sopra_al_letto': 45,
+                  'led_camera': 55,
+                  'led_cucina': 70,
+                  'gregg_cucina': 30,
+                  'soggiorno': 90,
+                  'gregg_soggiorno': 25
+                }
+              },
+              'cleaning': {
+                'name': 'Casa Pulizie',
+                'brightness': {
+                  'tv': 40,
+                  'museo': 35,
+                  'libreria': 34,
+                  'led_camera_da_letto': 100,
+                  'led_sopra_al_letto': 60,
+                  'led_camera': 85,
+                  'led_cucina': 100,
+                  'gregg_cucina': 31,
+                  'soggiorno': 100,
+                  'gregg_soggiorno': 26
+                }
+              },
+              'off': {
+                'name': 'Casa Spenta',
+                'brightness': {
+                  'soggiorno': 0,
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'led_camera_da_letto': 0,
+                  'led_sopra_al_letto': 0,
+                  'led_camera': 0,
+                  'led_cucina': 0,
+                  'gregg_cucina': 0
+                }
+              },
+              'livingroom_day': {
+                'name': 'Soggiorno Luminoso',
+                'brightness': {
+                  'tv': 5,
+                  'museo': 30,
+                  'libreria': 25,
+                  'soggiorno': 85,
+                  'gregg_soggiorno': 22
+                }
+              },
+              'livingroom_morning': {
+                'name': 'Soggiorno Risveglio',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 10,
+                  'libreria': 15,
+                  'soggiorno': 55,
+                  'gregg_soggiorno': 10
+                }
+              },
+              'livingroom_balanced': {
+                'name': 'Soggiorno Bilanciato',
+                'brightness': {
+                  'tv': 5,
+                  'museo': 24,
+                  'libreria': 20,
+                  'soggiorno': 70,
+                  'gregg_soggiorno': 16
+                }
+              },
+              'livingroom_soft': {
+                'name': 'Soggiorno Relax',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 5,
+                  'libreria': 8,
+                  'soggiorno': 45,
+                  'gregg_soggiorno': 0
+                }
+              },
+              'livingroom_nap': {
+                'name': 'Soggiorno Sonnellino',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 2,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 24
+                }
+              },
+              'livingroom_sleep': {
+                'name': 'Soggiorno Sonno Notturno',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 8,
+                  'libreria': 3,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 18
+                }
+              },
+              'livingroom_cinema': {
+                'name': 'Cinema',
+                'brightness': {
+                  'tv': 1
+                }
+              },
+              'livingroom_reading': {
+                'name': 'Soggiorno Lettura',
+                'brightness': {
+                  'libreria': 75,
+                  'soggiorno': 45,
+                  'gregg_soggiorno': 20
+                }
+              },
+              'livingroom_desk': {
+                'name': 'Soggiorno Lavoro',
+                'brightness': {
+                  'tv': 60,
+                }
+              },
+              'livingroom_football': {
+                'name': 'Soggiorno Calcio',
+                'brightness': {
+                  'tv': 1
+                }
+              },
+              'livingroom_computer': {
+                'name': 'Soggiorno Computer',
+                'brightness': {
+                  'tv': 2
+                }
+              },
+              'livingroom_night': {
+                'name': 'Soggiorno Notte',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 1
+                }
+              },
+              'livingroom_off': {
+                'name': 'Soggiorno Spenta',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 0
+                }
+              },
+              'kitchen_day': {
+                'name': 'Cucina Luminoso',
+                'brightness': {
+                  'led_cucina': 88,
+                  'gregg_cucina': 30
+                }
+              },
+              'kitchen_soft': {
+                'name': 'Cucina Relax',
+                'brightness': {
+                  'led_cucina': 40,
+                  'gregg_cucina': 25
+                }
+              },
+              'kitchen_prep': {
+                'name': 'Cucina Lavoro',
+                'brightness': {
+                  'led_cucina': 100,
+                  'gregg_cucina': 0
+                }
+              },
+              'kitchen_dinner': {
+                'name': 'Cucina Cena',
+                'brightness': {
+                  'led_cucina': 62,
+                  'gregg_cucina': 42
+                }
+              },
+              'kitchen_night': {
+                'name': 'Cucina Notte',
+                'brightness': {
+                  'led_cucina': 25,
+                  'gregg_cucina': 0
+                }
+              },
+              'kitchen_off': {
+                'name': 'Cucina Spenta',
+                'brightness': {
+                  'led_cucina': 0,
+                  'gregg_cucina': 0
+                }
+              },
+              'camera_day': {
+                'name': 'Camera Luminoso',
+                'brightness': {
+                  'led_camera': 100
+                }
+              },
+              'camera_soft': {
+                'name': 'Camera Relax',
+                'brightness': {
+                  'led_camera': 55
+                }
+              },
+              'camera_night': {
+                'name': 'Camera Notte',
+                'brightness': {
+                  'led_camera': 20
+                }
+              },
+              'camera_work': {
+                'name': 'Camera Lavoro',
+                'brightness': {
+                  'led_camera': 85
+                }
+              },
+              'camera_off': {
+                'name': 'Camera Spenta',
+                'brightness': {
+                  'led_camera': 0
+                }
+              },
+              'bed_day': {
+                'name': 'Letto Luminoso',
+                'brightness': {
+                  'led_sopra_al_letto': 55,
+                  'led_camera_da_letto': 100
+                }
+              },
+              'bed_soft': {
+                'name': 'Letto Relax',
+                'brightness': {
+                  'led_sopra_al_letto': 35,
+                  'led_camera_da_letto': 18
+                }
+              },
+              'bed_read': {
+                'name': 'Letto Lettura',
+                'brightness': {
+                  'led_sopra_al_letto': 90,
+                  'led_camera_da_letto': 0
+                }
+              },
+              'bed_night': {
+                'name': 'Letto Notte',
+                'brightness': {
+                  'led_sopra_al_letto': 5,
+                  'led_camera_da_letto': 0
+                }
+              },
+              'bed_off': {
+                'name': 'Letto Spenta',
+                'brightness': {
+                  'led_sopra_al_letto': 0,
+                  'led_camera_da_letto': 0
+                }
+              }
+            } %}
+            {{ scenes | tojson }}

@@ -1,0 +1,156 @@
+# ============================================================
+# VOICE CONTROL - SOGGIORNO LED
+# ============================================================
+# Homeway/Sage funziona perfettamente con gli script esposti (hw_*, scene_*).
+#
+# HA Assist locale con custom_sentences ha problemi di sintassi hassil
+# non risolvibili facilmente. Gli intent_script sotto restano per riferimento
+# futuro ma non sono attivi senza custom_sentences validi.
+#
+# SOLUZIONE: Usa solo Homeway/Sage per i comandi vocali.
+# ============================================================
+
+# intent_script disabilitati (servirebbero custom_sentences validi)
+# LedAccendiZona, LedSpegniZona, LedMetaZona, LedPreset, LedAmbiente, LedTuttoSpento
+
+LedAccendiZona:
+  speech:
+    text: "Ok, accendo {{ zona }} al {{ brightness if brightness else 'default' }}%"
+  action:
+    - variables:
+        zona_lower: "{{ (zona or '') | lower }}"
+        zone_key: >-
+          {% if 'tv' in zona_lower or 'televis' in zona_lower %}
+            tv
+          {% elif 'muse' in zona_lower or 'vetrin' in zona_lower %}
+            museo
+          {% elif 'libr' in zona_lower or 'mensol' in zona_lower or 'libri' in zona_lower %}
+            libreria
+          {% else %}
+            main
+          {% endif %}
+    - choose:
+        - conditions: "{{ brightness is defined and brightness | int(0) > 0 }}"
+          sequence:
+            - service: script.set_zone_brightness
+              data:
+                zone_key: "{{ zone_key }}"
+                brightness: "{{ brightness | int(0) }}"
+        - conditions: "{{ brightness is not defined or brightness | int(0) == 0 }}"
+          sequence:
+            - service: script.zone_on
+              data:
+                zone_key: "{{ zone_key }}"
+
+LedSpegniZona:
+  speech:
+    text: "Spento {{ zona }}"
+  action:
+    - variables:
+        zona_lower: "{{ (zona or '') | lower }}"
+        zone_key: >-
+          {% if 'tv' in zona_lower or 'televis' in zona_lower %}
+            tv
+          {% elif 'muse' in zona_lower or 'vetrin' in zona_lower %}
+            museo
+          {% elif 'libr' in zona_lower or 'mensol' in zona_lower or 'libri' in zona_lower %}
+            libreria
+          {% else %}
+            main
+          {% endif %}
+    - service: script.zone_off
+      data:
+        zone_key: "{{ zone_key }}"
+
+LedMetaZona:
+  speech:
+    text: "Ok, {{ zona }} al 50%"
+  action:
+    - variables:
+        zona_lower: "{{ (zona or '') | lower }}"
+        zone_key: >-
+          {% if 'tv' in zona_lower or 'televis' in zona_lower %}
+            tv
+          {% elif 'muse' in zona_lower or 'vetrin' in zona_lower %}
+            museo
+          {% elif 'libr' in zona_lower or 'mensol' in zona_lower or 'libri' in zona_lower %}
+            libreria
+          {% else %}
+            main
+          {% endif %}
+    - service: script.set_zone_brightness
+      data:
+        zone_key: "{{ zone_key }}"
+        brightness: 50
+
+LedPreset:
+  speech:
+    text: "Ok, {{ zona }} su {{ preset }}"
+  action:
+    - variables:
+        zona_lower: "{{ (zona or '') | lower }}"
+        preset_lower: "{{ (preset or '') | lower }}"
+        zone_key: >-
+          {% if 'tv' in zona_lower or 'televis' in zona_lower %}
+            tv
+          {% elif 'muse' in zona_lower or 'vetrin' in zona_lower %}
+            museo
+          {% elif 'libr' in zona_lower or 'mensol' in zona_lower or 'libri' in zona_lower %}
+            libreria
+          {% else %}
+            main
+          {% endif %}
+        preset_level: >-
+          {% if 'bassa' in preset_lower or 'basso' in preset_lower %}
+            low
+          {% elif 'media' in preset_lower or 'medi' in preset_lower %}
+            medium
+          {% elif 'alta' in preset_lower or 'alto' in preset_lower %}
+            high
+          {% else %}
+            medium
+          {% endif %}
+    - service: script.set_zone_preset
+      data:
+        zone_key: "{{ zone_key }}"
+        preset_level: "{{ preset_level }}"
+
+LedAmbiente:
+  speech:
+    text: "Ok, ambiente {{ ambiente }} avviato"
+  action:
+    - variables:
+        ambiente_lower: "{{ (ambiente or '') | lower }}"
+        scene_script: >-
+          {% if 'notte' in ambiente_lower %}
+            script.scene_casa_night
+          {% elif 'sonnell' in ambiente_lower or 'nap' in ambiente_lower or 'pisol' in ambiente_lower %}
+            script.scene_livingroom_nap
+          {% elif 'cinema' in ambiente_lower %}
+            script.scene_livingroom_cinema
+          {% elif 'lett' in ambiente_lower or 'lettura' in ambiente_lower %}
+            script.scene_livingroom_reading
+          {% elif 'giorn' in ambiente_lower %}
+            script.scene_casa_day
+          {% elif 'pomerig' in ambiente_lower %}
+            script.scene_afternoon
+          {% elif 'sera' in ambiente_lower %}
+            script.scene_casa_evening
+          {% elif 'nuvol' in ambiente_lower %}
+            script.scene_cloudy
+          {% elif 'medit' in ambiente_lower or 'relax' in ambiente_lower %}
+            script.scene_livingroom_meditation
+          {% else %}
+            script.scene_livingroom_nap
+          {% endif %}
+    - service: script.turn_on
+      target:
+        entity_id: "{{ scene_script }}"
+
+LedTuttoSpento:
+  speech:
+    text: "Spento tutto il soggiorno"
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.scene_livingroom_off

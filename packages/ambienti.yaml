@@ -1,0 +1,399 @@
+# ============================================================
+# AMBIENTI/SCENE GLOBALI - TUTTA LA CASA
+# ============================================================
+# Questi script sono GLOBALI e controllano tutte le zone LED di casa.
+# Ogni scena applica brightness definiti in scene.yaml
+# ============================================================
+
+script:
+  # ========================================
+  # AMBIENTE TRIGGER (preemptive scene manager)
+  # ========================================
+  ambiente_trigger:
+    alias: "Ambiente Trigger (Global)"
+    fields:
+      target_script:
+        description: "Entity id dello script ambiente da avviare (es. 'script.scene_casa_night')"
+      friendly_name:
+        description: "Nome leggibile ambiente (opzionale)"
+    sequence:
+      - choose:
+          - conditions: "{{ friendly_name is defined and friendly_name != '' }}"
+            sequence:
+              - service: input_text.set_value
+                data:
+                  entity_id: input_text.current_ambiente
+                  value: "{{ friendly_name }}"
+      - service: script.turn_off
+        data:
+          entity_id:
+            # House scenes
+            - script.scene_casa_night
+            - script.scene_casa_day
+            - script.scene_casa_guests
+            - script.scene_casa_cleaning
+            - script.scene_casa_all_off
+            # Livingroom scenes
+            - script.scene_livingroom_day
+            - script.scene_livingroom_morning
+            - script.scene_livingroom_soft
+            - script.scene_livingroom_nap
+            - script.scene_livingroom_sleep
+            - script.scene_livingroom_cinema
+            - script.scene_livingroom_reading
+            - script.scene_livingroom_meditation
+            - script.scene_livingroom_desk
+            - script.scene_livingroom_balanced
+            - script.scene_livingroom_football
+            - script.scene_livingroom_computer
+            - script.scene_livingroom_night
+            - script.scene_livingroom_off
+            # Kitchen scenes
+            - script.scene_kitchen_day
+            - script.scene_kitchen_prep
+            - script.scene_kitchen_dinner
+            - script.scene_kitchen_soft
+            - script.scene_kitchen_night
+            - script.scene_kitchen_off
+            # Camera scenes
+            - script.scene_camera_day
+            - script.scene_camera_soft
+            - script.scene_camera_night
+            - script.scene_camera_work
+            - script.scene_camera_off
+            # Bed scenes
+            - script.scene_bed_day
+            - script.scene_bed_read
+            - script.scene_bed_relax
+            - script.scene_bed_night
+            - script.scene_bed_off
+      - delay: "00:00:01"
+      - service: script.turn_on
+        data:
+          entity_id: "{{ target_script }}"
+
+  # ========================================
+  # HOUSE SCENES
+  # ========================================
+  scene_casa_night:
+    alias: "Notte"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "night"
+      # Spegni TV
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+
+  scene_casa_day:
+    alias: "Luminoso"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "day"
+
+  scene_casa_guests:
+    alias: "Ospiti"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "guests"
+
+  scene_casa_cleaning:
+    alias: "Pulizie"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "cleaning"
+
+  scene_casa_all_off:
+    alias: "Spegni Tutto"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "off"
+
+  # ========================================
+  # LIVINGROOM SCENES
+  # ========================================
+  scene_livingroom_day:
+    alias: "Soggiorno Luminoso"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_day"
+
+  scene_livingroom_morning:
+    alias: "Soggiorno Risveglio"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_morning"
+
+  scene_livingroom_balanced:
+    alias: "Soggiorno Bilanciato"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_balanced"
+
+  scene_livingroom_soft:
+    alias: "Soggiorno Relax"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_soft"
+
+  scene_livingroom_nap:
+    alias: "Sonnellino"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_nap"
+
+  scene_livingroom_sleep:
+    alias: "Sonno Notturno"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_sleep"
+
+  scene_livingroom_cinema:
+    alias: "Cinema"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL SUBITO (PRIMA di tutto)
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          # Accendi TV via WoL
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          # Attendi che la TV si accenda (timeout ridotto)
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          # Breve pausa per stabilizzazione
+          - delay:
+              seconds: 1
+      # Lancia Plex e imposta luci subito dopo
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "Plex"
+        continue_on_error: true
+      # Imposta luci cinema immediatamente
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_cinema"
+
+  scene_livingroom_reading:
+    alias: "Lettura"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_reading"
+
+  scene_livingroom_meditation:
+    alias: "Meditazione"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_meditation"
+
+  scene_livingroom_desk:
+    alias: "Scrivania"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_desk"
+
+  scene_livingroom_football:
+    alias: "Calcio"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 1
+      # Imposta source su Set-top Box
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "UPC Set-top box"
+        continue_on_error: true
+      # Imposta luci calcio
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_football"
+
+  scene_livingroom_computer:
+    alias: "Computer"
+    sequence:
+      # Se TV NON è in stato playing/paused, accendila via WoL
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+        then:
+          - service: wake_on_lan.send_magic_packet
+            data:
+              mac: !secret tv_mac_address
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
+            timeout: "00:00:10"
+          - delay:
+              seconds: 2
+      # Imposta source su HDMI 1
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI1"
+        continue_on_error: true
+      # Imposta luci computer
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_computer"
+
+  scene_livingroom_night:
+    alias: "Soggiorno Notte"
+    sequence:
+      # Imposta luci notte
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_night"
+      # Spegni TV
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+
+  scene_livingroom_off:
+    alias: "Spegni Soggiorno"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "livingroom_off"
+
+  # ========================================
+  # KITCHEN SCENES
+  # ========================================
+  scene_kitchen_day:
+    alias: "Cucina Luminoso"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_day"
+
+  scene_kitchen_prep:
+    alias: "Cucina Preparazione"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_prep"
+
+  scene_kitchen_dinner:
+    alias: "Cena in Cucina"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_dinner"
+
+  scene_kitchen_soft:
+    alias: "Cucina Relax"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_soft"
+
+  scene_kitchen_night:
+    alias: "Notte Cucina"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_night"
+
+  scene_kitchen_off:
+    alias: "Spegni Cucina"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "kitchen_off"
+
+  # ========================================
+  # CAMERA SCENES
+  # ========================================
+  scene_camera_day:
+    alias: "Camera Luminoso"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "camera_day"
+
+  scene_camera_soft:
+    alias: "Camera Relax"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "camera_soft"
+
+  scene_camera_night:
+    alias: "Camera Notte"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "camera_night"
+
+  scene_camera_work:
+    alias: "Camera Lavoro"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "camera_work"
+
+  scene_camera_off:
+    alias: "Spegni Camera"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "camera_off"
+
+  # ========================================
+  # BEDROOM SCENES
+  # ========================================
+  scene_bed_day:
+    alias: "Letto Luminoso"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_day"
+
+  scene_bed_read:
+    alias: "Letto Lettura"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_read"
+
+  scene_bed_relax:
+    alias: "Letto Relax"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_soft"
+
+  scene_bed_night:
+    alias: "Letto Notte"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_night"
+
+  scene_bed_off:
+    alias: "Spegni Letto"
+    sequence:
+      - service: script.set_ambiente
+        data:
+          scene_key: "bed_off"

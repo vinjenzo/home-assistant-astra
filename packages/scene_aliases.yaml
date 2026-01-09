@@ -1,0 +1,62 @@
+# ============================================================
+# SCENE ALIASES - Mappatura comandi vocali alternativi
+# ============================================================
+# Permette di usare "Relax" come alias per "Soffusa"
+# e altri comandi vocali equivalenti
+# ============================================================
+
+automation scene_aliases:
+  - alias: "Scene Alias - Soggiorno Relax → Soffusa"
+    id: automation_scene_alias_soggiorno_relax
+    trigger:
+      platform: state
+      entity_id: input_select.stanza_attuale
+      to: "Relax Soggiorno"
+    action:
+      - service: script.set_ambiente
+        data:
+          ambiente: "Soggiorno Soffusa"
+
+  - alias: "Scene Alias - Cucina Relax → Soffusa"
+    id: automation_scene_alias_cucina_relax
+    trigger:
+      platform: state
+      entity_id: input_select.stanza_attuale
+      to: "Relax Cucina"
+    action:
+      - service: script.set_ambiente
+        data:
+          ambiente: "Cucina Soffusa"
+
+  - alias: "Scene Alias - Camera Relax → Soffusa"
+    id: automation_scene_alias_camera_relax
+    trigger:
+      platform: state
+      entity_id: input_select.stanza_attuale
+      to: "Relax Camera"
+    action:
+      - service: script.set_ambiente
+        data:
+          ambiente: "Camera Soffusa"
+
+  - alias: "Scene Alias - Letto Relax → Soffusa"
+    id: automation_scene_alias_letto_relax
+    trigger:
+      platform: state
+      entity_id: input_select.stanza_attuale
+      to: "Relax Letto"
+    action:
+      - service: script.set_ambiente
+        data:
+          ambiente: "Letto Soffusa"
+
+  - alias: "Scene Alias - Casa Relax → Soffusa"
+    id: automation_scene_alias_casa_relax
+    trigger:
+      platform: state
+      entity_id: input_select.stanza_attuale
+      to: "Casa Relax"
+    action:
+      - service: script.set_ambiente
+        data:
+          ambiente: "Casa Soffusa"

@@ -1,0 +1,551 @@
+# ============================================================
+# PRESENCE - AUTOMAZIONI BASATE SULLA PRESENZA
+# ============================================================
+# Gestisce tutte le automazioni legate alla presenza/posizione:
+# - Ritorno a casa
+# - Accensione automatica luci basata sulla posizione
+# ============================================================
+
+# ============================================================
+# INPUT SELECT - Stanza attuale
+# ============================================================
+input_select:
+  stanza_attuale:
+    name: Stanza Attuale
+    options:
+      - Indeterminato
+      - Soggiorno
+      - Camera
+      - Camera da Letto
+      - Cucina
+    initial: Indeterminato
+    icon: mdi:home-search
+
+# ============================================================
+# INPUT BOOLEAN - Toggle Automazioni
+# ============================================================
+input_boolean:
+  automazioni_luci:
+    name: Automazioni Luci BLE
+    icon: mdi:lightbulb-auto
+    initial: "on"
+
+# ============================================================
+# TEMPLATE SENSORS - Rilevamento BLE
+# ============================================================
+template:
+  - sensor:
+      # Sensore RSSI (potenza segnale) - sostituisci con il tuo MAC device
+      - name: "Moto G42 RSSI"
+        unique_id: moto_g42_rssi
+        unit_of_measurement: "dBm"
+        state: >
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') %}
+          {{ rssi if rssi is not none else none }}
+
+      # Sensore distanza calcolata dal RSSI
+      - name: "Moto G42 Distanza"
+        unique_id: moto_g42_distanza
+        unit_of_measurement: "m"
+        state: >
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') | int(-999) %}
+          {% if rssi > -999 %}
+            {% set tx_power = -59 %}
+            {% set distance = 10 ** ((tx_power - rssi) / (10 * 2)) %}
+            {{ "%.1f" | format(distance) }}
+          {% else %}
+            {{ none }}
+          {% endif %}
+
+      # Sensore RSSI Pixel 9a
+      - name: "Pixel 9a RSSI"
+        unique_id: pixel_9a_rssi
+        unit_of_measurement: "dBm"
+        state: >
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') %}
+          {{ rssi if rssi is not none else none }}
+
+      # Sensore distanza Pixel 9a
+      - name: "Pixel 9a Distanza"
+        unique_id: pixel_9a_distanza
+        unit_of_measurement: "m"
+        state: >
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') | int(-999) %}
+          {% if rssi > -999 %}
+            {% set tx_power = -59 %}
+            {% set distance = 10 ** ((tx_power - rssi) / (10 * 2)) %}
+            {{ "%.1f" | format(distance) }}
+          {% else %}
+            {{ none }}
+          {% endif %}
+
+# ============================================================
+# AUTOMAZIONI
+# ============================================================
+automation:
+  # ========================================
+  # RITORNO A CASA
+  # ========================================
+  - alias: Ritorno a Casa - Benvenuto
+    mode: single
+    description: "Accoglienza graduale luci quando rientri e la casa è spenta"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.moto_g42
+        from: "not_home"
+        to: "home"
+      - platform: state
+        entity_id: device_tracker.pixel_9a
+        from: "not_home"
+        to: "home"
+    condition:
+      # Verifica che NESSUNO fosse in casa prima (entrambi not_home)
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "0" # moto_g42 trigger
+              - condition: state
+                entity_id: device_tracker.pixel_9a
+                state: "not_home"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "1" # pixel_9a trigger
+              - condition: state
+                entity_id: device_tracker.moto_g42
+                state: "not_home"
+      # Soggiorno
+      - condition: state
+        entity_id: binary_sensor.zona_in_alto_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_tv_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_museo_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_libreria_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_gregg_accesa
+        state: "off"
+      # Cucina
+      - condition: state
+        entity_id: binary_sensor.zona_led_cucina_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_gregg_cucina_accesa
+        state: "off"
+      # Camera
+      - condition: state
+        entity_id: binary_sensor.zona_led_camera_accesa
+        state: "off"
+      # Camera da Letto
+      - condition: state
+        entity_id: binary_sensor.zona_led_sopra_al_letto_accesa
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.zona_led_camera_da_letto_accesa
+        state: "off"
+    action:
+      # Calcola intensità in base al momento della giornata
+      - variables:
+          is_below_horizon: "{{ is_state('sun.sun', 'below_horizon') }}"
+          hour_now: "{{ now().hour }}"
+          brightness_soggiorno: >
+            {% if is_below_horizon %}80
+            {% elif hour_now < 12 %}40
+            {% else %}50
+            {% endif %}
+          brightness_camera: >
+            {% if is_below_horizon %}100
+            {% elif hour_now < 12 %}60
+            {% else %}70
+            {% endif %}
+
+      # Accendi Gregg Soggiorno
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "gregg_soggiorno"
+          brightness: "{{ brightness_soggiorno }}"
+
+      # Accendi Gregg Cucina (stessa intensità del Soggiorno)
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "gregg_cucina"
+          brightness: "{{ brightness_soggiorno }}"
+
+      # Accendi Camera
+      - service: script.set_zone_brightness
+        data:
+          zone_key: "led_camera"
+          brightness: "{{ brightness_camera }}"
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "🏠 Rientro a casa"
+          message: "{{ trigger.entity_id }} è tornato: livingroom {{ brightness_soggiorno }}%, camera {{ brightness_camera }}%"
+
+  # ========================================
+  # USCITA DA CASA
+  # ========================================
+  - alias: "Uscita da Casa - Spegni tutte le luci quando entrambi escono"
+    mode: single
+    description: "Quando entrambi i cellulari escono da casa, spegni tutte le luci"
+    trigger:
+      - platform: state
+        entity_id:
+          - device_tracker.moto_g42
+          - device_tracker.pixel_9a
+        to: "not_home"
+    condition:
+      # Verifica che ENTRAMBI i cellulari siano fuori casa
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: device_tracker.moto_g42
+            state: "not_home"
+          - condition: state
+            entity_id: device_tracker.pixel_9a
+            state: "not_home"
+    action:
+      # Spegni tutte le luci
+      - service: script.turn_on
+        target:
+          entity_id: script.scene_casa_all_off
+      # Spegni TV
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "🚪 Uscita di casa"
+          message: "Entrambi away: luci e TV spente"
+
+  # ========================================
+  # USCITA SOLO MOTO G42
+  # ========================================
+  - alias: "Moto G42 Esce - Spegni TV HDMI1 e PC"
+    mode: single
+    description: "Quando Moto G42 esce da casa, spegni TV se su HDMI1 e spegni PC"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.moto_g42
+        from: "home"
+        to: "not_home"
+    condition:
+      # Spegni solo se TV è su HDMI1
+      - condition: template
+        value_template: "{{ state_attr('media_player.lg_webos_tv_oled48c31la', 'source') == 'HDMI1' }}"
+    action:
+      # Spegni TV
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "📱 Moto G42 away"
+          message: "TV era su HDMI1: spenta"
+
+  # ========================================
+  # USCITA SINGOLA - SOLO NOTIFICA
+  # ========================================
+  - alias: "Uscita Singola - Moto G42 via, Pixel in casa"
+    mode: single
+    description: "Notifica quando Moto G42 esce ma Pixel 9a è ancora in casa"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.moto_g42
+        from: "home"
+        to: "not_home"
+    condition:
+      - condition: state
+        entity_id: device_tracker.pixel_9a
+        state: "home"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "ℹ️ Uscita singola"
+          message: "Sei uscito, Pixel 9a è ancora a casa."
+
+  - alias: "Uscita Singola - Pixel via, Moto G42 in casa"
+    mode: single
+    description: "Notifica quando Pixel 9a esce ma Moto G42 è ancora in casa"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.pixel_9a
+        from: "home"
+        to: "not_home"
+    condition:
+      - condition: state
+        entity_id: device_tracker.moto_g42
+        state: "home"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "ℹ️ Uscita singola (Pixel)"
+          message: "Pixel 9a è uscito, tu sei in casa."
+
+  # ========================================
+  # AWAY CONFERMATO (ENTRAMBI FUORI >5m)
+  # ========================================
+  - alias: "Away confermato - Entrambi fuori da 5 minuti"
+    mode: single
+    description: "Notifica quando entrambi i telefoni sono away da almeno 5 minuti"
+    trigger:
+      - platform: state
+        entity_id:
+          - device_tracker.moto_g42
+          - device_tracker.pixel_9a
+        to: "not_home"
+    condition:
+      - condition: state
+        entity_id: device_tracker.moto_g42
+        state: "not_home"
+        for: "00:05:00"
+      - condition: state
+        entity_id: device_tracker.pixel_9a
+        state: "not_home"
+        for: "00:05:00"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "✅ Away confermato"
+          message: "Entrambi fuori da 5 minuti. Casa in modalità away."
+
+  # ========================================
+  # TOGGLE AUTOMAZIONI LUCI (BLE) - NOTIFICA
+  # ========================================
+  - alias: "Automazioni Luci BLE - Toggle"
+    mode: single
+    description: "Notifica quando il toggle automazioni luci BLE cambia"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.automazioni_luci
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.automazioni_luci
+                state: "on"
+            sequence:
+              - service: !secret notify_service
+                data:
+                  title: "🟢 Automazioni luci"
+                  message: "Automazioni luci BLE attive"
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.automazioni_luci
+                state: "off"
+            sequence:
+              - service: !secret notify_service
+                data:
+                  title: "🟡 Automazioni luci"
+                  message: "Automazioni luci BLE disattivate"
+
+  # ========================================
+  # TV ACCESA CON CASA VUOTA - NOTIFICA
+  # ========================================
+  - alias: "TV accesa con casa vuota - Notifica"
+    mode: single
+    description: "Avvisa se la TV resta accesa mentre nessuno è in casa"
+    trigger:
+      - platform: state
+        entity_id: media_player.lg_webos_tv_oled48c31la
+        to: "on"
+        for: "00:02:00"
+    condition:
+      - condition: state
+        entity_id: device_tracker.moto_g42
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.pixel_9a
+        state: "not_home"
+    action:
+      - service: !secret notify_service
+        data:
+          title: "📺 TV accesa a casa vuota"
+          message: "La TV è accesa da 2 minuti mentre nessuno è in casa."
+
+  # ========================================
+  # RILEVAMENTO BLE STANZE
+  # ========================================
+  # ⭐ Soggiorno
+  - alias: "BLE - Rileva Soggiorno e Accendi Luci"
+    trigger:
+      - platform: template
+        value_template: >
+          {% set distanza = states('sensor.moto_g42_distanza') | float(999) %}
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') | int(-999) %}
+          {{ rssi > -70 and distanza < 5 }}
+      - platform: template
+        value_template: >
+          {% set distanza = states('sensor.pixel_9a_distanza') | float(999) %}
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') | int(-999) %}
+          {{ rssi > -70 and distanza < 5 }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+        - condition: state
+          entity_id: input_boolean.automazioni_luci
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.zona_in_alto_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_tv_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_museo_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_libreria_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_gregg_accesa
+          state: "off"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.stanza_attuale
+        data:
+          option: Soggiorno
+      - service: script.turn_on
+        target:
+          entity_id: script.hw_livingroom_main_low
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.moto_g42_distanza
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "💡 Presenza Soggiorno"
+          message: "BLE rilevato, luci livingroom low"
+
+  # ⭐ Camera
+  - alias: "BLE - Rileva Camera e Accendi Luci"
+    trigger:
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') | int(-999) %}
+          {{ rssi < -70 and rssi > -80 }}
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') | int(-999) %}
+          {{ rssi < -70 and rssi > -80 }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+        - condition: state
+          entity_id: input_boolean.automazioni_luci
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.zona_led_camera_accesa
+          state: "off"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.stanza_attuale
+        data:
+          option: Camera
+      - service: script.turn_on
+        target:
+          entity_id: script.hw_room_led_low
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "💡 Presenza Camera"
+          message: "BLE rilevato, luci camera low"
+
+  # ⭐ Camera da Letto
+  - alias: "BLE - Rileva Camera da Letto e Accendi Luci"
+    trigger:
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') | int(-999) %}
+          {{ rssi < -60 and rssi > -75 }}
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') | int(-999) %}
+          {{ rssi < -60 and rssi > -75 }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+        - condition: state
+          entity_id: input_boolean.automazioni_luci
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.zona_led_sopra_al_letto_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_led_camera_da_letto_accesa
+          state: "off"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.stanza_attuale
+        data:
+          option: Camera da Letto
+      - service: script.turn_on
+        target:
+          entity_id: script.hw_bedroom_sopra_al_letto_low
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "💡 Presenza Camera Letto"
+          message: "BLE rilevato, luci letto low"
+
+  # ⭐ Cucina
+  - alias: "BLE - Rileva Cucina e Accendi Luci"
+    trigger:
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.moto_g42', 'ble_rssi') | int(-999) %}
+          {{ rssi < -50 and rssi > -65 }}
+      - platform: template
+        value_template: >
+          {% set rssi = state_attr('device_tracker.pixel_9a', 'ble_rssi') | int(-999) %}
+          {{ rssi < -50 and rssi > -65 }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+        - condition: state
+          entity_id: input_boolean.automazioni_luci
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.zona_led_cucina_accesa
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.zona_gregg_cucina_accesa
+          state: "off"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.stanza_attuale
+        data:
+          option: Cucina
+      - service: script.turn_on
+        target:
+          entity_id: script.hw_kitchen_led_low
+      # Notifica
+      - service: !secret notify_service
+        data:
+          title: "💡 Presenza Cucina"
+          message: "BLE rilevato, luci cucina low"

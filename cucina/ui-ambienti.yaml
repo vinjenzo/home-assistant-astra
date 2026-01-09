@@ -1,0 +1,234 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Luminoso
+        icon: mdi:white-balance-sunny
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_kitchen_day"
+              friendly_name: "Cucina Luminoso"
+        styles:
+          card:
+            - background: rgba(255,235,59,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,235,59,0.20)
+          icon:
+            - width: 60px
+            - color: "#ffeb3b"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Lavoro
+        icon: mdi:chef-hat
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_kitchen_prep"
+              friendly_name: "Cucina Lavoro"
+        styles:
+          card:
+            - background: rgba(255,152,0,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,152,0,0.20)
+          icon:
+            - width: 60px
+            - color: "#ff9800"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Cena
+        icon: mdi:silverware-fork-knife
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_kitchen_dinner"
+              friendly_name: "Cucina Cena"
+        styles:
+          card:
+            - background: rgba(255,111,0,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,111,0,0.20)
+          icon:
+            - width: 60px
+            - color: "#ff6f00"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Relax
+        icon: mdi:weather-night-partly-cloudy
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_kitchen_soft"
+              friendly_name: "Cucina Relax"
+        styles:
+          card:
+            - background: rgba(0,150,136,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(0,150,136,0.20)
+          icon:
+            - width: 60px
+            - color: "#009688"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Notte
+        icon: mdi:weather-night
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_kitchen_night"
+              friendly_name: "Cucina Notte"
+        styles:
+          card:
+            - background: rgba(55,71,79,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(55,71,79,0.35)
+          icon:
+            - width: 60px
+            - color: "#37474f"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Spegni
+        icon: mdi:power-off
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.scene_kitchen_off
+        styles:
+          card:
+            - background: rgba(244,67,54,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(244,67,54,0.25)
+          icon:
+            - width: 60px
+            - color: "#f44336"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none

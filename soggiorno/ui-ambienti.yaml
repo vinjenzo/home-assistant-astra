@@ -1,0 +1,371 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Risveglio
+        icon: mdi:weather-sunset-up
+        show_label: true
+        label: "🌅"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_morning"
+              friendly_name: "Soggiorno Risveglio"
+        styles:
+          card:
+            - background: rgba(255,152,0,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,152,0,0.20)
+          icon:
+            - width: 60px
+            - color: "#ff9800"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Bilanciato
+        icon: mdi:brightness-6
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_balanced"
+              friendly_name: "Soggiorno Bilanciato"
+        styles:
+          card:
+            - background: rgba(255,193,7,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,193,7,0.20)
+          icon:
+            - width: 60px
+            - color: "#ffc107"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Luminoso
+        icon: mdi:white-balance-sunny
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_day"
+              friendly_name: "Soggiorno Luminoso"
+        styles:
+          card:
+            - background: rgba(255,235,59,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,235,59,0.20)
+          icon:
+            - width: 60px
+            - color: "#ffeb3b"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Lavoro
+        icon: mdi:desk
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_desk"
+              friendly_name: "Soggiorno Lavoro"
+        styles:
+          card:
+            - background: rgba(33,150,243,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(33,150,243,0.20)
+          icon:
+            - width: 60px
+            - color: "#2196f3"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Lettura
+        icon: mdi:book-open-page-variant
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_reading"
+              friendly_name: "Soggiorno Lettura"
+        styles:
+          card:
+            - background: rgba(255,111,0,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,111,0,0.20)
+          icon:
+            - width: 60px
+            - color: "#ff6f00"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: Relax
+        icon: mdi:lightbulb-group-outline
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_soft"
+              friendly_name: "Soggiorno Relax"
+        styles:
+          card:
+            - background: rgba(0,150,136,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(0,150,136,0.20)
+          icon:
+            - width: 60px
+            - color: "#009688"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Sonnellino
+        icon: mdi:bed-empty
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_nap"
+              friendly_name: "Soggiorno Sonnellino"
+        styles:
+          card:
+            - background: rgba(156,39,176,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(156,39,176,0.20)
+          icon:
+            - width: 60px
+            - color: "#9c27b0"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Sonno Notturno
+        icon: mdi:moon-new
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_sleep"
+              friendly_name: "Soggiorno Sonno Notturno"
+        styles:
+          card:
+            - background: rgba(63,81,181,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(63,81,181,0.35)
+          icon:
+            - width: 60px
+            - color: "#3f51b5"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        name: Notte
+        icon: mdi:weather-night
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_livingroom_night"
+              friendly_name: "Soggiorno Notte"
+        styles:
+          card:
+            - background: rgba(55,71,79,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(55,71,79,0.35)
+          icon:
+            - width: 60px
+            - color: "#37474f"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Spegni
+        icon: mdi:power-off
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.scene_livingroom_off
+        styles:
+          card:
+            - background: rgba(244,67,54,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(244,67,54,0.25)
+          icon:
+            - width: 60px
+            - color: "#f44336"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none

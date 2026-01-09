@@ -1,0 +1,55 @@
+type: vertical-stack
+cards:
+  # ============================================================
+  # INTESTAZIONE
+  # ============================================================
+  - type: markdown
+    content: |
+      ## 📱 Moto G42
+      Stato batteria e posizione dispositivo
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255,255,255,0.05);
+          border-radius: 12px;
+          padding: 8px;
+        }
+
+  # ============================================================
+  # DETTAGLI DISPOSITIVO
+  # ============================================================
+  - type: entities
+    title: 📱 Informazioni Dispositivo
+    entities:
+      - entity: device_tracker.moto_g42
+        name: Posizione
+      - entity: sensor.moto_g42_battery_level
+        name: Batteria
+        icon: mdi:battery
+      - entity: sensor.moto_g42_battery_state
+        name: Stato di carica
+        icon: mdi:power-plug
+      - entity: sensor.moto_g42_charger_type
+        name: Tipo di caricatore
+        icon: mdi:flash
+    card_mod:
+      style: |
+        ha-card {
+          background: rgba(255,255,255,0.05);
+          border-radius: 12px;
+        }
+
+  - type: gauge
+    entity: sensor.moto_g42_battery_level
+    name: Batteria
+    min: 0
+    max: 100
+    severity:
+      green: 60
+      yellow: 30
+      red: 0
+
+visibility:
+  - condition: user
+    users:
+      - a49848c64edf4601867cf91a5a16b093

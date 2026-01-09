@@ -1,0 +1,4 @@
+# Badge per ultimo ambiente selezionato
+type: entity
+entity: input_text.current_ambiente
+name: Ultimo Ambiente

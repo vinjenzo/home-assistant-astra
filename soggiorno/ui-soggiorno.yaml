@@ -1,0 +1,570 @@
+type: vertical-stack
+cards:
+  # ============================================================
+  # ⭐ ZONE LUCI - RIGA 1 (SOGGIORNO • GREGG)
+  # ============================================================
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      # ⭐ LUCE SOGGIORNO
+      - type: custom:button-card
+        entity: binary_sensor.zona_in_alto_accesa
+        name: Soggiorno
+        icon: mdi:led-strip-variant
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Soggiorno';
+              
+              if (!zonaAccesa) return 'script.hw_livingroom_soggiorno_on';
+              if (zonaAccesa && isSelected) return 'script.hw_livingroom_soggiorno_off';
+              return 'script.select_zone_soggiorno';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Soggiorno';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  zone_name: 'Soggiorno'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #ffd082'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
+                  const selected = last === 'Soggiorno' || binary;
+                  return selected ? '0 0 14px #ffd082' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
+                  const selected = last === 'Soggiorno' || binary;
+                  return selected ? '#ffd082' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_in_alto_accesa']?.state === 'on';
+                  const selected = last === 'Soggiorno' || binary;
+                  return selected ? '#ffd082' : 'white';
+                ]]]
+            - margin-top: 8px
+
+      # ⭐ GREGG SOGGIORNO
+      - type: custom:button-card
+        entity: binary_sensor.zona_gregg_accesa
+        name: Gregg
+        icon: mdi:egg-outline
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Gregg Soggiorno';
+              
+              if (!zonaAccesa) return 'script.hw_livingroom_gregg_on';
+              if (zonaAccesa && isSelected) return 'script.hw_livingroom_gregg_off';
+              return 'script.select_zone_soggiorno';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Gregg Soggiorno';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  zone_name: 'Gregg Soggiorno'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #ce93d8'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
+                  const selected = last === 'Gregg Soggiorno' || binary;
+                  return selected ? '0 0 14px #ce93d8' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
+                  const selected = last === 'Gregg Soggiorno' || binary;
+                  return selected ? '#ce93d8' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_gregg_accesa']?.state === 'on';
+                  const selected = last === 'Gregg Soggiorno' || binary;
+                  return selected ? '#ce93d8' : 'white';
+                ]]]
+            - margin-top: 8px
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  # ============================================================
+  # ⭐ ZONE LUCI - RIGA 2 (TV • MUSEO • LIBRERIA)
+  # ============================================================
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      # ⭐ TV
+      - type: custom:button-card
+        entity: binary_sensor.zona_tv_accesa
+        name: TV
+        icon: mdi:television-ambient-light
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_tv_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'TV';
+              
+              if (!zonaAccesa) return 'script.hw_livingroom_tv_on';
+              if (zonaAccesa && isSelected) return 'script.hw_livingroom_tv_off';
+              return 'script.select_zone_soggiorno';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_tv_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'TV';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  zone_name: 'TV'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #80deea'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_tv_accesa']?.state === 'on';
+                  const selected = last === 'TV' || binary;
+                  return selected ? '0 0 14px #80deea' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_tv_accesa']?.state === 'on';
+                  const selected = last === 'TV' || binary;
+                  return selected ? '#80deea' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_tv_accesa']?.state === 'on';
+                  const selected = last === 'TV' || binary;
+                  return selected ? '#80deea' : 'white';
+                ]]]
+            - margin-top: 8px
+
+      # ⭐ MUSEO
+      - type: custom:button-card
+        entity: binary_sensor.zona_museo_accesa
+        name: Museo
+        icon: mdi:wall-sconce-round
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_museo_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Museo';
+              
+              if (!zonaAccesa) return 'script.hw_livingroom_museum_on';
+              if (zonaAccesa && isSelected) return 'script.hw_livingroom_museum_off';
+              return 'script.select_zone_soggiorno';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_museo_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Museo';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  zone_name: 'Museo'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #c5e1a5'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_museo_accesa']?.state === 'on';
+                  const selected = last === 'Museo' || binary;
+                  return selected ? '0 0 14px #c5e1a5' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_museo_accesa']?.state === 'on';
+                  const selected = last === 'Museo' || binary;
+                  return selected ? '#c5e1a5' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_museo_accesa']?.state === 'on';
+                  const selected = last === 'Museo' || binary;
+                  return selected ? '#c5e1a5' : 'white';
+                ]]]
+            - margin-top: 8px
+
+      # ⭐ LIBRERIA
+      - type: custom:button-card
+        entity: binary_sensor.zona_libreria_accesa
+        name: Libreria
+        icon: mdi:bookshelf
+        tap_action:
+          action: call-service
+          service: |
+            [[[
+              if (states['input_boolean.led_bulk_mode']?.state === 'on') return null;
+              const zonaAccesa = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Libreria';
+              
+              if (!zonaAccesa) return 'script.hw_livingroom_library_on';
+              if (zonaAccesa && isSelected) return 'script.hw_livingroom_library_off';
+              return 'script.select_zone_soggiorno';
+            ]]]
+          service_data: |
+            [[[
+              const zonaAccesa = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
+              const last = states['input_text.ultima_zona_led']?.state || '';
+              const isSelected = last === 'Libreria';
+              
+              if (zonaAccesa && !isSelected) {
+                return {
+                  zone_name: 'Libreria'
+                };
+              }
+              return {};
+            ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.08)
+            - border-radius: 12px
+            - border: >
+                [[[ return entity.state === 'on'
+                    ? '2px solid #f8bbd0'
+                    : '1px solid rgba(255,255,255,0.15)' ]]]
+            - box-shadow: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
+                  const selected = last === 'Libreria' || binary;
+                  return selected ? '0 0 14px #f8bbd0' : 'none';
+                ]]]
+          icon:
+            - width: 70px
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
+                  const selected = last === 'Libreria' || binary;
+                  return selected ? '#f8bbd0' : 'rgba(255,255,255,0.4)';
+                ]]]
+          name:
+            - color: >
+                [[[
+                  const last = states['input_text.ultima_zona_led']?.state || '';
+                  const binary = states['binary_sensor.zona_libreria_accesa']?.state === 'on';
+                  const selected = last === 'Libreria' || binary;
+                  return selected ? '#f8bbd0' : 'white';
+                ]]]
+            - margin-top: 8px
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  # ============================================================
+  # ⭐ SLIDER (visibile quando una luce è selezionata)
+  # ============================================================
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.zona_soggiorno_slider_visibile
+        state: "on"
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        - type: light
+          entity: light.luci
+          name: Luci Soggiorno
+          card_mod:
+            style: |
+              ha-card {
+                flex: 1 1 100% !important;
+                background: rgba(255,255,255,0.08) !important;
+                border-radius: 12px !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
+              }
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+
+  # ============================================================
+  # ⭐ PRESET (Bassa • Media • Alta) - sotto lo slider
+  # ============================================================
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.zona_soggiorno_slider_visibile
+        state: "on"
+    card:
+      type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none
+        # ⭐ BASSA
+        - type: custom:button-card
+          name: Bassa
+          icon: mdi:brightness-3
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Soggiorno': states['binary_sensor.zona_in_alto_accesa']?.state === 'on',
+                  'TV': states['binary_sensor.zona_tv_accesa']?.state === 'on',
+                  'Museo': states['binary_sensor.zona_museo_accesa']?.state === 'on',
+                  'Libreria': states['binary_sensor.zona_libreria_accesa']?.state === 'on',
+                  'Gregg Soggiorno': states['binary_sensor.zona_gregg_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Soggiorno';
+                const map = {
+                  'Soggiorno': 'script.hw_livingroom_soggiorno_low',
+                  'TV': 'script.hw_livingroom_tv_low',
+                  'Museo': 'script.hw_livingroom_museum_low',
+                  'Libreria': 'script.hw_livingroom_library_low',
+                  'Gregg Soggiorno': 'script.hw_livingroom_gregg_low',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#ffb74d"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+
+        # ⭐ MEDIA
+        - type: custom:button-card
+          name: Media
+          icon: mdi:brightness-5
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Soggiorno': states['binary_sensor.zona_in_alto_accesa']?.state === 'on',
+                  'TV': states['binary_sensor.zona_tv_accesa']?.state === 'on',
+                  'Museo': states['binary_sensor.zona_museo_accesa']?.state === 'on',
+                  'Libreria': states['binary_sensor.zona_libreria_accesa']?.state === 'on',
+                  'Gregg Soggiorno': states['binary_sensor.zona_gregg_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Soggiorno';
+                const map = {
+                  'Soggiorno': 'script.hw_livingroom_soggiorno_medium',
+                  'TV': 'script.hw_livingroom_tv_medium',
+                  'Museo': 'script.hw_livingroom_museum_medium',
+                  'Libreria': 'script.hw_livingroom_library_medium',
+                  'Gregg Soggiorno': 'script.hw_livingroom_gregg_medium',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#ffe082"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+
+        # ⭐ ALTA
+        - type: custom:button-card
+          name: Alta
+          icon: mdi:brightness-7
+          tap_action:
+            action: call-service
+            service: |
+              [[[ 
+                const binaries = {
+                  'Soggiorno': states['binary_sensor.zona_in_alto_accesa']?.state === 'on',
+                  'TV': states['binary_sensor.zona_tv_accesa']?.state === 'on',
+                  'Museo': states['binary_sensor.zona_museo_accesa']?.state === 'on',
+                  'Libreria': states['binary_sensor.zona_libreria_accesa']?.state === 'on',
+                  'Gregg Soggiorno': states['binary_sensor.zona_gregg_accesa']?.state === 'on',
+                };
+                const zona = Object.entries(binaries).find(([, on]) => on)?.[0] || 'Soggiorno';
+                const map = {
+                  'Soggiorno': 'script.hw_livingroom_soggiorno_high',
+                  'TV': 'script.hw_livingroom_tv_high',
+                  'Museo': 'script.hw_livingroom_museum_high',
+                  'Libreria': 'script.hw_livingroom_library_high',
+                  'Gregg Soggiorno': 'script.hw_livingroom_gregg_high',
+                };
+                return map[zona];
+              ]]]
+          styles:
+            card:
+              - background: rgba(255,255,255,0.08)
+              - border-radius: 12px
+              - border: 1px solid rgba(255,255,255,0.15)
+            icon:
+              - width: 30px
+              - color: "#fff59d"
+            name:
+              - color: white
+              - font-size: 13px
+              - margin-top: 6px
+        - type: custom:button-card
+          styles:
+            card:
+              - width: 12px
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - padding: 0
+              - cursor: default
+          tap_action:
+            action: none

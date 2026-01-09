@@ -1,0 +1,193 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Luminoso
+        icon: mdi:white-balance-sunny
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_casa_day"
+              friendly_name: "Casa Luminoso"
+        styles:
+          card:
+            - background: rgba(255,235,59,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,235,59,0.20)
+          icon:
+            - width: 70px
+            - color: "#ffeb3b"
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        name: "Notte"
+        icon: mdi:weather-night
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_casa_night"
+              friendly_name: "Casa Notte"
+        styles:
+          card:
+            - background: rgba(55,71,79,0.20)
+            - border-radius: 12px
+            - border: 1px solid rgba(55,71,79,0.35)
+          icon:
+            - width: 70px
+            - color: "#37474f"
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: Ospiti
+        icon: mdi:human-greeting-proximity
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_casa_guests"
+              friendly_name: "Casa Ospiti"
+        styles:
+          card:
+            - background: rgba(156,39,176,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(156,39,176,0.20)
+          icon:
+            - width: 70px
+            - color: "#9c27b0"
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+
+      - type: custom:button-card
+        name: Pulizie
+        icon: mdi:spray-bottle
+        show_label: true
+        label: "💡"
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.ambiente_trigger
+            variables:
+              target_script: "script.scene_casa_cleaning"
+              friendly_name: "Casa Pulizie"
+        styles:
+          card:
+            - background: rgba(0,188,212,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(0,188,212,0.20)
+          icon:
+            - width: 70px
+            - color: "#00bcd4"
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.6
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        name: "Spegni"
+        icon: mdi:power-off
+        tap_action:
+          action: call-service
+          service: script.turn_on
+          service_data:
+            entity_id: script.scene_casa_all_off
+        styles:
+          card:
+            - background: rgba(244,67,54,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(244,67,54,0.25)
+          icon:
+            - width: 70px
+            - color: "#f44336"
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
