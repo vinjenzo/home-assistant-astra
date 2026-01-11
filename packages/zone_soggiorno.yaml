@@ -17,6 +17,9 @@ automation:
       - condition: state
         entity_id: input_boolean.led_bulk_mode
         state: "off"
+      # Ignora trigger a brightness 0 dallo slider (usa pulsante off per spegnere)
+      - condition: template
+        value_template: "{{ states(trigger.entity_id) | int(0) > 0 }}"
     action:
       - variables:
           zone_key: >-
@@ -38,13 +41,17 @@ automation:
         entity_id: input_boolean.led_bulk_mode
         state: "off"
       - condition: template
-        value_template: "{{ state_attr('light.luci', 'brightness') not in [None, ''] }}"
-      - condition: template
         value_template: "{{ states('input_text.ultima_zona_led') in ['Soggiorno','TV','Museo','Libreria','Gregg Soggiorno'] }}"
     action:
       - delay: "00:00:00.3"
       - variables:
-          brightness_pct: "{{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}"
+          # Se luce è off, brightness_pct = 0, altrimenti calcola da attributo
+          brightness_pct: >-
+            {% if is_state('light.luci', 'off') or state_attr('light.luci', 'brightness') in [None, ''] %}
+              0
+            {% else %}
+              {{ ((state_attr('light.luci','brightness') | int(0)) * 100 / 255) | round(0) }}
+            {% endif %}
           zona: "{{ states('input_text.ultima_zona_led') }}"
           input_map:
             {

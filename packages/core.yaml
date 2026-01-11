@@ -60,22 +60,35 @@ script:
           scene_entity: "{{ zone_config.get('scene', '') }}"
           zone_name: "{{ zone_config.get('name', '') }}"
           input_number_entity: "{{ zone_config.get('input_number', '') }}"
+          bulk_was_on: "{{ is_state('input_boolean.led_bulk_mode','on') }}"
 
       - condition: template
         value_template: "{{ zone_config != {} and scene_entity != '' }}"
+
+      # Attiva bulk_mode per tutta la durata dello script (se non era già attivo)
+      - choose:
+          - conditions: "{{ not bulk_was_on }}"
+            sequence:
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.led_bulk_mode
 
       # Seleziona SEMPRE la zona per evitare mismatch sul bridge Tuya
       - service: scene.turn_on
         target:
           entity_id: "{{ scene_entity }}"
 
-      - delay: "00:00:02"
+      # Attendi conferma selezione zona dal bridge Tuya (~500-800ms)
+      - delay: "00:00:00.8"
+      # Registra zona e timestamp (sincronizza con ultima_zona_led)
 
       - service: input_text.set_value
         target:
           entity_id: "input_text.ultima_zona_led"
         data:
           value: "{{ zone_name }}"
+
+      - delay: "00:00:00.1"
 
       # Imposta luminosità
       - choose:
@@ -84,13 +97,17 @@ script:
               - service: scene.turn_on
                 target:
                   entity_id: scene.off
-              - wait_template: "{{ is_state('light.luci','off') }}"
-                timeout: "00:00:05"
+              - delay: "00:00:00.2"
+              # Azzera lo slider SUBITO (protetto da bulk_mode) prima di aspettare lo stato fisico
               - service: input_number.set_value
                 target:
                   entity_id: "{{ input_number_entity }}"
                 data:
                   value: 0
+              # Verifica che la luce si sia spenta (con timeout tollerante)
+              - wait_template: "{{ is_state('light.luci','off') }}"
+                timeout: "00:00:05"
+                continue_on_timeout: true
 
           - conditions: "{{ brightness | int > 0 }}"
             sequence:
@@ -100,29 +117,27 @@ script:
                 data:
                   brightness_pct: "{{ brightness }}"
 
+              # Attendi conferma cambio brightness dal bridge
               - wait_template: "{{ is_state('light.luci','on') or state_attr('light.luci','brightness') is not none }}"
                 timeout: "00:00:03"
 
-              - delay: "00:00:00.5"
+              - delay: "00:00:00.2"
 
-              - choose:
-                  - conditions: "{{ zone_key in ['led_cucina', 'museo'] }}"
-                    sequence:
-                      - service: scene.turn_on
-                        target:
-                          entity_id: "{{ scene_entity }}"
-                      - delay: "00:00:00.5"
-                      - service: light.turn_on
-                        target:
-                          entity_id: light.luci
-                        data:
-                          brightness_pct: "{{ brightness }}"
+              # Aggiorna slider solo dopo che luce ha confermato la zona corretta
 
               - service: input_number.set_value
                 target:
                   entity_id: "{{ input_number_entity }}"
                 data:
                   value: "{{ brightness | int }}"
+
+      # Spegni bulk_mode solo alla fine (se lo avevamo attivato noi)
+      - choose:
+          - conditions: "{{ not bulk_was_on }}"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.led_bulk_mode
 
   # ========================================
   # SET ZONE PRESET (reads from led_config.yaml)
@@ -179,11 +194,18 @@ script:
                 target:
                   entity_id: "{{ zone_config.get('scene', '') }}"
               - delay: "00:00:00.6"
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.led_bulk_mode
               - service: input_text.set_value
                 target:
                   entity_id: input_text.ultima_zona_led
                 data:
                   value: "{{ zone_config.get('name', '') }}"
+              - delay: "00:00:00.2"
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.led_bulk_mode
 
           - conditions: "{{ is_led_on and current_level == 0 }}"
             sequence:
