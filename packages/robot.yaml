@@ -1,475 +1,65 @@
-# ============================================================
-# ROBOT ASPIRAPOLVERE DREAME
-# ============================================================
-# Entità principale: !secret robot_entity_id
-# Comandi vocali HomeWay: "Inizia la pulizia", "Pulisci la cucina",
-# "Ferma il robot", "Torna alla base"
-# ============================================================
+# =========================
+# SCRIPT ROBOT
+# =========================
 
-script:
-  # Script con prefisso hw_ per HomeWay/Sage
-  hw_robot_avvia_pulizia:
-    alias: "Robot Avvia Pulizia"
-    mode: single
-    sequence:
-      - service: vacuum.start
-        data:
-          entity_id: !secret robot_entity_id
-
-  hw_robot_stop:
-    alias: "Robot Stop"
-    mode: single
-    sequence:
-      - service: vacuum.stop
-        data:
-          entity_id: !secret robot_entity_id
-
-  hw_robot_torna_base:
-    alias: "Robot Torna alla Base"
-    mode: single
-    sequence:
-      - service: vacuum.return_to_base
-        data:
-          entity_id: !secret robot_entity_id
-
-  hw_robot_vai_cucina:
-    alias: "Robot Vai in Cucina"
-    mode: single
-    sequence:
-      - choose:
-          - conditions: "{{ states('!secret robot_entity_id') in ['paused','idle','docked'] }}"
-            sequence:
-              - service: vacuum.start
-                data:
-                  entity_id: !secret robot_entity_id
-      - service: vacuum.send_command
-        target:
-          entity_id: !secret robot_entity_id
-        data:
-          command: app_segment_clean
-          params:
-            - segments:
-                ["{{ states('input_number.robot_segment_cucina') | int }}"]
-              repeats: 1
-          # segments: array di ID stanze da pulire (7 = cucina)
-          # repeats: numero di passaggi
-
-  hw_robot_vai_soggiorno:
-    alias: "Robot Vai in Soggiorno"
-    mode: single
-    sequence:
-      - choose:
-          - conditions: "{{ states('!secret robot_entity_id') in ['paused','idle','docked'] }}"
-            sequence:
-              - service: vacuum.start
-                data:
-                  entity_id: !secret robot_entity_id
-      - service: vacuum.send_command
-        target:
-          entity_id: !secret robot_entity_id
-        data:
-          command: app_segment_clean
-          params:
-            - segments:
-                ["{{ states('input_number.robot_segment_soggiorno') | int }}"]
-              repeats: 1
-          # segments: 4 = soggiorno
-          # repeats: numero di passaggi
-
-  hw_robot_pausa:
-    alias: "Robot Pausa"
-    mode: single
-    sequence:
-      - service: vacuum.pause
-        data:
-          entity_id: !secret robot_entity_id
-
-  hw_robot_localizza:
-    alias: "Robot Localizza"
-    mode: single
-    sequence:
-      - service: button.press
-        data:
-          entity_id: !secret robot_button_position
-
-  hw_robot_stop_robusto:
-    alias: "Robot Stop Robusto (con button)"
-    mode: single
-    sequence:
-      - service: button.press
-        target:
-          entity_id: !secret robot_button_stop
-      - delay: "00:00:00.5"
-      - service: vacuum.pause
-        data:
-          entity_id: !secret robot_entity_id
-
-  hw_robot_dnd_attiva:
-    alias: "Robot Attiva Non Disturbare"
-    mode: single
-    sequence:
-      - service: switch.turn_on
-        target:
-          entity_id: !secret robot_switch_dnd
-
-  hw_robot_dnd_disattiva:
-    alias: "Robot Disattiva Non Disturbare"
-    mode: single
-    sequence:
-      - service: switch.turn_off
-        target:
-          entity_id: !secret robot_switch_dnd
-
-  # Vecchi script senza prefisso hw_ (mantieni per compatibilità)
-  robot_pulizia_avvia:
-    alias: "Robot Pulizia Avvia"
-    mode: single
-    sequence:
-      - service: script.hw_robot_avvia_pulizia
-
-  robot_pulizia_stop:
-    alias: "Robot Pulizia Stop"
-    mode: single
-    sequence:
-      - service: script.hw_robot_stop
-
-  robot_torna_base:
-    alias: "Robot Torna alla Base"
-    mode: single
-    sequence:
-      - service: script.hw_robot_torna_base
-
-  robot_pulisci_cucina:
-    alias: "Robot Pulisci Cucina"
-    mode: single
-    sequence:
-      - service: script.hw_robot_vai_cucina
-
-  robot_pulisci_soggiorno:
-    alias: "Robot Pulisci Soggiorno"
-    mode: single
-    sequence:
-      - service: script.hw_robot_vai_soggiorno
-
-  robot_pausa:
-    alias: "Robot Pulizia Pausa"
-    mode: single
-    sequence:
-      - service: script.hw_robot_pausa
-
-  robot_localizza:
-    alias: "Robot Localizza"
-    mode: single
-    sequence:
-      - service: script.hw_robot_localizza
-
-  # ========================================
-  # TEST PULIZIA SEGMENTO (ID da dropdown)
-  # ========================================
-  robot_pulisci_segmento_test:
-    alias: "Robot Pulisci Segmento (Test)"
-    mode: single
-    sequence:
-      # Variabile per usare l'entity_id in template
-      - variables:
-          robot_id: !secret robot_entity_id
-      # Avvia se fermo/alla base
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ states(robot_id) in ['paused','idle','docked'] }}"
-            sequence:
-              - service: vacuum.start
-                target:
-                  entity_id: !secret robot_entity_id
-      # Pulisci il segmento selezionato
-      - service: vacuum.send_command
-        target:
-          entity_id: !secret robot_entity_id
-        data:
-          command: app_segment_clean
-          params:
-            - segments:
-                ["{{ states('input_select.robot_segment_test') | int }}"]
-              repeats: 1
-      # Notifica di avvio test
-      - service: !secret notify_service
-        data:
-          title: "🧪 Test segmento"
-          message: "Avvio pulizia segmento ID: {{ states('input_select.robot_segment_test') }}"
-
-  # ========================================
-  # PULIZIA TURBO STANZE (senza mocio)
-  # ========================================
-  robot_pulisci_cucina_turbo:
-    alias: "Robot Pulisci Cucina Turbo"
-    mode: single
-    sequence:
-      # Imposta modalità Turbo
-      - service: select.select_option
-        target:
-          entity_id: !secret robot_select_mode
-        data:
-          option: "Turbo"
-      # Imposta mocio disattivato
-      - service: select.select_option
-        target:
-          entity_id: !secret robot_select_mop
-        data:
-          option: "Off"
-      - delay: "00:00:01"
-      # Avvia pulizia cucina se in stato idle/docked
-      - choose:
-          - conditions: "{{ states('!secret robot_entity_id') in ['paused','idle','docked'] }}"
-            sequence:
-              - service: vacuum.start
-                data:
-                  entity_id: !secret robot_entity_id
-      # Pulisci segmento cucina
-      - service: vacuum.send_command
-        target:
-          entity_id: !secret robot_entity_id
-        data:
-          command: app_segment_clean
-          params:
-            - segments:
-                ["{{ states('input_number.robot_segment_cucina') | int }}"]
-              repeats: 1
-
-  robot_pulisci_soggiorno_turbo:
-    alias: "Robot Pulisci Soggiorno Turbo"
-    mode: single
-    sequence:
-      # Imposta modalità Turbo
-      - service: select.select_option
-        target:
-          entity_id: !secret robot_select_mode
-        data:
-          option: "Turbo"
-      # Imposta mocio disattivato
-      - service: select.select_option
-        target:
-          entity_id: !secret robot_select_mop
-        data:
-          option: "Off"
-      - delay: "00:00:01"
-      # Avvia pulizia soggiorno se in stato idle/docked
-      - choose:
-          - conditions: "{{ states('!secret robot_entity_id') in ['paused','idle','docked'] }}"
-            sequence:
-              - service: vacuum.start
-                data:
-                  entity_id: !secret robot_entity_id
-      # Pulisci segmento soggiorno
-      - service: vacuum.send_command
-        target:
-          entity_id: !secret robot_entity_id
-        data:
-          command: app_segment_clean
-          params:
-            - segments:
-                ["{{ states('input_number.robot_segment_soggiorno') | int }}"]
-              repeats: 1
-
-# ============================================================
+# =========================
 # AUTOMAZIONI ROBOT
-# ============================================================
+# =========================
+
 automation:
-  - alias: Robot - Pulizia Completata
-    description: "Notifica quando pulizia finisce, mostra stats"
+  - id: robot_avvio_casa_vuota
+    alias: "Robot - Avvio Pulizia Casa Vuota"
+    description: "Avvia la pulizia quando sia {{ !secret mobile_2 }} che {{ !secret mobile_1 }} non sono in casa"
     mode: single
     trigger:
-      - platform: event
-        event_type: "清扫工作已完成"
-    condition: []
+      - platform: state
+        entity_id: !secret mobile_2
+        to: "not_home"
+      - platform: state
+        entity_id: !secret mobile_1
+        to: "not_home"
+    condition:
+      - condition: state
+        entity_id: !secret mobile_2
+        state: "not_home"
+      - condition: state
+        entity_id: !secret mobile_1
+        state: "not_home"
     action:
-      - variables:
-          area: "{{ trigger.event.data.get('清扫面积', 0) }}"
-          tempo_min: "{{ trigger.event.data.get('清扫时长', 0) }}"
-          work_mode: "{{ trigger.event.data.get('工作模式', 'unknown') }}"
+      - service: vacuum.start
+        target:
+          entity_id: vacuum.ufo
       - service: !secret notify_service
         data:
-          title: "✅ Robot - Pulizia Completata"
-          message: |
-            Area: {{ area }} m²
-            Tempo: {{ tempo_min }} minuti
-            Modalità: {{ work_mode }}
-      - service: persistent_notification.create
-        data:
-          title: "Robot Pulizia Completata"
-          message: |
-            📊 Statistiche:
-            • Area pulita: {{ area }} m²
-            • Tempo impiegato: {{ tempo_min }} minuti
-            • Batteria: {{ states('sensor.robot_batteria') }}%
+          title: "Robot"
+          message: "Casa vuota - pulizia avviata automaticamente"
 
-  - alias: Robot - Non Disturbare Notturno
-    description: "Attiva DND alle 22:00, disattiva alle 07:00"
-    mode: single
+  - id: robot_ritorno_base_rientro
+    alias: "Robot - Ritorno alla Base al Rientro"
+    description: "Riporta il robot alla base quando {{ !secret mobile_2 }} o {{ !secret mobile_1 }} rientrano in casa (delay 1 min)"
+    mode: restart
     trigger:
-      - platform: time
-        at: "22:00:00"
-      - platform: time
-        at: "07:00:00"
+      - platform: state
+        entity_id: !secret mobile_2
+        to: "home"
+        for:
+          minutes: 1
+      - platform: state
+        entity_id: !secret mobile_1
+        to: "home"
+        for:
+          minutes: 1
+    condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: vacuum.ufo
+            state: "docked"
     action:
-      - choose:
-          - conditions: "{{ now().hour >= 22 or now().hour < 7 }}"
-            sequence:
-              - service: script.hw_robot_dnd_attiva
-          - conditions: "{{ now().hour >= 7 and now().hour < 22 }}"
-            sequence:
-              - service: script.hw_robot_dnd_disattiva
-
-# Template sensors per UI più leggibile
-template:
-  - sensor:
-      - name: "Robot Stato Pulizia"
-        unique_id: robot_stato_pulizia
-        icon: mdi:robot-vacuum
-        state: >
-          {% set stato = states('!secret robot_entity_id') %}
-          {% if stato == 'cleaning' %}Pulizia in corso
-          {% elif stato == 'docked' %}In carica
-          {% elif stato == 'idle' %}Pronto
-          {% elif stato == 'paused' %}In pausa
-          {% elif stato == 'returning' %}Tornando alla base
-          {% elif stato == 'error' %}Errore
-          {% else %}{{ stato }}
-          {% endif %}
-
-      - name: "Robot Batteria"
-        unique_id: robot_batteria
-        unit_of_measurement: "%"
-        device_class: battery
-        state: >
-          {% set battery = states('!secret robot_sensor_battery') %}
-          {{ battery if battery not in ['unavailable', 'unknown', 'none'] else 0 }}
-
-      - name: "Robot Area Pulita"
-        unique_id: robot_area_pulita
-        unit_of_measurement: "m²"
-        icon: mdi:floor-plan
-        state: >
-          {% set area = states('!secret robot_sensor_area') %}
-          {{ area if area not in ['unavailable', 'unknown', 'none'] else 0 }}
-
-      - name: "Robot Tempo Pulizia"
-        unique_id: robot_tempo_pulizia
-        icon: mdi:timer
-        state: >
-          {% set minuti = states('!secret robot_sensor_time') | int(0) %}
-          {% if minuti > 60 %}
-            {{ (minuti // 60) }}h {{ (minuti % 60) }}m
-          {% elif minuti > 0 %}
-            {{ minuti }}m
-          {% else %}
-            0m
-          {% endif %}
-
-      - name: "Robot Spazzola Principale Vita"
-        unique_id: robot_spazzola_vita
-        unit_of_measurement: "%"
-        icon: mdi:brush
-        state: >
-          {% set spazzola = states('!secret robot_sensor_brush') %}
-          {{ spazzola if spazzola not in ['unavailable', 'unknown', 'none'] else 0 }}
-
-      - name: "Robot Spazzola Laterale Vita"
-        unique_id: robot_spazzola_laterale_vita
-        unit_of_measurement: "%"
-        icon: mdi:brush
-        state: >
-          {% set spazzola_lat = states('!secret robot_sensor_brush_side') %}
-          {{ spazzola_lat if spazzola_lat not in ['unavailable', 'unknown', 'none'] else 0 }}
-
-      - name: "Robot Filtro Vita"
-        unique_id: robot_filtro_vita
-        unit_of_measurement: "%"
-        icon: mdi:air-filter
-        state: >
-          {% set filtro = states('!secret robot_sensor_filter') %}
-          {{ filtro if filtro not in ['unavailable', 'unknown', 'none'] else 0 }}
-
-# ============================================================
-# INPUT_NUMBER per mappare ID stanze (segmenti) — regolabili da UI
-# ============================================================
-input_number:
-  robot_segment_cucina:
-    name: "ID Segmento Cucina"
-    min: 1
-    max: 50
-    step: 1
-    mode: box
-    initial: 7
-  robot_segment_soggiorno:
-    name: "ID Segmento Soggiorno"
-    min: 1
-    max: 50
-    step: 1
-    mode: box
-    initial: 4
-
-input_boolean:
-  robot_dnd_notturno:
-    name: "Robot DND Notturno"
-    icon: mdi:moon-waning-crescent
-    initial: true
-
-# ============================================
-# INPUT_SELECT per test ID segmento
-# ============================================
-input_select:
-  robot_segment_test:
-    name: "ID Segmento Test"
-    options:
-      - "1"
-      - "2"
-      - "3"
-      - "4"
-      - "5"
-      - "6"
-      - "7"
-      - "8"
-      - "9"
-      - "10"
-      - "11"
-      - "12"
-      - "13"
-      - "14"
-      - "15"
-      - "16"
-      - "17"
-      - "18"
-      - "19"
-      - "20"
-      - "21"
-      - "22"
-      - "23"
-      - "24"
-      - "25"
-      - "26"
-      - "27"
-      - "28"
-      - "29"
-      - "30"
-      - "31"
-      - "32"
-      - "33"
-      - "34"
-      - "35"
-      - "36"
-      - "37"
-      - "38"
-      - "39"
-      - "40"
-      - "41"
-      - "42"
-      - "43"
-      - "44"
-      - "45"
-      - "46"
-      - "47"
-      - "48"
-      - "49"
-      - "50"
-    initial: "7"
+      - service: vacuum.return_to_base
+        target:
+          entity_id: vacuum.ufo
+      - service: !secret notify_service
+        data:
+          title: "Robot"
+          message: "Qualcuno è rientrato - robot torna alla base"
