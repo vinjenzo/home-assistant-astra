@@ -30,6 +30,12 @@ script:
         data:
           source: "HDMI 1"
         continue_on_error: true
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI1"
+        continue_on_error: true
 
   select_hdmi_2:
     alias: "Seleziona HDMI 2"
@@ -39,6 +45,12 @@ script:
           entity_id: media_player.lg_webos_tv_oled48c31la
         data:
           source: "HDMI 2"
+        continue_on_error: true
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI2"
         continue_on_error: true
 
   select_hdmi_3:
@@ -50,6 +62,12 @@ script:
         data:
           source: "HDMI 3"
         continue_on_error: true
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI3"
+        continue_on_error: true
 
   select_hdmi_4:
     alias: "Seleziona HDMI 4"
@@ -59,6 +77,12 @@ script:
           entity_id: media_player.lg_webos_tv_oled48c31la
         data:
           source: "HDMI 4"
+        continue_on_error: true
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI4"
         continue_on_error: true
 
   # ========================================

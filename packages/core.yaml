@@ -139,7 +139,7 @@ script:
                   entity_id: input_boolean.led_bulk_mode
 
   # ========================================
-  # SET ZONE PRESET 
+  # SET ZONE PRESET
   # ========================================
   set_zone_preset:
     alias: "Set Zone Preset (Universal)"
@@ -355,16 +355,6 @@ script:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.led_bulk_mode
-          - conditions: "{{ scene_key == 'home_off' }}"
-            sequence:
-              - wait_template: "{{ is_state('light.luci','off') }}"
-                timeout: "00:00:10"
-                continue_on_timeout: true
-
-              - service: input_text.set_value
-                data:
-                  entity_id: input_text.ultima_zona_led
-                  value: "OFF"
 
   # ========================================
   # NOOP - No operation (dummy script)

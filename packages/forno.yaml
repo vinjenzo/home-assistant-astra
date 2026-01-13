@@ -19,3 +19,17 @@ script:
           entity_id: number.bosch_383120532719000097_001_bsh_common_option_duration
         data:
           value: "{{ secondi }}"
+
+# Applica automaticamente la temperatura quando lo slider cambia
+automation:
+  - alias: Forno - Applica temperatura da slider
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
+    action:
+      - service: number.set_value
+        target:
+          entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
+        data:
+          value: "{{ trigger.to_state.state }}"

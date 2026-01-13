@@ -229,18 +229,20 @@ automation:
   # ========================================
   # USCITA SOLO MOTO G42
   # ========================================
-  - alias: "Moto G42 Esce - Spegni TV HDMI1 e PC"
+  - alias: "Moto G42 Esce - Spegni TV HDMI2 e PC"
     mode: single
-    description: "Quando Moto G42 esce da casa, spegni TV se su HDMI1 e spegni PC"
+    description: "Quando Moto G42 esce da casa, spegni TV se su HDMI2 e spegni PC"
     trigger:
       - platform: state
         entity_id: device_tracker.moto_g42
         from: "home"
         to: "not_home"
     condition:
-      # Spegni solo se TV è su HDMI1
+      # Spegni solo se TV è su HDMI2
       - condition: template
-        value_template: "{{ state_attr('media_player.lg_webos_tv_oled48c31la', 'source') == 'HDMI1' }}"
+        value_template: >
+          {% set src = (state_attr('media_player.lg_webos_tv_oled48c31la', 'source') or '').replace(' ', '').upper() %}
+          {{ src == 'HDMI2' }}
     action:
       # Spegni TV
       - service: media_player.turn_off
@@ -250,7 +252,7 @@ automation:
       - service: !secret notify_service
         data:
           title: "📱 Moto G42 away"
-          message: "TV era su HDMI1: spenta"
+          message: "TV era su HDMI2: spenta"
 
   # ========================================
   # USCITA SINGOLA - SOLO NOTIFICA
