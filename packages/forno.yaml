@@ -20,6 +20,52 @@ script:
         data:
           value: "{{ secondi }}"
 
+  forno_tosta:
+    alias: Forno - Tosta pane
+    mode: single
+    sequence:
+      - service: select.select_option
+        data:
+          entity_id: select.bosch_383120532719000097_001_bsh_common_setting_powerstate
+          option: BSH.Common.EnumType.PowerState.On
+      - service: select.select_option
+        data:
+          entity_id: select.bosch_383120532719000097_001_programs
+          option: Cooking.Oven.Program.HeatingMode.HotAirGrilling
+      - service: number.set_value
+        target:
+          entity_id: number.bosch_383120532719000097_001_bsh_common_option_duration
+        data:
+          value: 420
+      - service: number.set_value
+        target:
+          entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
+        data:
+          value: 120
+
+  forno_scalda:
+    alias: Forno - Scalda cibo
+    mode: single
+    sequence:
+      - service: select.select_option
+        data:
+          entity_id: select.bosch_383120532719000097_001_bsh_common_setting_powerstate
+          option: BSH.Common.EnumType.PowerState.On
+      - service: select.select_option
+        data:
+          entity_id: select.bosch_383120532719000097_001_programs
+          option: Cooking.Oven.Program.HeatingMode.KeepWarm
+      - service: number.set_value
+        target:
+          entity_id: number.bosch_383120532719000097_001_bsh_common_option_duration
+        data:
+          value: 600
+      - service: number.set_value
+        target:
+          entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
+        data:
+          value: 90
+
 # Applica automaticamente la temperatura quando lo slider cambia
 automation:
   - alias: Forno - Applica temperatura da slider
