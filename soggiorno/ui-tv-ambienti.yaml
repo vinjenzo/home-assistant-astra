@@ -22,7 +22,7 @@ cards:
           service_data:
             entity_id: script.ambiente_trigger
             variables:
-              target_script: script.scene_livingroom_cinema
+              target_script: script.scene_tv_cinema
               friendly_name: Soggiorno Cinema
         styles:
           card:
@@ -45,7 +45,7 @@ cards:
           service_data:
             entity_id: script.ambiente_trigger
             variables:
-              target_script: script.scene_livingroom_football
+              target_script: script.scene_tv_football
               friendly_name: Soggiorno Calcio
         styles:
           card:
@@ -92,7 +92,7 @@ cards:
           service_data:
             entity_id: script.ambiente_trigger
             variables:
-              target_script: script.scene_livingroom_computer
+              target_script: script.scene_tv_computer
               friendly_name: Soggiorno Computer
         styles:
           card:

@@ -13,7 +13,7 @@ template:
         attributes:
           scenes: >-
             {% set scenes = {
-              'night': {
+              'home_night': {
                 'name': 'Casa Notte',
                 'brightness': {
                   'soggiorno': 1,
@@ -28,7 +28,7 @@ template:
                   'led_sopra_al_letto': 12
                 }
               },
-              'day': {
+              'home_day': {
                 'name': 'Casa Luminoso',
                 'brightness': {
                   'tv': 25,
@@ -43,7 +43,7 @@ template:
                   'gregg_soggiorno': 22
                 }
               },
-              'guests': {
+              'home_guests': {
                 'name': 'Casa Ospiti',
                 'brightness': {
                   'tv': 30,
@@ -58,7 +58,7 @@ template:
                   'gregg_soggiorno': 25
                 }
               },
-              'cleaning': {
+              'home_cleaning': {
                 'name': 'Casa Pulizie',
                 'brightness': {
                   'tv': 40,
@@ -73,7 +73,7 @@ template:
                   'gregg_soggiorno': 26
                 }
               },
-              'off': {
+              'home_off': {
                 'name': 'Casa Spenta',
                 'brightness': {
                   'soggiorno': 0,
@@ -148,7 +148,7 @@ template:
                   'soggiorno': 18
                 }
               },
-              'livingroom_cinema': {
+              'tv_cinema': {
                 'name': 'Cinema',
                 'brightness': {
                   'tv': 1
@@ -168,31 +168,31 @@ template:
                   'tv': 60,
                 }
               },
-              'livingroom_football': {
+              'tv_football': {
                 'name': 'Soggiorno Calcio',
                 'brightness': {
                   'tv': 1
                 }
               },
-              'livingroom_computer': {
+              'tv_computer': {
                 'name': 'Soggiorno Computer',
                 'brightness': {
                   'tv': 2
                 }
               },
-              'livingroom_computer_hdmi1': {
+              'tv_computer_hdmi1': {
                 'name': 'Soggiorno Computer HDMI 1',
                 'brightness': {
                   'tv': 2
                 }
               },
-              'livingroom_computer_hdmi2': {
+              'tv_computer_hdmi2': {
                 'name': 'Soggiorno Computer HDMI 2',
                 'brightness': {
                   'tv': 2
                 }
               },
-              'livingroom_computer_hdmi3': {
+              'tv_computer_hdmi3': {
                 'name': 'Soggiorno Computer HDMI 3',
                 'brightness': {
                   'tv': 2

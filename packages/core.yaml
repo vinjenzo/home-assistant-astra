@@ -49,7 +49,7 @@ script:
     max: 10
     fields:
       zone_key:
-        description: "Chiave zona da led_config.yaml"
+        description: "Chiave zona"
       brightness:
         description: "Luminosità 0-100"
     sequence:
@@ -80,7 +80,6 @@ script:
 
       # Attendi conferma selezione zona dal bridge Tuya (~500-800ms)
       - delay: "00:00:00.8"
-      # Registra zona e timestamp (sincronizza con ultima_zona_led)
 
       - service: input_text.set_value
         target:
@@ -131,7 +130,7 @@ script:
                 data:
                   value: "{{ brightness | int }}"
 
-      # Spegni bulk_mode solo alla fine (se lo avevamo attivato noi)
+      # Spegni bulk_mode solo alla fine
       - choose:
           - conditions: "{{ not bulk_was_on }}"
             sequence:
@@ -140,12 +139,12 @@ script:
                   entity_id: input_boolean.led_bulk_mode
 
   # ========================================
-  # SET ZONE PRESET (reads from led_config.yaml)
+  # SET ZONE PRESET 
   # ========================================
   set_zone_preset:
     alias: "Set Zone Preset (Universal)"
     mode: queued
-    description: "Chiama set_zone_brightness con brightness da led_config.yaml"
+    description: "Chiama set_zone_brightness"
     fields:
       zone_key:
         description: "Chiave zona (main, tv, museo, libreria, ecc.)"
@@ -301,6 +300,15 @@ script:
           entity_id: input_text.current_ambiente
           value: "{{ scene_name }}"
 
+      # Notifica sulla TV se accesa
+      - condition: template
+        value_template: "{{ not is_state('media_player.lg_webos_tv_oled48c31la','off') }}"
+      - delay: "00:00:01"
+      - service: notify.lg_webos_tv_oled48c31la
+        data:
+          title: "💡 Ambiente"
+          message: "Ambiente: {{ scene_name }}"
+
       # Enable bulk mode to prevent individual automations
       - service: input_boolean.turn_on
         target:
@@ -347,42 +355,16 @@ script:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.led_bulk_mode
-
-      # Notifica sulla TV se accesa
-      - condition: template
-        value_template: "{{ not is_state('media_player.lg_webos_tv_oled48c31la','off') }}"
-      - delay: "00:00:01"
-      - service: notify.lg_webos_tv_oled48c31la
-        data:
-          title: "💡 Ambiente"
-          message: "Ambiente: {{ scene_name }}"
-
-      # Special handling for "off" scene
-      - choose:
-          - conditions: "{{ scene_key == 'off' }}"
+          - conditions: "{{ scene_key == 'home_off' }}"
             sequence:
               - wait_template: "{{ is_state('light.luci','off') }}"
                 timeout: "00:00:10"
                 continue_on_timeout: true
 
-              - choose:
-                  - conditions: "{{ not is_state('light.luci','off') }}"
-                    sequence:
-                      - service: persistent_notification.create
-                        data:
-                          title: "LED: tutto_spento - applicazione incompleta"
-                          message: "Almeno una zona non è risultata spenta correttamente. Controllare device Tuya."
-
               - service: input_text.set_value
                 data:
                   entity_id: input_text.ultima_zona_led
                   value: "OFF"
-
-      # Safety: ensure bulk mode is cleared even if something above misbehaves
-      - delay: "00:00:01"
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.led_bulk_mode
 
   # ========================================
   # NOOP - No operation (dummy script)

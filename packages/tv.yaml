@@ -21,22 +21,9 @@ script:
         data:
           mac: !secret tv_mac_address
 
-  # ========================================
-  # HDMI INPUT SELECTION WITH HOME BUTTON
-  # ========================================
   select_hdmi_1:
-    alias: "Seleziona HDMI 1 (con HOME)"
+    alias: "Seleziona HDMI 1"
     sequence:
-      # Invia comando HOME
-      - service: webostv.button
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          button: HOME
-      # Attendi 500ms
-      - delay:
-          milliseconds: 500
-      # Seleziona HDMI 1
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -45,18 +32,8 @@ script:
         continue_on_error: true
 
   select_hdmi_2:
-    alias: "Seleziona HDMI 2 (con HOME)"
+    alias: "Seleziona HDMI 2"
     sequence:
-      # Invia comando HOME
-      - service: webostv.button
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          button: HOME
-      # Attendi 500ms
-      - delay:
-          milliseconds: 500
-      # Seleziona HDMI 2
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -65,18 +42,8 @@ script:
         continue_on_error: true
 
   select_hdmi_3:
-    alias: "Seleziona HDMI 3 (con HOME)"
+    alias: "Seleziona HDMI 3"
     sequence:
-      # Invia comando HOME
-      - service: webostv.button
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          button: HOME
-      # Attendi 500ms
-      - delay:
-          milliseconds: 500
-      # Seleziona HDMI 3
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -85,18 +52,8 @@ script:
         continue_on_error: true
 
   select_hdmi_4:
-    alias: "Seleziona HDMI 4 (con HOME)"
+    alias: "Seleziona HDMI 4"
     sequence:
-      # Invia comando HOME
-      - service: webostv.button
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          button: HOME
-      # Attendi 500ms
-      - delay:
-          milliseconds: 500
-      # Seleziona HDMI 4
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -149,24 +106,6 @@ script:
           source: "UPC Set-top box"
         continue_on_error: true
 
-  tv_computer_hdmi1:
-    alias: "TV - Computer HDMI 1 (WoL + HDMI 1)"
-    sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
-        then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
-          - delay:
-              seconds: 3
-      - delay:
-          seconds: 1
-      # Invia HOME + Seleziona HDMI 1
-      - service: script.select_hdmi_1
-
   tv_computer_hdmi2:
     alias: "TV - Computer HDMI 2 (WoL + HDMI 2)"
     sequence:
@@ -179,47 +118,11 @@ script:
           - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
             timeout: "00:00:10"
           - delay:
-              seconds: 3
+              seconds: 1
       - delay:
           seconds: 1
       # Invia HOME + Seleziona HDMI 2
       - service: script.select_hdmi_2
-
-  tv_computer_hdmi3:
-    alias: "TV - Computer HDMI 3 (WoL + HDMI 3)"
-    sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
-        then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
-          - delay:
-              seconds: 3
-      - delay:
-          seconds: 1
-      # Invia HOME + Seleziona HDMI 3
-      - service: script.select_hdmi_3
-
-  tv_computer_hdmi4:
-    alias: "TV - Computer HDMI 4 (WoL + HDMI 4)"
-    sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
-        then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
-          - delay:
-              seconds: 3
-      - delay:
-          seconds: 1
-      # Invia HOME + Seleziona HDMI 4
-      - service: script.select_hdmi_4
 
 # ============================================================
 # AUTOMATION

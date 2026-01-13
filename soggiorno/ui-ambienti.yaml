@@ -17,7 +17,7 @@ cards:
         name: Risveglio
         icon: mdi:weather-sunset-up
         show_label: true
-        label: "🌅"
+        label: "💡"
         tap_action:
           action: call-service
           service: script.turn_on

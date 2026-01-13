@@ -39,19 +39,16 @@ script:
             - script.scene_livingroom_soft
             - script.scene_livingroom_nap
             - script.scene_livingroom_sleep
-            - script.scene_livingroom_cinema
             - script.scene_livingroom_reading
             - script.scene_livingroom_meditation
             - script.scene_livingroom_desk
             - script.scene_livingroom_balanced
-            - script.scene_livingroom_football
-            - script.scene_livingroom_computer
-            - script.scene_livingroom_computer_hdmi1
-            - script.scene_livingroom_computer_hdmi2
-            - script.scene_livingroom_computer_hdmi3
-            - script.scene_livingroom_computer_hdmi4
             - script.scene_livingroom_night
             - script.scene_livingroom_off
+            # TV scenes
+            - script.scene_tv_football
+            - script.scene_tv_cinema
+            - script.scene_tv_computer
             # Kitchen scenes
             - script.scene_kitchen_day
             - script.scene_kitchen_prep
@@ -85,7 +82,7 @@ script:
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "night"
+          scene_key: "home_night"
       # Spegni TV
       - service: media_player.turn_off
         target:
@@ -96,28 +93,28 @@ script:
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "day"
+          scene_key: "home_day"
 
   scene_casa_guests:
     alias: "Ospiti"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "guests"
+          scene_key: "home_guests"
 
   scene_casa_cleaning:
     alias: "Pulizie"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "cleaning"
+          scene_key: "home_cleaning"
 
   scene_casa_all_off:
     alias: "Spegni Tutto"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "off"
+          scene_key: "home_off"
 
   # ========================================
   # LIVINGROOM SCENES
@@ -164,16 +161,6 @@ script:
         data:
           scene_key: "livingroom_sleep"
 
-  scene_livingroom_cinema:
-    alias: "Cinema"
-    sequence:
-      # Accendi TV e lancia Plex
-      - service: script.tv_cinema
-      # Imposta luci cinema
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_cinema"
-
   scene_livingroom_reading:
     alias: "Lettura"
     sequence:
@@ -195,66 +182,6 @@ script:
         data:
           scene_key: "livingroom_desk"
 
-  scene_livingroom_football:
-    alias: "Calcio"
-    sequence:
-      # Accendi TV e seleziona Set-top box
-      - service: script.tv_football
-      # Imposta luci calcio
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_football"
-
-  scene_livingroom_computer:
-    alias: "Computer"
-    sequence:
-      # Accendi TV e seleziona HDMI 2
-      - service: script.tv_computer_hdmi2
-      # Imposta luci computer
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_computer"
-
-  scene_livingroom_computer_hdmi1:
-    alias: "Computer HDMI 1"
-    sequence:
-      # Accendi TV e seleziona HDMI 1
-      - service: script.tv_computer_hdmi1
-      # Imposta luci computer
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_computer"
-
-  scene_livingroom_computer_hdmi2:
-    alias: "Computer HDMI 2"
-    sequence:
-      # Accendi TV e seleziona HDMI 2
-      - service: script.tv_computer_hdmi2
-      # Imposta luci computer
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_computer"
-
-  scene_livingroom_computer_hdmi3:
-    alias: "Computer HDMI 3"
-    sequence:
-      # Accendi TV e seleziona HDMI 3
-      - service: script.tv_computer_hdmi3
-      # Imposta luci computer
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_computer"
-
-  scene_livingroom_computer_hdmi4:
-    alias: "Computer HDMI 4"
-    sequence:
-      # Accendi TV e seleziona HDMI 4
-      - service: script.tv_computer_hdmi4
-      # Imposta luci computer
-      - service: script.set_ambiente
-        data:
-          scene_key: "livingroom_computer"
-
   scene_livingroom_night:
     alias: "Soggiorno Notte"
     sequence:
@@ -273,6 +200,30 @@ script:
       - service: script.set_ambiente
         data:
           scene_key: "livingroom_off"
+
+  scene_tv_football:
+    alias: "Calcio"
+    sequence:
+      - service: script.tv_football
+      - service: script.set_ambiente
+        data:
+          scene_key: "tv_football"
+
+  scene_tv_cinema:
+    alias: "Cinema"
+    sequence:
+      - service: script.tv_cinema
+      - service: script.set_ambiente
+        data:
+          scene_key: "tv_cinema"
+
+  scene_tv_computer:
+    alias: "Computer"
+    sequence:
+      - service: script.tv_computer_hdmi2
+      - service: script.set_ambiente
+        data:
+          scene_key: "tv_computer"
 
   # ========================================
   # KITCHEN SCENES

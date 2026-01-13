@@ -469,7 +469,7 @@ script:
       - parallel:
           - service: script.set_zone_brightness
             data:
-              zone_key: "main"
+              zone_key: "soggiorno"
               brightness: 0
           - service: script.set_zone_brightness
             data:

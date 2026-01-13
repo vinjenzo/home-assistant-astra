@@ -192,39 +192,39 @@ automation:
   # ========================================
   # USCITA DA CASA
   # ========================================
-  - alias: "Uscita da Casa - Spegni tutte le luci quando entrambi escono"
+
+  # alias precedente disabilitata: ora lo spegnimento avviene solo dopo 3 minuti di assenza
+  # - alias: "Uscita da Casa - Spegni tutte le luci quando entrambi escono"
+  #   ...existing code...
+
+  - alias: "Casa Vuota - Spegni Luci dopo 3 minuti"
     mode: single
-    description: "Quando entrambi i cellulari escono da casa, spegni tutte le luci"
+    description: "Spegni tutte le luci e la TV solo se entrambi sono assenti da almeno 3 minuti"
     trigger:
       - platform: state
         entity_id:
           - device_tracker.moto_g42
           - device_tracker.pixel_9a
         to: "not_home"
+        for: "00:03:00"
     condition:
-      # Verifica che ENTRAMBI i cellulari siano fuori casa
-      - condition: and
-        conditions:
-          - condition: state
-            entity_id: device_tracker.moto_g42
-            state: "not_home"
-          - condition: state
-            entity_id: device_tracker.pixel_9a
-            state: "not_home"
+      - condition: state
+        entity_id: device_tracker.moto_g42
+        state: "not_home"
+      - condition: state
+        entity_id: device_tracker.pixel_9a
+        state: "not_home"
     action:
-      # Spegni tutte le luci
       - service: script.turn_on
         target:
           entity_id: script.scene_casa_all_off
-      # Spegni TV
       - service: media_player.turn_off
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
-      # Notifica
       - service: !secret notify_service
         data:
-          title: "🚪 Uscita di casa"
-          message: "Entrambi away: luci e TV spente"
+          title: "🚪 Casa vuota da 3 minuti"
+          message: "Luci e TV spente dopo 3 minuti di assenza di tutti."
 
   # ========================================
   # USCITA SOLO MOTO G42

@@ -127,7 +127,7 @@ LedAmbiente:
           {% elif 'sonnell' in ambiente_lower or 'nap' in ambiente_lower or 'pisol' in ambiente_lower %}
             script.scene_livingroom_nap
           {% elif 'cinema' in ambiente_lower %}
-            script.scene_livingroom_cinema
+            script.scene_tv_cinema
           {% elif 'lett' in ambiente_lower or 'lettura' in ambiente_lower %}
             script.scene_livingroom_reading
           {% elif 'giorn' in ambiente_lower %}
