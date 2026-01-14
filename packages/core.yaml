@@ -317,9 +317,8 @@ script:
       # Apply brightness ONLY to zones explicitly defined in the scene's brightness_map
       - variables:
           previous_brightness: 0
-          brightness_keys: "{{ brightness_map.keys() | list }}"
       - repeat:
-          for_each: "{{ brightness_keys }}"
+          for_each: "{{ scene_order }}"
           sequence:
             - variables:
                 zone_key: "{{ repeat.item }}"
