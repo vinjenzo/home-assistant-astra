@@ -102,7 +102,7 @@ template:
                   'soggiorno': 85,
                   'gregg_soggiorno': 22
                 },
-                'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
+                'zone_order': ['tv', 'museo', 'libreria', 'soggiorno', 'gregg_soggiorno']
               },
               'livingroom_morning': {
                 'name': 'Soggiorno Risveglio',
@@ -124,7 +124,7 @@ template:
                   'soggiorno': 70,
                   'gregg_soggiorno': 16
                 },
-                'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
+                'zone_order': ['tv', 'museo', 'libreria', 'soggiorno', 'gregg_soggiorno']
               },
               'livingroom_soft': {
                 'name': 'Soggiorno Relax',
