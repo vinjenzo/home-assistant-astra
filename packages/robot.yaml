@@ -26,29 +26,29 @@ automation:
         entity_id: !secret mobile_1
         state: "not_home"
     action:
-      - service: vacuum.start
-        target:
+      - variables:
+          segments: [1, 2, 3, 4, 7] # Cameretta, Camera da letto, Corridoio, Soggiorno, Cucina
+          random_segments: "{{ segments | shuffle }}"
+      - service: dreame_vacuum.vacuum_clean_segment
+        data:
           entity_id: vacuum.ufo
+          segments: "{{ random_segments }}"
       - service: !secret notify_service
         data:
           title: "Robot"
-          message: "Casa vuota - pulizia avviata automaticamente"
+          message: "Casa vuota - pulizia avviata automaticamente (ordine random e continua)"
 
   - id: robot_ritorno_base_rientro
     alias: "Robot - Ritorno alla Base al Rientro"
-    description: "Riporta il robot alla base quando {{ !secret mobile_2 }} o {{ !secret mobile_1 }} rientrano in casa (delay 1 min)"
+    description: "Riporta il robot alla base quando {{ !secret mobile_2 }} o {{ !secret mobile_1 }} rientrano in casa"
     mode: restart
     trigger:
       - platform: state
         entity_id: !secret mobile_2
         to: "home"
-        for:
-          minutes: 1
       - platform: state
         entity_id: !secret mobile_1
         to: "home"
-        for:
-          minutes: 1
     condition:
       - condition: not
         conditions:
