@@ -96,11 +96,11 @@ template:
               'livingroom_day': {
                 'name': 'Soggiorno Luminoso',
                 'brightness': {
-                  'tv': 5,
-                  'museo': 30,
-                  'libreria': 25,
-                  'soggiorno': 85,
-                  'gregg_soggiorno': 22
+                  'tv': 0,
+                  'museo': 20,
+                  'libreria': 20,
+                  'soggiorno': 90,
+                  'gregg_soggiorno': 40
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'soggiorno', 'gregg_soggiorno']
               },
@@ -109,20 +109,20 @@ template:
                 'brightness': {
                   'tv': 0,
                   'museo': 10,
-                  'libreria': 15,
-                  'soggiorno': 55,
-                  'gregg_soggiorno': 10
+                  'libreria': 10,
+                  'soggiorno': 70,
+                  'gregg_soggiorno': 20
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'soggiorno', 'gregg_soggiorno']
               },
               'livingroom_balanced': {
                 'name': 'Soggiorno Bilanciato',
                 'brightness': {
-                  'tv': 5,
-                  'museo': 24,
-                  'libreria': 20,
-                  'soggiorno': 70,
-                  'gregg_soggiorno': 16
+                  'tv': 0,
+                  'museo': 15,
+                  'libreria': 15,
+                  'soggiorno': 80,
+                  'gregg_soggiorno': 30
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'soggiorno', 'gregg_soggiorno']
               },
@@ -130,21 +130,35 @@ template:
                 'name': 'Soggiorno Relax',
                 'brightness': {
                   'tv': 0,
-                  'museo': 5,
-                  'libreria': 8,
-                  'soggiorno': 45,
-                  'gregg_soggiorno': 0
+                  'museo': 15,
+                  'libreria': 20,
+                  'soggiorno': 10,
+                  'gregg_soggiorno': 10
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
+              },
+              'livingroom_reading': {
+                'name': 'Soggiorno Lettura',
+                'brightness': {
+                  'libreria': 75,
+                  'soggiorno': 25,
+                  'gregg_soggiorno': 50
+                }
+              },
+              'livingroom_desk': {
+                'name': 'Soggiorno Lavoro',
+                'brightness': {
+                  'tv': 60,
+                }
               },
               'livingroom_nap': {
                 'name': 'Soggiorno Sonnellino',
                 'brightness': {
                   'tv': 0,
-                  'museo': 2,
+                  'museo': 5,
                   'libreria': 0,
-                  'gregg_soggiorno': 0,
-                  'soggiorno': 24
+                  'gregg_soggiorno': 5,
+                  'soggiorno': 25
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
               },
@@ -152,31 +166,37 @@ template:
                 'name': 'Soggiorno Sonno Notturno',
                 'brightness': {
                   'tv': 0,
-                  'museo': 8,
-                  'libreria': 3,
-                  'gregg_soggiorno': 0,
-                  'soggiorno': 18
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 1,
+                  'soggiorno': 15
                 },
                 'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
+              },
+              'livingroom_night': {
+                'name': 'Soggiorno Notte',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 1
+                },
+              },
+              'livingroom_off': {
+                'name': 'Soggiorno Spenta',
+                'brightness': {
+                  'tv': 0,
+                  'museo': 0,
+                  'libreria': 0,
+                  'gregg_soggiorno': 0,
+                  'soggiorno': 0
+                },
               },
               'tv_cinema': {
                 'name': 'Cinema',
                 'brightness': {
                   'tv': 1
-                }
-              },
-              'livingroom_reading': {
-                'name': 'Soggiorno Lettura',
-                'brightness': {
-                  'libreria': 75,
-                  'soggiorno': 45,
-                  'gregg_soggiorno': 20
-                }
-              },
-              'livingroom_desk': {
-                'name': 'Soggiorno Lavoro',
-                'brightness': {
-                  'tv': 60,
                 }
               },
               'tv_football': {
@@ -209,33 +229,11 @@ template:
                   'tv': 2
                 }
               },
-              'livingroom_night': {
-                'name': 'Soggiorno Notte',
-                'brightness': {
-                  'tv': 0,
-                  'museo': 0,
-                  'libreria': 0,
-                  'gregg_soggiorno': 0,
-                  'soggiorno': 1
-                },
-                'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
-              },
-              'livingroom_off': {
-                'name': 'Soggiorno Spenta',
-                'brightness': {
-                  'tv': 0,
-                  'museo': 0,
-                  'libreria': 0,
-                  'gregg_soggiorno': 0,
-                  'soggiorno': 0
-                },
-                'zone_order': ['tv', 'museo', 'libreria', 'gregg_soggiorno', 'soggiorno']
-              },
               'kitchen_day': {
                 'name': 'Cucina Luminoso',
                 'brightness': {
-                  'led_cucina': 88,
-                  'gregg_cucina': 30
+                  'led_cucina': 50,
+                  'gregg_cucina': 80
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
@@ -251,15 +249,15 @@ template:
                 'name': 'Cucina Lavoro',
                 'brightness': {
                   'led_cucina': 100,
-                  'gregg_cucina': 0
+                  'gregg_cucina': 70
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
               'kitchen_dinner': {
                 'name': 'Cucina Cena',
                 'brightness': {
-                  'led_cucina': 62,
-                  'gregg_cucina': 42
+                  'led_cucina': 30,
+                  'gregg_cucina': 50
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
@@ -269,7 +267,6 @@ template:
                   'led_cucina': 25,
                   'gregg_cucina': 0
                 },
-                'zone_order': ['led_cucina', 'gregg_cucina']
               },
               'kitchen_off': {
                 'name': 'Cucina Spenta',
@@ -277,7 +274,6 @@ template:
                   'led_cucina': 0,
                   'gregg_cucina': 0
                 },
-                'zone_order': ['led_cucina', 'gregg_cucina']
               },
               'camera_day': {
                 'name': 'Camera Luminoso',
