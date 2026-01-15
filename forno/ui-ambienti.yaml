@@ -1,5 +1,8 @@
 type: vertical-stack
 cards:
+  - type: markdown
+    content: >
+      **Nota:** I programmi "Tosta" e "Scalda" funzionano solo se il forno è acceso e pronto. Assicurati che il forno sia acceso prima di avviare questi programmi.
   - type: custom:button-card
     name: Tosta
     icon: mdi:bread-slice

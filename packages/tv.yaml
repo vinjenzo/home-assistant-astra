@@ -30,12 +30,6 @@ script:
         data:
           source: "HDMI 1"
         continue_on_error: true
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI1"
-        continue_on_error: true
 
   select_hdmi_2:
     alias: "Seleziona HDMI 2"
@@ -45,12 +39,6 @@ script:
           entity_id: media_player.lg_webos_tv_oled48c31la
         data:
           source: "HDMI 2"
-        continue_on_error: true
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI2"
         continue_on_error: true
 
   select_hdmi_3:
@@ -62,12 +50,6 @@ script:
         data:
           source: "HDMI 3"
         continue_on_error: true
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI3"
-        continue_on_error: true
 
   select_hdmi_4:
     alias: "Seleziona HDMI 4"
@@ -78,12 +60,6 @@ script:
         data:
           source: "HDMI 4"
         continue_on_error: true
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI4"
-        continue_on_error: true
 
   # ========================================
   # TV SCENES (WoL + Source Selection)
@@ -91,17 +67,18 @@ script:
   tv_cinema:
     alias: "TV - Cinema (WoL + Plex)"
     sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+      # Se TV NON è accesa, accendila via WoL e attendi
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
           - service: wake_on_lan.send_magic_packet
             data:
               mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
+            timeout: "00:00:20"
+            continue_on_timeout: true
           - delay:
-              seconds: 1
-      # Lancia Plex
+              seconds: 2
+      # Seleziona Plex
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -112,17 +89,18 @@ script:
   tv_football:
     alias: "TV - Calcio (WoL + Set-top box)"
     sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+      # Se TV NON è accesa, accendila via WoL e attendi
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
           - service: wake_on_lan.send_magic_packet
             data:
               mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
+            timeout: "00:00:20"
+            continue_on_timeout: true
           - delay:
-              seconds: 1
-      # Seleziona Set-top Box
+              seconds: 2
+      # Seleziona UPC Set-top box
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -133,20 +111,24 @@ script:
   tv_computer_hdmi2:
     alias: "TV - Computer HDMI 2 (WoL + HDMI 2)"
     sequence:
-      # Se TV NON è in stato playing/paused, accendila via WoL
-      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['playing', 'paused'] }}"
+      # Se TV NON è accesa, accendila via WoL e attendi
+      - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
           - service: wake_on_lan.send_magic_packet
             data:
               mac: !secret tv_mac_address
-          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') not in ['unavailable', 'unknown', 'off'] }}"
-            timeout: "00:00:10"
+          - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
+            timeout: "00:00:20"
+            continue_on_timeout: true
           - delay:
-              seconds: 1
-      - delay:
-          seconds: 1
-      # Invia HOME + Seleziona HDMI 2
-      - service: script.select_hdmi_2
+              seconds: 2
+      # Seleziona HDMI 2
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI 2"
+        continue_on_error: true
 
 # ============================================================
 # AUTOMATION

@@ -557,6 +557,29 @@ cards:
             - font-size: 12px
       - type: custom:button-card
         icon: mdi:hdmi-port
+        name: "3"
+        tap_action:
+          action: call-service
+          service: media_player.select_source
+          target:
+            entity_id: media_player.lg_webos_tv_oled48c31la
+          service_data:
+            source: "HDMI 3"
+        styles:
+          card:
+            - background: rgba(33,150,243,0.15)
+            - border-radius: 12px
+            - border: 1px solid rgba(33,150,243,0.3)
+            - padding: 10px
+            - flex-grow: 1
+          icon:
+            - width: 25px
+            - color: "#2196f3"
+          name:
+            - color: "#2196f3"
+            - font-size: 12px
+      - type: custom:button-card
+        icon: mdi:hdmi-port
         name: "4"
         tap_action:
           action: call-service

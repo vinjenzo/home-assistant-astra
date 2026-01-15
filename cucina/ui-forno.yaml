@@ -1,5 +1,8 @@
 type: vertical-stack
 cards:
+  ###############################################
+  # 🔌 ACCENSIONE / SPEGNIMENTO
+  ###############################################
   - type: horizontal-stack
     cards:
       - type: custom:button-card
@@ -24,6 +27,7 @@ cards:
             - color: white
             - font-size: 14px
             - font-weight: bold
+
       - type: custom:button-card
         name: Spegni
         icon: mdi:power-off
@@ -46,177 +50,42 @@ cards:
             - color: white
             - font-size: 14px
             - font-weight: bold
+
+  ###############################################
+  # 🔒 CHILD LOCK
+  ###############################################
   - type: custom:button-card
-    name: Stato Forno
-    icon: mdi:stove
-    show_state: false
-    show_label: true
-    label: |
-      [[[
-        const temp = states['sensor.bosch_383120532719000097_001_cooking_oven_status_currentcavitytemperature']?.state;
-
-        let prog = states['sensor.bosch_383120532719000097_001_selected_program']?.state;
-        if (!prog || prog === 'unknown') prog = 'In avvio…';
-
-        let rem = states['sensor.forno_tempo_rimanente']?.state;
-        if (!rem || rem === 'unavailable') rem = 'In attesa…';
-
-        return `Temp: ${temp}°C • Prog: ${prog} • Timer: ${rem}`;
-      ]]]
+    name: Child Lock
+    icon: mdi:lock
+    tap_action:
+      action: call-service
+      service: switch.toggle
+      target:
+        entity_id: switch.bosch_383120532719000097_001_bsh_common_setting_childlock
     styles:
       card:
-        - background: rgba(255,255,255,0.06)
-        - border-radius: 14px
-        - border: 1px solid rgba(255,255,255,0.15)
-        - padding: 16px
+        - background: rgba(156,39,176,0.15)
+        - border-radius: 12px
+        - border: 1px solid rgba(156,39,176,0.3)
+        - padding: 14px
       icon:
-        - width: 42px
-        - color: |
-            [[[
-              return states['select.bosch_383120532719000097_001_bsh_common_setting_powerstate'].state === 'BSH.Common.EnumType.PowerState.On'
-              ? '#ff9800' : '#777';
-            ]]]
+        - width: 40px
+        - color: "#ba68c8"
       name:
         - color: white
-        - font-size: 16px
-        - font-weight: bold
-      label:
-        - color: "#ccc"
-        - font-size: 13px
-  - type: horizontal-stack
-    cards:
-      - type: custom:button-card
-        name: Luce
-        icon: mdi:lightbulb-on-outline
-        entity: >-
-          binary_sensor.bosch_383120532719000097_001_bsh_common_status_interiorilluminationactive
-        tap_action:
-          action: call-service
-          service: switch.toggle
-          target:
-            entity_id: >-
-              switch.bosch_383120532719000097_001_bsh_common_setting_interiorillumination
-        styles:
-          card:
-            - background: rgba(255,235,59,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(255,235,59,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#ffeb3b"
-          name:
-            - color: white
-            - font-size: 14px
-      - type: custom:button-card
-        name: Child Lock
-        icon: mdi:lock
-        tap_action:
-          action: call-service
-          service: switch.toggle
-          target:
-            entity_id: switch.bosch_383120532719000097_001_bsh_common_setting_childlock
-        styles:
-          card:
-            - background: rgba(156,39,176,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(156,39,176,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#ba68c8"
-          name:
-            - color: white
-            - font-size: 14px
-      - type: custom:button-card
-        name: Acqua
-        icon: mdi:cup-water
-        tap_action:
-          action: call-service
-          service: button.press
-          target:
-            entity_id: button.bosch_383120532719000097_001_waterdrawer
-        styles:
-          card:
-            - background: rgba(33,150,243,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(33,150,243,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#2196f3"
-          name:
-            - color: white
-            - font-size: 14px
-  - type: horizontal-stack
-    cards:
-      - type: custom:button-card
-        name: Fast Preheat
-        icon: mdi:fire
-        tap_action:
-          action: call-service
-          service: switch.toggle
-          target:
-            entity_id: >-
-              binary_sensor.bosch_383120532719000097_001_cooking_oven_option_fastpreheat
-        styles:
-          card:
-            - background: rgba(255,87,34,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(255,87,34,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#ff5722"
-          name:
-            - color: white
-            - font-size: 14px
-      - type: custom:button-card
-        name: Steam Boost
-        icon: mdi:weather-fog
-        tap_action:
-          action: call-service
-          service: switch.toggle
-          target:
-            entity_id: >-
-              binary_sensor.bosch_383120532719000097_001_cooking_oven_option_steamboost
-        styles:
-          card:
-            - background: rgba(33,150,243,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(33,150,243,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#2196f3"
-          name:
-            - color: white
-            - font-size: 14px
-      - type: custom:button-card
-        name: Remote
-        icon: mdi:remote-tv
-        entity: >-
-          binary_sensor.bosch_383120532719000097_001_bsh_common_status_remotecontrolactive
-        styles:
-          card:
-            - background: rgba(156,39,176,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(156,39,176,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#ba68c8"
-          name:
-            - color: white
-            - font-size: 14px
+        - font-size: 14px
+
+  ###############################################
+  # 🌡️ TEMPERATURA (SETTABILE)
+  ###############################################
   - type: custom:button-card
     name: Temperatura
     icon: mdi:thermometer
     show_label: true
-    label: |
+    label: >
       [[[
         const t = states['number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature']?.state;
-        return `${t}°C`;
+        return t === 'unavailable' ? '—' : `${t}°C`;
       ]]]
     tap_action:
       action: more-info
@@ -236,14 +105,18 @@ cards:
       label:
         - color: "#ccc"
         - font-size: 13px
+
+  ###############################################
+  # ⏱️ DURATA (SETTABILE)
+  ###############################################
   - type: custom:button-card
     name: Durata
     icon: mdi:timer-outline
     show_label: true
-    label: |
+    label: >
       [[[
         const d = states['number.bosch_383120532719000097_001_bsh_common_option_duration']?.state;
-        return `${Math.round(d/60)} min`;
+        return d === 'unavailable' ? '—' : `${Math.round(d/60)} min`;
       ]]]
     tap_action:
       action: more-info
@@ -263,35 +136,21 @@ cards:
       label:
         - color: "#ccc"
         - font-size: 13px
-  - type: custom:button-card
-    name: Avvio Ritardato
-    icon: mdi:clock-start
-    show_label: true
-    label: |
-      [[[
-        const v = states['select.bosch_383120532719000097_001_bsh_common_option_startinrelative']?.state;
-        return v === '0' ? 'Nessun ritardo' : `Tra ${v} min`;
-      ]]]
-    tap_action:
-      action: more-info
-    styles:
-      card:
-        - background: rgba(156,39,176,0.15)
-        - border-radius: 12px
-        - border: 1px solid rgba(156,39,176,0.3)
-        - padding: 14px
-      icon:
-        - width: 40px
-        - color: "#ba68c8"
-      name:
-        - color: white
-        - font-size: 15px
-        - font-weight: bold
-      label:
-        - color: "#ccc"
-        - font-size: 13px
-  - type: horizontal-stack
+
+  ###############################################
+  # 🔥 PROGRAMMI (SOLO QUELLI SUPPORTATI)
+  ###############################################
+  - type: markdown
+    content: "### 🔥 Programmi"
+    card_mod:
+      style: |
+        ha-card { background: transparent; padding: 0; }
+
+  - type: grid
+    columns: 2
+    square: false
     cards:
+      # HOT AIR
       - type: custom:button-card
         name: HotAir
         icon: mdi:fan
@@ -303,7 +162,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.HotAir
         state:
           - value: Cooking.Oven.Program.HeatingMode.HotAir
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,152,0,0.8)
@@ -319,7 +178,8 @@ cards:
             - color: "#ff9800"
           name:
             - color: white
-            - font-size: 14px
+
+      # PIZZA
       - type: custom:button-card
         name: Pizza
         icon: mdi:pizza
@@ -331,7 +191,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.PizzaSetting
         state:
           - value: Cooking.Oven.Program.HeatingMode.PizzaSetting
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,87,34,0.8)
@@ -347,7 +207,8 @@ cards:
             - color: "#ff5722"
           name:
             - color: white
-            - font-size: 14px
+
+      # STATICO
       - type: custom:button-card
         name: Statico
         icon: mdi:heat-wave
@@ -359,7 +220,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.TopBottomHeating
         state:
           - value: Cooking.Oven.Program.HeatingMode.TopBottomHeating
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,193,7,0.8)
@@ -375,37 +236,8 @@ cards:
             - color: "#ffc107"
           name:
             - color: white
-            - font-size: 14px
-      - type: custom:button-card
-        name: Steam
-        icon: mdi:water
-        tap_action:
-          action: call-service
-          service: select.select_option
-          data:
-            entity_id: select.bosch_383120532719000097_001_programs
-            option: Cooking.Oven.Program.SteamModes.Steam
-        state:
-          - value: Cooking.Oven.Program.SteamModes.Steam
-            entity: sensor.bosch_383120532719000097_001_selected_program
-            styles:
-              card:
-                - box-shadow: 0 0 12px 4px rgba(33,150,243,0.8)
-                - border: 1px solid rgba(33,150,243,0.8)
-        styles:
-          card:
-            - background: rgba(33,150,243,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(33,150,243,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#2196f3"
-          name:
-            - color: white
-            - font-size: 14px
-  - type: horizontal-stack
-    cards:
+
+      # STATICO ECO
       - type: custom:button-card
         name: Eco
         icon: mdi:leaf
@@ -417,7 +249,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.TopBottomHeatingEco
         state:
           - value: Cooking.Oven.Program.HeatingMode.TopBottomHeatingEco
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(76,175,80,0.8)
@@ -433,7 +265,8 @@ cards:
             - color: "#4caf50"
           name:
             - color: white
-            - font-size: 14px
+
+      # GRILL VENTILATO
       - type: custom:button-card
         name: Grill Ventilato
         icon: mdi:grill
@@ -445,7 +278,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.HotAirGrilling
         state:
           - value: Cooking.Oven.Program.HeatingMode.HotAirGrilling
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,87,34,0.8)
@@ -461,7 +294,8 @@ cards:
             - color: "#ff5722"
           name:
             - color: white
-            - font-size: 14px
+
+      # SLOWCOOK
       - type: custom:button-card
         name: SlowCook
         icon: mdi:tortoise
@@ -473,7 +307,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.SlowCook
         state:
           - value: Cooking.Oven.Program.HeatingMode.SlowCook
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(33,150,243,0.8)
@@ -489,7 +323,8 @@ cards:
             - color: "#2196f3"
           name:
             - color: white
-            - font-size: 14px
+
+      # SOLO BASSO
       - type: custom:button-card
         name: Solo Basso
         icon: mdi:arrow-down-bold-box
@@ -501,7 +336,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.BottomHeating
         state:
           - value: Cooking.Oven.Program.HeatingMode.BottomHeating
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,193,7,0.8)
@@ -517,9 +352,8 @@ cards:
             - color: "#ffc107"
           name:
             - color: white
-            - font-size: 14px
-  - type: horizontal-stack
-    cards:
+
+      # KEEP WARM
       - type: custom:button-card
         name: Mantieni Caldo
         icon: mdi:food-hot
@@ -531,7 +365,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.KeepWarm
         state:
           - value: Cooking.Oven.Program.HeatingMode.KeepWarm
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(255,152,0,0.8)
@@ -547,7 +381,8 @@ cards:
             - color: "#ff9800"
           name:
             - color: white
-            - font-size: 14px
+
+      # PREHEATING
       - type: custom:button-card
         name: Preheat
         icon: mdi:thermometer-lines
@@ -559,7 +394,7 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.PreHeating
         state:
           - value: Cooking.Oven.Program.HeatingMode.PreHeating
-            entity: sensor.bosch_383120532719000097_001_selected_program
+            entity: select.bosch_383120532719000097_001_programs
             styles:
               card:
                 - box-shadow: 0 0 12px 4px rgba(33,150,243,0.8)
@@ -575,7 +410,8 @@ cards:
             - color: "#2196f3"
           name:
             - color: white
-            - font-size: 14px
+
+      # PREHEAT OVENWARE
       - type: custom:button-card
         name: PreheatWare
         icon: mdi:pot-steam
@@ -587,92 +423,4 @@ cards:
             option: Cooking.Oven.Program.HeatingMode.PreheatOvenware
         state:
           - value: Cooking.Oven.Program.HeatingMode.PreheatOvenware
-            entity: sensor.bosch_383120532719000097_001_selected_program
-            styles:
-              card:
-                - box-shadow: 0 0 12px 4px rgba(156,39,176,0.8)
-                - border: 1px solid rgba(156,39,176,0.8)
-        styles:
-          card:
-            - background: rgba(156,39,176,0.15)
-            - border-radius: 12px
-            - border: 1px solid rgba(156,39,176,0.3)
-            - padding: 14px
-          icon:
-            - width: 40px
-            - color: "#ba68c8"
-          name:
-            - color: white
-            - font-size: 14px
-  - type: entities
-    title: Durata (minuti)
-    entities:
-      - entity: input_number.forno_durata_minuti
-        name: Minuti
-  - type: custom:button-card
-    name: Applica durata
-    icon: mdi:timer
-    tap_action:
-      action: call-service
-      service: script.forno_imposta_durata
-    styles:
-      card:
-        - background: rgba(255,152,0,0.15)
-        - border-radius: 12px
-        - border: 1px solid rgba(255,152,0,0.3)
-        - padding: 14px
-      icon:
-        - width: 40px
-        - color: "#ff9800"
-      name:
-        - color: white
-        - font-size: 14px
-        - font-weight: bold
-  - type: horizontal-stack
-    cards:
-      - type: custom:button-card
-        name: Avvia / Pausa
-        icon: mdi:play-pause
-        tap_action:
-          action: call-service
-          service: button.press
-          service_data:
-            entity_id: button.bosch_383120532719000097_001_start_pause
-        styles:
-          card:
-            - background: >-
-                linear-gradient(135deg, rgba(255,152,0,0.25),
-                rgba(255,152,0,0.10))
-            - border-radius: 12px
-            - border: 1px solid rgba(255,152,0,0.35)
-            - padding: 18px
-          icon:
-            - color: "#ff9800"
-            - width: 48px
-          name:
-            - color: white
-            - font-size: 15px
-            - font-weight: bold
-      - type: custom:button-card
-        name: Stop
-        icon: mdi:stop
-        tap_action:
-          action: call-service
-          service: button.press
-          service_data:
-            entity_id: button.bosch_383120532719000097_001_stop
-        styles:
-          card:
-            - background: >-
-                linear-gradient(135deg, rgba(244,67,54,0.25),
-                rgba(244,67,54,0.10))
-            - border-radius: 12px
-            - border: 1px solid rgba(244,67,54,0.35)
-            - padding: 18px
-          icon:
-            - color: "#f44336"
-            - width: 48px
-          name:
-            - color: white
-            - font-size: 15px
-            - font-weight: bold
+            entity: select.bosch_383120532719000097_

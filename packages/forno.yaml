@@ -24,19 +24,32 @@ script:
     alias: Forno - Tosta pane
     mode: single
     sequence:
+      - service: homeconnect_alt.allow_remote_control
+        data:
+          entity_id: select.bosch_383120532719000097_001_programs
+
+      - delay: "00:00:01"
+
       - service: select.select_option
         data:
           entity_id: select.bosch_383120532719000097_001_bsh_common_setting_powerstate
           option: BSH.Common.EnumType.PowerState.On
+
+      - delay: "00:00:01"
+
       - service: select.select_option
         data:
           entity_id: select.bosch_383120532719000097_001_programs
           option: Cooking.Oven.Program.HeatingMode.HotAirGrilling
+
+      - delay: "00:00:01"
+
       - service: number.set_value
         target:
           entity_id: number.bosch_383120532719000097_001_bsh_common_option_duration
         data:
           value: 420
+
       - service: number.set_value
         target:
           entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
@@ -47,19 +60,32 @@ script:
     alias: Forno - Scalda cibo
     mode: single
     sequence:
+      - service: homeconnect_alt.allow_remote_control
+        data:
+          entity_id: select.bosch_383120532719000097_001_programs
+
+      - delay: "00:00:01"
+
       - service: select.select_option
         data:
           entity_id: select.bosch_383120532719000097_001_bsh_common_setting_powerstate
           option: BSH.Common.EnumType.PowerState.On
+
+      - delay: "00:00:01"
+
       - service: select.select_option
         data:
           entity_id: select.bosch_383120532719000097_001_programs
           option: Cooking.Oven.Program.HeatingMode.KeepWarm
+
+      - delay: "00:00:01"
+
       - service: number.set_value
         target:
           entity_id: number.bosch_383120532719000097_001_bsh_common_option_duration
         data:
           value: 600
+
       - service: number.set_value
         target:
           entity_id: number.bosch_383120532719000097_001_cooking_oven_option_setpointtemperature
