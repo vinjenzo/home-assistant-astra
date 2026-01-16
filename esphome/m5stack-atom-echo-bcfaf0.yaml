@@ -48,7 +48,7 @@ speaker:
     bits_per_sample: 16bit
     sample_rate: 16000
     channel: stereo
-    buffer_duration: 40ms
+    buffer_duration: 60ms
 
 media_player:
   - platform: speaker
@@ -111,6 +111,9 @@ voice_assistant:
         effect: "Gentle Pulse"
 
   on_tts_start:
+    - micro_wake_word.stop:
+    - voice_assistant.stop: 
+
     - light.turn_on:
         id: led
         red: 0%
@@ -122,8 +125,17 @@ voice_assistant:
   on_end:
     - wait_until:
         condition:
-          - media_player.is_announcing:
-        timeout: 0.5s
+          and:
+            - not: media_player.is_announcing
+            - not: voice_assistant.is_running
+            - not: speaker.is_playing
+        timeout: 5s
+
+    - delay: 1s
+    - micro_wake_word.start:
+    - script.execute: reset_led
+
+
     - if:
         condition:
           - lambda: |-
@@ -369,10 +381,17 @@ select:
             - micro_wake_word.start:
 
 micro_wake_word:
+
   on_wake_word_detected:
-    - voice_assistant.start:
-        wake_word: !lambda return wake_word;
-  vad:
+    - if:
+        condition:
+          api.connected:
+        then:
+          - voice_assistant.start:
+              wake_word: !lambda return wake_word;
+        else:
+          - logger.log: "Wake word ignored: no API client connected"
+
   models:
     - model: okay_nabu
 
