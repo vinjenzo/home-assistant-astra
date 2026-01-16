@@ -101,7 +101,7 @@ voice_assistant:
         brightness: 60%
         effect: "Soft Pulse"
 
-  on_stt_vad_end:
+  on_stt_vad_end:  
     - light.turn_on:
         id: led
         red: 0%
@@ -122,7 +122,7 @@ voice_assistant:
         brightness: 60%
         effect: none
 
-  on_end:
+  on_end:  
     - wait_until:
         condition:
           and:
@@ -270,6 +270,9 @@ script:
 
   - id: start_wake_word
     then:
+      - wait_until:
+          not: speaker.is_playing
+          
       - if:
           condition:
             and:
