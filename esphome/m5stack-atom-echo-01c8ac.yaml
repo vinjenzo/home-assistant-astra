@@ -382,13 +382,13 @@ micro_wake_word:
 
 api:
   encryption:
-    key: uCs5t+kR4ZKJpDmmAG30vLmWDoS29mLgEVtknMTD3QY=
+    key: H7HKdp8D00pqBj5mmXr5Xbq3I2OuDfER4OhJE0q8rN0=
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
   manual_ip:
-    static_ip: 192.168.0.35
+    static_ip: 192.168.0.127
     gateway: 192.168.0.1
     subnet: 255.255.255.0
 
