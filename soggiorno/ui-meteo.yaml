@@ -1,0 +1,158 @@
+# Dashboard Meteo PirateWeather
+# Stile coerente con altre UI (badge, card, colori, icone)
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        styles:
+          card:
+            - width: 12px
+            - background: transparent
+            - border: none
+            - box-shadow: none
+            - padding: 0
+            - cursor: default
+        tap_action:
+          action: none
+      - type: custom:button-card
+        entity: weather.pirateweather
+        name: Meteo
+        icon: mdi:weather-partly-cloudy
+        show_state: true
+        show_label: true
+        label: "[[[ return states['sensor.pirateweather_summary']?.state ]]]"
+        styles:
+          card:
+            - background: rgba(33,150,243,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(33,150,243,0.20)
+          icon:
+            - width: 60px
+            - color: "#2196f3"
+          name:
+            - color: white
+            - font-size: 14px
+            - font-weight: bold
+          label:
+            - position: absolute
+            - bottom: 6px
+            - right: 8px
+            - font-size: 12px
+            - opacity: 0.7
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        entity: sensor.pirateweather_temperature
+        name: Temperatura
+        icon: mdi:thermometer
+        show_state: false
+        show_label: true
+        label: "[[[ const t = states['sensor.pirateweather_temperature']?.state; const tApp = states['sensor.pirateweather_apparent_temperature']?.state; const c = t ? Math.round((parseFloat(t)-32)*5/9) : '-'; const cApp = tApp ? Math.round((parseFloat(tApp)-32)*5/9) : '-'; return c + '°C' + (tApp ? ' / ' + cApp + '°C percepita' : ''); ]]]"
+        styles:
+          card:
+            - background: rgba(255,87,34,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,87,34,0.20)
+          icon:
+            - width: 40px
+            - color: "#ff5722"
+          name:
+            - color: white
+            - font-size: 13px
+            - font-weight: bold
+          label:
+            - font-size: 11px
+            - opacity: 0.7
+      - type: custom:button-card
+        entity: sensor.pirateweather_precip_probability
+        name: Pioggia
+        icon: mdi:weather-rainy
+        show_state: true
+        show_label: true
+        label: "[[[ return states['sensor.pirateweather_precip_intensity']?.state + ' mm/h'; ]]]"
+        styles:
+          card:
+            - background: rgba(33,150,243,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(33,150,243,0.20)
+          icon:
+            - width: 40px
+            - color: "#2196f3"
+          name:
+            - color: white
+            - font-size: 13px
+            - font-weight: bold
+          label:
+            - font-size: 11px
+            - opacity: 0.7
+      - type: custom:button-card
+        entity: sensor.pirateweather_wind_speed
+        name: Vento
+        icon: mdi:weather-windy
+        show_state: false
+        show_label: true
+        label: "[[[ const v = states['sensor.pirateweather_wind_speed']?.state; const g = states['sensor.pirateweather_wind_gust']?.state; return (v ? Math.round(parseFloat(v)*3.6) : '-') + ' km/h' + (g ? ' (' + Math.round(parseFloat(g)*3.6) + ' km/h raffiche)' : ''); ]]]"
+        styles:
+          card:
+            - background: rgba(76,175,80,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(76,175,80,0.20)
+          icon:
+            - width: 40px
+            - color: "#4caf50"
+          name:
+            - color: white
+            - font-size: 13px
+            - font-weight: bold
+          label:
+            - font-size: 11px
+            - opacity: 0.7
+            - white-space: pre-line
+            - word-break: break-word
+      - type: custom:button-card
+        entity: sensor.pirateweather_uv_index
+        name: UV
+        icon: mdi:weather-sunny-alert
+        show_state: true
+        show_label: true
+        label: "[[[ return states['sensor.pirateweather_cloud_coverage']?.state + '% nuvolosità'; ]]]"
+        styles:
+          card:
+            - background: rgba(255,235,59,0.10)
+            - border-radius: 12px
+            - border: 1px solid rgba(255,235,59,0.20)
+          icon:
+            - width: 40px
+            - color: "#ffeb3b"
+          name:
+            - color: white
+            - font-size: 13px
+            - font-weight: bold
+          label:
+            - font-size: 11px
+            - opacity: 0.7
+  - type: custom:button-card
+    entity: sensor.pirateweather_alerts
+    name: Allerta
+    icon: mdi:alert
+    show_state: true
+    show_label: true
+    label: "[[[ return states['sensor.pirateweather_daily_summary']?.state ]]]"
+    styles:
+      card:
+        - background: rgba(244,67,54,0.10)
+        - border-radius: 12px
+        - border: 1px solid rgba(244,67,54,0.20)
+      icon:
+        - width: 40px
+        - color: "#f44336"
+      name:
+        - color: white
+        - font-size: 13px
+        - font-weight: bold
+      label:
+        - font-size: 11px
+        - opacity: 0.7
+        - white-space: pre-line
+        - word-break: break-word
