@@ -1,6 +1,6 @@
 substitutions:
-  name: m5stack-atom-echo-a19044
-  friendly_name: M5Stack Atom Echo a19044
+  name: m5stack-atom-echo-01c8ac
+  friendly_name: M5Stack Atom Echo 01c8ac
 
 esphome:
   name: ${name}
@@ -456,3 +456,17 @@ time:
         then:
           - logger.log: "Riavvio notturno programmato"
           - switch.turn_on: restart_switch
+
+
+
+
+
+
+api:
+  encryption:
+    key: uCs5t+kR4ZKJpDmmAG30vLmWDoS29mLgEVtknMTD3QY=
+
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
