@@ -21,8 +21,6 @@ ota:
   - platform: esphome
     id: ota_esphome
 
-captive_portal:
-
 button:
   - platform: factory_reset
     id: factory_reset_btn
@@ -391,66 +389,3 @@ wifi:
     static_ip: 192.168.0.127
     gateway: 192.168.0.1
     subnet: 255.255.255.0
-
-# ---------------------------------------------------------
-# WATCHDOG SOFTWARE (periodico)
-# ---------------------------------------------------------
-
-interval:
-  - interval: 30s
-    then:
-      - if:
-          condition:
-            not:
-              api.connected:
-          then:
-            - logger.log: "API non connessa, riavvio..."
-            - delay: 1s
-            - switch.turn_on: restart_switch
-
-  - interval: 20s
-    then:
-      - if:
-          condition:
-            and:
-              - not: voice_assistant.is_running
-              - not: microphone.is_capturing
-              - not: speaker.is_playing
-          then:
-            - logger.log: "Wake word non attiva, riavvio detection"
-            - micro_wake_word.start:
-
-  - interval: 15s
-    then:
-      - if:
-          condition: voice_assistant.is_running
-          then:
-            - logger.log: "Pipeline bloccata, forzo stop"
-            - voice_assistant.stop:
-            - delay: 500ms
-            - micro_wake_word.start:
-
-  - interval: 10s
-    then:
-      - if:
-          condition: microphone.is_capturing
-          then:
-            - logger.log: "Microfono bloccato, stop forzato"
-            - voice_assistant.stop:
-            - delay: 500ms
-            - micro_wake_word.start:
-
-# ---------------------------------------------------------
-# RIAVVIO NOTTURNO
-# ---------------------------------------------------------
-
-time:
-  - platform: homeassistant
-    id: ha_time
-    on_time:
-      - seconds: 0
-        minutes: 0
-        hours: 4
-        then:
-          - logger.log: "Riavvio notturno programmato"
-          - switch.turn_on: restart_switch
