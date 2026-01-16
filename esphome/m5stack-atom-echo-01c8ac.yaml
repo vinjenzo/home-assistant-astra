@@ -7,7 +7,7 @@ esphome:
   name_add_mac_suffix: false
   friendly_name: ${friendly_name}
   min_version: 2025.5.0
-      
+
 logger:
   level: DEBUG
 
@@ -382,13 +382,13 @@ micro_wake_word:
 
 api:
   encryption:
-    key: 5DJQjBTrjVsMB6bQRZiwb8/lxfAf77lfblOGa7kQxf4=
+    key: uCs5t+kR4ZKJpDmmAG30vLmWDoS29mLgEVtknMTD3QY=
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
   manual_ip:
-    static_ip: 192.168.0.13
+    static_ip: 192.168.0.35
     gateway: 192.168.0.1
     subnet: 255.255.255.0
 
@@ -423,8 +423,7 @@ interval:
   - interval: 15s
     then:
       - if:
-          condition:
-            voice_assistant.is_running
+          condition: voice_assistant.is_running
           then:
             - logger.log: "Pipeline bloccata, forzo stop"
             - voice_assistant.stop:
@@ -434,8 +433,7 @@ interval:
   - interval: 10s
     then:
       - if:
-          condition:
-            microphone.is_capturing
+          condition: microphone.is_capturing
           then:
             - logger.log: "Microfono bloccato, stop forzato"
             - voice_assistant.stop:
@@ -456,17 +454,3 @@ time:
         then:
           - logger.log: "Riavvio notturno programmato"
           - switch.turn_on: restart_switch
-
-
-
-
-
-
-api:
-  encryption:
-    key: uCs5t+kR4ZKJpDmmAG30vLmWDoS29mLgEVtknMTD3QY=
-
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
