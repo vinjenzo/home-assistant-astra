@@ -20,10 +20,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_camera_day"
-              friendly_name: "Camera Luminoso"
+            entity_id: script.scene_camera_day
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -67,10 +64,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_camera_soft"
-              friendly_name: "Camera Relax"
+            entity_id: script.scene_camera_soft
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -90,10 +84,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_camera_night"
-              friendly_name: "Camera Notte"
+            entity_id: script.scene_camera_night
         styles:
           card:
             - background: rgba(96,125,139,0.16)
@@ -137,10 +128,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_camera_work"
-              friendly_name: "Camera Lavoro"
+            entity_id: script.scene_camera_work
         styles:
           card:
             - background: rgba(144,164,174,0.08)

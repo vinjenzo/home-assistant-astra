@@ -72,7 +72,7 @@ template:
               'led_cucina': {
                 'name': 'Luce Cucina',
                 'scene': 'scene.led_cucina',
-                'input_number': 'input_number.hw_kitchen_led_level',
+                'input_number': 'input_number.cucina_led_level',
                 'presets': {
                   'low': 20,
                   'medium': 50,
@@ -83,7 +83,7 @@ template:
               'gregg_cucina': {
                 'name': 'Gregg Cucina',
                 'scene': 'scene.lampada_gregg',
-                'input_number': 'input_number.hw_kitchen_gregg_level',
+                'input_number': 'input_number.cucina_gregg_level',
                 'presets': {
                   'low': 23,
                   'medium': 56,

@@ -20,10 +20,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: script.scene_tv_cinema
-              friendly_name: Soggiorno Cinema
+            entity_id: script.scene_tv_cinema
         styles:
           card:
             - background: rgba(255,225,215,0.08)
@@ -43,10 +40,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: script.scene_tv_football
-              friendly_name: Soggiorno Calcio
+            entity_id: script.scene_tv_football
         styles:
           card:
             - background: rgba(76,175,80,0.08)
@@ -90,10 +84,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: script.scene_tv_computer
-              friendly_name: Soggiorno Computer
+            entity_id: script.scene_tv_computer
         styles:
           card:
             - background: rgba(156,39,176,0.08)

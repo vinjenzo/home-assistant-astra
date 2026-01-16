@@ -22,10 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_morning"
-              friendly_name: "Soggiorno Risveglio"
+            entity_id: script.scene_livingroom_morning
         styles:
           card:
             - background: rgba(255,152,0,0.10)
@@ -53,10 +50,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_balanced"
-              friendly_name: "Soggiorno Bilanciato"
+            entity_id: script.scene_livingroom_balanced
         styles:
           card:
             - background: rgba(255,193,7,0.10)
@@ -84,10 +78,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_day"
-              friendly_name: "Soggiorno Luminoso"
+            entity_id: script.scene_livingroom_day
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -139,10 +130,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_desk"
-              friendly_name: "Soggiorno Lavoro"
+            entity_id: script.scene_livingroom_desk
         styles:
           card:
             - background: rgba(33,150,243,0.10)
@@ -170,10 +158,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_reading"
-              friendly_name: "Soggiorno Lettura"
+            entity_id: script.scene_livingroom_reading
         styles:
           card:
             - background: rgba(255,111,0,0.10)
@@ -199,10 +184,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_soft"
-              friendly_name: "Soggiorno Relax"
+            entity_id: script.scene_livingroom_soft
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -252,10 +234,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_nap"
-              friendly_name: "Soggiorno Sonnellino"
+            entity_id: script.scene_livingroom_nap
         styles:
           card:
             - background: rgba(156,39,176,0.10)
@@ -275,10 +254,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_sleep"
-              friendly_name: "Soggiorno Sonno Notturno"
+            entity_id: script.scene_livingroom_sleep
         styles:
           card:
             - background: rgba(63,81,181,0.20)
@@ -298,10 +274,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_livingroom_night"
-              friendly_name: "Soggiorno Notte"
+            entity_id: script.scene_livingroom_night
         styles:
           card:
             - background: rgba(96,125,139,0.16)

@@ -22,10 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_casa_day"
-              friendly_name: "Casa Luminoso"
+            entity_id: script.scene_casa_day
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -47,10 +44,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_casa_night"
-              friendly_name: "Casa Notte"
+            entity_id: script.scene_casa_night
         styles:
           card:
             - background: rgba(55,71,79,0.20)
@@ -93,10 +87,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_casa_guests"
-              friendly_name: "Casa Ospiti"
+            entity_id: script.scene_casa_guests
         styles:
           card:
             - background: rgba(156,39,176,0.10)
@@ -121,10 +112,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_casa_cleaning"
-              friendly_name: "Casa Pulizie"
+            entity_id: script.scene_casa_cleaning
         styles:
           card:
             - background: rgba(0,188,212,0.10)

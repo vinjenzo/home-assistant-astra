@@ -2,7 +2,6 @@
 # AMBIENTI/SCENE - CONFIGURAZIONE CENTRALIZZATA (Template Sensor)
 # ============================================================
 # Mappa: scene_key → { name, brightness: { zone_key: value } }
-# Usata da: script.set_ambiente in led_system_core.yaml
 # ============================================================
 
 template:
@@ -225,15 +224,15 @@ template:
                   'tv': 2
                 }
               },
-              'kitchen_day': {
-                'name': 'Cucina Luminoso',
+              'cucina_luminosa': {
+                'name': 'Cucina Luminosa',
                 'brightness': {
                   'led_cucina': 50,
                   'gregg_cucina': 80
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
-              'kitchen_soft': {
+              'cucina_relax': {
                 'name': 'Cucina Relax',
                 'brightness': {
                   'led_cucina': 70,
@@ -241,7 +240,7 @@ template:
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
-              'kitchen_prep': {
+              'cucina_lavoro': {
                 'name': 'Cucina Lavoro',
                 'brightness': {
                   'led_cucina': 100,
@@ -249,7 +248,7 @@ template:
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
-              'kitchen_dinner': {
+              'cucina_cena': {
                 'name': 'Cucina Cena',
                 'brightness': {
                   'led_cucina': 30,
@@ -257,14 +256,14 @@ template:
                 },
                 'zone_order': ['led_cucina', 'gregg_cucina']
               },
-              'kitchen_night': {
+              'cucina_notte': {
                 'name': 'Cucina Notte',
                 'brightness': {
                   'led_cucina': 25,
                   'gregg_cucina': 0
                 },
               },
-              'kitchen_off': {
+              'cucina_spenta': {
                 'name': 'Cucina Spenta',
                 'brightness': {
                   'led_cucina': 0,

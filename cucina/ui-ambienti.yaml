@@ -22,10 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_kitchen_day"
-              friendly_name: "Cucina Luminoso"
+            entity_id: script.scene_cucina_luminosa
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -51,10 +48,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_kitchen_prep"
-              friendly_name: "Cucina Lavoro"
+            entity_id: script.scene_cucina_lavoro
         styles:
           card:
             - background: rgba(255,152,0,0.10)
@@ -100,10 +94,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_kitchen_dinner"
-              friendly_name: "Cucina Cena"
+            entity_id: script.scene_cucina_cena
         styles:
           card:
             - background: rgba(255,111,0,0.10)
@@ -131,10 +122,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_kitchen_soft"
-              friendly_name: "Cucina Relax"
+            entity_id: script.scene_cucina_relax
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -185,10 +173,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.ambiente_trigger
-            variables:
-              target_script: "script.scene_kitchen_night"
-              friendly_name: "Cucina Notte"
+            entity_id: script.scene_cucina_notte
         styles:
           card:
             - background: rgba(96,125,139,0.16)
@@ -208,7 +193,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_kitchen_off
+            entity_id: script.scene_cucina_spenta
         styles:
           card:
             - background: rgba(244,67,54,0.10)

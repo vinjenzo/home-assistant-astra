@@ -1,79 +1,9 @@
 # ============================================================
-# AMBIENTI/SCENE GLOBALI - TUTTA LA CASA
-# ============================================================
-# Questi script sono GLOBALI e controllano tutte le zone LED di casa.
+# AMBIENTI
 # Ogni scena applica brightness definiti in scene.yaml
 # ============================================================
 
 script:
-  # ========================================
-  # AMBIENTE TRIGGER (preemptive scene manager)
-  # ========================================
-  ambiente_trigger:
-    alias: "Ambiente Trigger (Global)"
-    fields:
-      target_script:
-        description: "Entity id dello script ambiente da avviare (es. 'script.scene_casa_night')"
-      friendly_name:
-        description: "Nome leggibile ambiente (opzionale)"
-    sequence:
-      - choose:
-          - conditions: "{{ friendly_name is defined and friendly_name != '' }}"
-            sequence:
-              - service: input_text.set_value
-                data:
-                  entity_id: input_text.current_ambiente
-                  value: "{{ friendly_name }}"
-      - service: script.turn_off
-        data:
-          entity_id:
-            # House scenes
-            - script.scene_casa_night
-            - script.scene_casa_day
-            - script.scene_casa_guests
-            - script.scene_casa_cleaning
-            - script.scene_casa_all_off
-            # Livingroom scenes
-            - script.scene_livingroom_day
-            - script.scene_livingroom_morning
-            - script.scene_livingroom_soft
-            - script.scene_livingroom_nap
-            - script.scene_livingroom_sleep
-            - script.scene_livingroom_reading
-            - script.scene_livingroom_meditation
-            - script.scene_livingroom_desk
-            - script.scene_livingroom_balanced
-            - script.scene_livingroom_night
-            - script.scene_livingroom_off
-            # TV scenes
-            - script.scene_tv_football
-            - script.scene_tv_cinema
-            - script.scene_tv_computer
-            # Kitchen scenes
-            - script.scene_kitchen_day
-            - script.scene_kitchen_prep
-            - script.scene_kitchen_dinner
-            - script.scene_kitchen_soft
-            - script.scene_kitchen_night
-            - script.scene_kitchen_off
-            # Camera scenes
-            - script.scene_camera_day
-            - script.scene_camera_soft
-            - script.scene_camera_night
-            - script.scene_camera_work
-            - script.scene_camera_off
-            # Bed scenes
-            - script.scene_bed_day
-            - script.scene_bed_evening
-            - script.scene_bed_read
-            - script.scene_bed_relax
-            - script.scene_bed_night
-            - script.scene_bed_off
-      - delay: "00:00:01"
-      - service: script.turn_on
-        data:
-          entity_id: "{{ target_script }}"
-
   # ========================================
   # HOUSE SCENES
   # ========================================
@@ -185,7 +115,6 @@ script:
   scene_livingroom_night:
     alias: "Soggiorno Notte"
     sequence:
-      # Imposta luci notte
       - service: script.set_ambiente
         data:
           scene_key: "livingroom_night"
@@ -228,47 +157,47 @@ script:
   # ========================================
   # KITCHEN SCENES
   # ========================================
-  scene_kitchen_day:
-    alias: "Cucina Luminoso"
+  scene_cucina_luminosa:
+    alias: "Cucina Luminosa"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_day"
+          scene_key: "cucina_luminosa"
 
-  scene_kitchen_prep:
+  scene_cucina_lavoro:
     alias: "Cucina Preparazione"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_prep"
+          scene_key: "cucina_lavoro"
 
-  scene_kitchen_dinner:
+  scene_cucina_cena:
     alias: "Cena in Cucina"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_dinner"
+          scene_key: "cucina_cena"
 
-  scene_kitchen_soft:
+  scene_cucina_relax:
     alias: "Cucina Relax"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_soft"
+          scene_key: "cucina_relax"
 
-  scene_kitchen_night:
+  scene_cucina_notte:
     alias: "Notte Cucina"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_night"
+          scene_key: "cucina_notte"
 
-  scene_kitchen_off:
+  scene_cucina_spenta:
     alias: "Spegni Cucina"
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "kitchen_off"
+          scene_key: "cucina_spenta"
 
   # ========================================
   # CAMERA SCENES

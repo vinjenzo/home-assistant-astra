@@ -1,13 +1,13 @@
 # Badge luci Cucina
 - type: entity
-  entity: input_number.hw_kitchen_led_level
+  entity: input_number.cucina_led_level
   name: Cucina
   icon: mdi:led-strip
   show_name: true
   show_state: true
   show_icon: true
 - type: entity
-  entity: input_number.hw_kitchen_gregg_level
+  entity: input_number.cucina_gregg_level
   name: Gregg
   icon: mdi:egg-easter
   show_name: true
