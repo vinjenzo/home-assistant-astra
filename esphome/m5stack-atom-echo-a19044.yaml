@@ -1,10 +1,10 @@
 substitutions:
-  name: m5stack-atom-echo
-  friendly_name: M5Stack Atom Echo
+  name: m5stack-atom-echo-a19044
+  friendly_name: M5Stack Atom Echo a19044
 
 esphome:
   name: ${name}
-  name_add_mac_suffix: true
+  name_add_mac_suffix: false
   friendly_name: ${friendly_name}
   min_version: 2025.5.0
 
@@ -14,15 +14,9 @@ esp32:
   framework:
     type: esp-idf
 
-logger:
-api:
-
 ota:
   - platform: esphome
     id: ota_esphome
-
-wifi:
-  ap:
 
 captive_portal:
 
@@ -53,7 +47,7 @@ speaker:
     bits_per_sample: 16bit
     sample_rate: 16000
     channel: stereo # The Echo has poor playback audio quality when using mon audio
-    buffer_duration: 60ms
+    buffer_duration: 40ms
 
 media_player:
   - platform: speaker
@@ -91,43 +85,27 @@ voice_assistant:
   microphone:
     microphone: echo_microphone
     channels: 0
-    gain_factor: 2
-
+    gain_factor: 1
   media_player: echo_media_player
 
-  # 🔥 chiude l’ascolto se si allunga troppo
-  speech_timeout: 1200ms
+  noise_suppression_level: 4
 
-  # 🔥 rileva il silenzio dopo che hai finito di parlare
-  silence_detection:
-    enable: true
-    time: 350ms
-    threshold: 0.015
-
-  # 🔥 adatta la sensibilità al rumore di fondo
-  ambient_noise_estimation:
-    enable: true
-    # quanto spesso aggiorna la stima del rumore
-    update_interval: 10s
-    # quanto “pesa” il nuovo rumore rispetto allo storico
-    adaptation_rate: 0.05
-
-  noise_suppression_level: 3
   auto_gain: 27dBFS
-
   on_listening:
     - light.turn_on:
         id: led
-        blue: 100%
-        red: 0%
-        green: 0%
+        blue: 0%
+        red: 20%
+        green: 80%
+        brightness: 50%
         effect: "Slow Pulse"
   on_stt_vad_end:
     - light.turn_on:
         id: led
-        blue: 100%
-        red: 0%
+        blue: 20%
+        red: 80%
         green: 0%
+        brightness: 50%
         effect: "Fast Pulse"
   on_tts_start:
     - light.turn_on:
@@ -135,8 +113,8 @@ voice_assistant:
         blue: 100%
         red: 0%
         green: 0%
-        brightness: 100%
-        effect: none
+        brightness: 50%
+        effect: "Fast Pulse"
   on_end:
     # Handle the "nevermind" case where there is no announcement
     - wait_until:
@@ -231,6 +209,7 @@ light:
     chipset: SK6812
     num_leds: 1
     rgb_order: grb
+
     effects:
       - pulse:
           name: "Slow Pulse"
@@ -395,3 +374,15 @@ micro_wake_word:
     - model: okay_nabu
     - model: hey_mycroft
     - model: hey_jarvis
+
+api:
+  encryption:
+    key: 5DJQjBTrjVsMB6bQRZiwb8/lxfAf77lfblOGa7kQxf4=
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: 192.168.0.13
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
