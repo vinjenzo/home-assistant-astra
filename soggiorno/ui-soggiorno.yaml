@@ -29,8 +29,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Soggiorno';
               
-              if (!zonaAccesa) return 'script.hw_livingroom_soggiorno_on';
-              if (zonaAccesa && isSelected) return 'script.hw_livingroom_soggiorno_off';
+              if (!zonaAccesa) return 'script.soggiorno_led_on';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_led_off';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -93,8 +93,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Gregg Soggiorno';
               
-              if (!zonaAccesa) return 'script.hw_livingroom_gregg_on';
-              if (zonaAccesa && isSelected) return 'script.hw_livingroom_gregg_off';
+              if (!zonaAccesa) return 'script.soggiorno_gregg_on';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_gregg_off';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -184,8 +184,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'TV';
               
-              if (!zonaAccesa) return 'script.hw_livingroom_tv_on';
-              if (zonaAccesa && isSelected) return 'script.hw_livingroom_tv_off';
+              if (!zonaAccesa) return 'script.soggiorno_tv_on';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_tv_off';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -248,8 +248,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Museo';
               
-              if (!zonaAccesa) return 'script.hw_livingroom_museum_on';
-              if (zonaAccesa && isSelected) return 'script.hw_livingroom_museum_off';
+              if (!zonaAccesa) return 'script.soggiorno_museo_on';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_museo_off';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -312,8 +312,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Libreria';
               
-              if (!zonaAccesa) return 'script.hw_livingroom_library_on';
-              if (zonaAccesa && isSelected) return 'script.hw_livingroom_library_off';
+              if (!zonaAccesa) return 'script.soggiorno_libreria_on';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_libreria_off';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -408,11 +408,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.hw_livingroom_soggiorno_high',
-                      'TV': 'script.hw_livingroom_tv_high',
-                      'Museo': 'script.hw_livingroom_museum_high',
-                      'Libreria': 'script.hw_livingroom_library_high',
-                      'Gregg Soggiorno': 'script.hw_livingroom_gregg_high',
+                      'Soggiorno': 'script.soggiorno_led_high',
+                      'TV': 'script.soggiorno_tv_high',
+                      'Museo': 'script.soggiorno_museo_high',
+                      'Libreria': 'script.soggiorno_libreria_high',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_high',
                     };
                     return map[zona];
                   ]]]
@@ -436,11 +436,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.hw_livingroom_soggiorno_medium',
-                      'TV': 'script.hw_livingroom_tv_medium',
-                      'Museo': 'script.hw_livingroom_museum_medium',
-                      'Libreria': 'script.hw_livingroom_library_medium',
-                      'Gregg Soggiorno': 'script.hw_livingroom_gregg_medium',
+                      'Soggiorno': 'script.soggiorno_led_medium',
+                      'TV': 'script.soggiorno_tv_medium',
+                      'Museo': 'script.soggiorno_museo_medium',
+                      'Libreria': 'script.soggiorno_libreria_medium',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_medium',
                     };
                     return map[zona];
                   ]]]
@@ -464,11 +464,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.hw_livingroom_soggiorno_low',
-                      'TV': 'script.hw_livingroom_tv_low',
-                      'Museo': 'script.hw_livingroom_museum_low',
-                      'Libreria': 'script.hw_livingroom_library_low',
-                      'Gregg Soggiorno': 'script.hw_livingroom_gregg_low',
+                      'Soggiorno': 'script.soggiorno_led_low',
+                      'TV': 'script.soggiorno_tv_low',
+                      'Museo': 'script.soggiorno_museo_low',
+                      'Libreria': 'script.soggiorno_libreria_low',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_low',
                     };
                     return map[zona];
                   ]]]
@@ -505,11 +505,11 @@ cards:
                     }
                     
                     const map = {
-                      'Soggiorno': 'script.hw_livingroom_soggiorno_off',
-                      'TV': 'script.hw_livingroom_tv_off',
-                      'Museo': 'script.hw_livingroom_museum_off',
-                      'Libreria': 'script.hw_livingroom_library_off',
-                      'Gregg Soggiorno': 'script.hw_livingroom_gregg_off',
+                      'Soggiorno': 'script.soggiorno_led_off',
+                      'TV': 'script.soggiorno_tv_off',
+                      'Museo': 'script.soggiorno_museo_off',
+                      'Libreria': 'script.soggiorno_libreria_off',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_off',
                     };
                     return map[zona];
                   ]]]

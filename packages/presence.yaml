@@ -153,7 +153,7 @@ automation:
       - service: !secret notify_service
         data:
           title: "🏠 Rientro a casa"
-          message: "{{ trigger.entity_id }} è tornato: livingroom {{ brightness_soggiorno }}%, camera {{ brightness_camera }}%"
+          message: "{{ trigger.entity_id }} è tornato: soggiorno {{ brightness_soggiorno }}%, camera {{ brightness_camera }}%"
 
   # ========================================
   # USCITA DA CASA

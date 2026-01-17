@@ -1,6 +1,6 @@
 substitutions:
-  name: m5stack-atom-echo-a19044
-  friendly_name: M5Stack Atom Echo a19044
+  name: m5stack-atom-echo-01c8ac
+  friendly_name: M5Stack Atom Echo 01c8ac
 
 esphome:
   name: ${name}
@@ -63,6 +63,8 @@ media_player:
     files:
       - id: timer_finished_wave_file
         file: media/timer_finished.wav
+      - id: wake_word_detected_audio
+        file: media/Startrek_Door_Noise.wav
     on_announcement:
       - if:
           condition:
@@ -388,6 +390,10 @@ micro_wake_word:
         condition:
           api.connected:
         then:
+          - media_player.speaker.play_on_device_media_file:
+              media_file: wake_word_detected_audio
+              announcement: true
+          - delay: 150ms
           - voice_assistant.start:
               wake_word: !lambda return wake_word;
         else:
@@ -398,12 +404,12 @@ micro_wake_word:
 
 api:
   encryption:
-    key: !secret api_encryption_key_m5stack_atom_echo_a19044
+    key: !secret api_encryption_key_m5stack_atom_echo_01c8ac
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
   manual_ip:
-    static_ip: 192.168.0.13
+    static_ip: 192.168.0.127
     gateway: 192.168.0.1
     subnet: 255.255.255.0

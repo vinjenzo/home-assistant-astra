@@ -32,14 +32,21 @@ script:
         continue_on_error: true
 
   select_hdmi_2:
-    alias: "Seleziona HDMI 2"
-    sequence:
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI 2"
-        continue_on_error: true
+      alias: "Seleziona HDMI 2 (compatibile)"
+      sequence:
+        - service: media_player.select_source
+          target:
+            entity_id: media_player.lg_webos_tv_oled48c31la
+          data:
+            source: "HDMI 2"
+          continue_on_error: true
+        - delay: 1
+        - service: media_player.select_source
+          target:
+            entity_id: media_player.lg_webos_tv_oled48c31la
+          data:
+            source: "HDMI2"
+          continue_on_error: true
 
   select_hdmi_3:
     alias: "Seleziona HDMI 3"

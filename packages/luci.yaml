@@ -13,10 +13,10 @@ template:
         attributes:
           zones: >-
             {% set zones = {
-              'soggiorno': {
+              'led_soggiorno': {
                 'name': 'Soggiorno',
                 'scene': 'scene.led_principale',
-                'input_number': 'input_number.hw_livingroom_soggiorno_level',
+                'input_number': 'input_number.soggiorno_led_level',
                 'presets': {
                   'low': 40,
                   'medium': 70,
@@ -27,7 +27,7 @@ template:
               'tv': {
                 'name': 'TV',
                 'scene': 'scene.led_tv',
-                'input_number': 'input_number.hw_livingroom_tv_level',
+                'input_number': 'input_number.soggiorno_tv_level',
                 'presets': {
                   'low': 2,
                   'medium': 15,
@@ -38,7 +38,7 @@ template:
               'museo': {
                 'name': 'Museo',
                 'scene': 'scene.led_museo',
-                'input_number': 'input_number.hw_livingroom_museum_level',
+                'input_number': 'input_number.soggiorno_museo_level',
                 'presets': {
                   'low': 7,
                   'medium': 34,
@@ -49,7 +49,7 @@ template:
               'libreria': {
                 'name': 'Libreria',
                 'scene': 'scene.led_libreria',
-                'input_number': 'input_number.hw_livingroom_library_level',
+                'input_number': 'input_number.soggiorno_libreria_level',
                 'presets': {
                   'low': 10,
                   'medium': 40,
@@ -60,7 +60,7 @@ template:
               'gregg_soggiorno': {
                 'name': 'Gregg Soggiorno',
                 'scene': 'scene.lampade_gregg',
-                'input_number': 'input_number.hw_livingroom_gregg_level',
+                'input_number': 'input_number.soggiorno_gregg_level',
                 'presets': {
                   'low': 10,
                   'medium': 35,

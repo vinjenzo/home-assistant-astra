@@ -9,6 +9,7 @@ script:
   # ========================================
   scene_casa_night:
     alias: "Notte"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -20,6 +21,7 @@ script:
 
   scene_casa_day:
     alias: "Luminoso"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -27,6 +29,7 @@ script:
 
   scene_casa_guests:
     alias: "Ospiti"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -34,6 +37,7 @@ script:
 
   scene_casa_cleaning:
     alias: "Pulizie"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -41,97 +45,110 @@ script:
 
   scene_casa_all_off:
     alias: "Spegni Tutto"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
           scene_key: "home_off"
 
   # ========================================
-  # LIVINGROOM SCENES
+  # SOGGIORNO SCENES
   # ========================================
-  scene_livingroom_day:
+  scene_soggiorno_luminoso:
     alias: "Soggiorno Luminoso"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_day"
+          scene_key: "soggiorno_luminoso"
 
-  scene_livingroom_morning:
+  scene_soggiorno_risveglio:
     alias: "Soggiorno Risveglio"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_morning"
+          scene_key: "soggiorno_risveglio"
 
-  scene_livingroom_balanced:
+  scene_soggiorno_bilanciato:
     alias: "Soggiorno Bilanciato"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_balanced"
+          scene_key: "soggiorno_bilanciato"
 
-  scene_livingroom_soft:
+  scene_soggiorno_relax:
     alias: "Soggiorno Relax"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_soft"
+          scene_key: "soggiorno_relax"
 
-  scene_livingroom_nap:
+  scene_soggiorno_sonnellino:
     alias: "Sonnellino"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_nap"
+          scene_key: "soggiorno_sonnellino"
 
-  scene_livingroom_sleep:
+  scene_soggiorno_sonno_notturno:
     alias: "Sonno Notturno"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_sleep"
+          scene_key: "soggiorno_sonno_notturno"
 
-  scene_livingroom_reading:
+  scene_soggiorno_lettura:
     alias: "Lettura"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_reading"
+          scene_key: "soggiorno_lettura"
 
-  scene_livingroom_meditation:
+  scene_soggiorno_meditazione:
     alias: "Meditazione"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_meditation"
+          scene_key: "soggiorno_meditazione"
 
-  scene_livingroom_desk:
+  scene_soggiorno_lavoro:
     alias: "Scrivania"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_desk"
+          scene_key: "soggiorno_lavoro"
 
-  scene_livingroom_night:
+  scene_soggiorno_notte:
     alias: "Soggiorno Notte"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_night"
+          scene_key: "soggiorno_notte"
       # Spegni TV
       - service: media_player.turn_off
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
 
-  scene_livingroom_off:
+  scene_soggiorno_spento:
     alias: "Spegni Soggiorno"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "livingroom_off"
+          scene_key: "soggiorno_spento"
 
   scene_tv_football:
     alias: "Calcio"
+    mode: queued
     sequence:
       - service: script.tv_football
       - service: script.set_ambiente
@@ -140,6 +157,7 @@ script:
 
   scene_tv_cinema:
     alias: "Cinema"
+    mode: queued
     sequence:
       - service: script.tv_cinema
       - service: script.set_ambiente
@@ -148,6 +166,7 @@ script:
 
   scene_tv_computer:
     alias: "Computer"
+    mode: queued
     sequence:
       - service: script.tv_computer_hdmi2
       - service: script.set_ambiente
@@ -210,6 +229,7 @@ script:
   # ========================================
   scene_camera_day:
     alias: "Camera Luminoso"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -217,6 +237,7 @@ script:
 
   scene_camera_soft:
     alias: "Camera Relax"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -224,6 +245,7 @@ script:
 
   scene_camera_night:
     alias: "Camera Notte"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -231,6 +253,7 @@ script:
 
   scene_camera_work:
     alias: "Camera Lavoro"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -238,6 +261,7 @@ script:
 
   scene_camera_off:
     alias: "Spegni Camera"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -248,6 +272,7 @@ script:
   # ========================================
   scene_bed_day:
     alias: "Letto Luminoso"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -255,6 +280,7 @@ script:
 
   scene_bed_evening:
     alias: "Letto Sera"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -262,6 +288,7 @@ script:
 
   scene_bed_read:
     alias: "Letto Lettura"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -269,6 +296,7 @@ script:
 
   scene_bed_relax:
     alias: "Letto Relax"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -276,6 +304,7 @@ script:
 
   scene_bed_night:
     alias: "Letto Notte"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -283,6 +312,7 @@ script:
 
   scene_bed_off:
     alias: "Spegni Letto"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
