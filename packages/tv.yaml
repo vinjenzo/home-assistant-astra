@@ -32,21 +32,28 @@ script:
         continue_on_error: true
 
   select_hdmi_2:
-      alias: "Seleziona HDMI 2 (compatibile)"
-      sequence:
-        - service: media_player.select_source
-          target:
-            entity_id: media_player.lg_webos_tv_oled48c31la
-          data:
-            source: "HDMI 2"
-          continue_on_error: true
-        - delay: 1
-        - service: media_player.select_source
-          target:
-            entity_id: media_player.lg_webos_tv_oled48c31la
-          data:
-            source: "HDMI2"
-          continue_on_error: true
+    alias: "Seleziona HDMI 2 (compatibile)"
+    sequence:
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "Home"
+        continue_on_error: true
+      - delay: 1
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI 2"
+        continue_on_error: true
+      - delay: 1
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.lg_webos_tv_oled48c31la
+        data:
+          source: "HDMI2"
+        continue_on_error: true
 
   select_hdmi_3:
     alias: "Seleziona HDMI 3"
@@ -71,21 +78,18 @@ script:
   # ========================================
   # TV SCENES (WoL + Source Selection)
   # ========================================
+
   tv_cinema:
     alias: "TV - Cinema (WoL + Plex)"
     sequence:
-      # Se TV NON è accesa, accendila via WoL e attendi
       - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
+          - service: script.tv_wol_on
           - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
             timeout: "00:00:20"
             continue_on_timeout: true
           - delay:
               seconds: 2
-      # Seleziona Plex
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -93,21 +97,17 @@ script:
           source: "Plex"
         continue_on_error: true
 
-  tv_football:
+  tv_calcio:
     alias: "TV - Calcio (WoL + Set-top box)"
     sequence:
-      # Se TV NON è accesa, accendila via WoL e attendi
       - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
+          - service: script.tv_wol_on
           - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
             timeout: "00:00:20"
             continue_on_timeout: true
           - delay:
               seconds: 2
-      # Seleziona UPC Set-top box
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -118,24 +118,15 @@ script:
   tv_computer_hdmi2:
     alias: "TV - Computer HDMI 2 (WoL + HDMI 2)"
     sequence:
-      # Se TV NON è accesa, accendila via WoL e attendi
       - if: "{{ states('media_player.lg_webos_tv_oled48c31la') in ['off', 'unavailable', 'unknown'] }}"
         then:
-          - service: wake_on_lan.send_magic_packet
-            data:
-              mac: !secret tv_mac_address
+          - service: script.tv_wol_on
           - wait_template: "{{ states('media_player.lg_webos_tv_oled48c31la') == 'on' }}"
             timeout: "00:00:20"
             continue_on_timeout: true
           - delay:
               seconds: 2
-      # Seleziona HDMI 2
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI 2"
-        continue_on_error: true
+      - service: script.select_hdmi_2
 
 # ============================================================
 # AUTOMATION

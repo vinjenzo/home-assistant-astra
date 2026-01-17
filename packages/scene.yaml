@@ -194,32 +194,32 @@ template:
                   'tv': 1
                 }
               },
-              'tv_football': {
-                'name': 'Soggiorno Calcio',
+              'tv_calcio': {
+                'name': 'Calcio',
                 'brightness': {
                   'tv': 1
                 }
               },
               'tv_computer': {
-                'name': 'Soggiorno Computer',
+                'name': 'Computer',
                 'brightness': {
                   'tv': 2
                 }
               },
               'tv_computer_hdmi1': {
-                'name': 'Soggiorno Computer HDMI 1',
+                'name': 'Computer HDMI 1',
                 'brightness': {
                   'tv': 2
                 }
               },
               'tv_computer_hdmi2': {
-                'name': 'Soggiorno Computer HDMI 2',
+                'name': 'Computer HDMI 2',
                 'brightness': {
                   'tv': 2
                 }
               },
               'tv_computer_hdmi3': {
-                'name': 'Soggiorno Computer HDMI 3',
+                'name': 'Computer HDMI 3',
                 'brightness': {
                   'tv': 2
                 }
@@ -271,7 +271,7 @@ template:
                 },
               },
               'cameretta_luminosa': {
-                'name': 'Cameretta Luminoso',
+                'name': 'Cameretta Luminosa',
                 'brightness': {
                   'led_cameretta': 100
                 }
@@ -308,35 +308,35 @@ template:
                 }
               },
               'camera_da_letto_sera': {
-                'name': 'Letto Sera',
+                'name': 'Camera da letto Sera',
                 'brightness': {
                   'led_sopra_al_letto': 45,
                   'led_camera_da_letto': 59
                 }
               },
               'camera_da_letto_relax': {
-                'name': 'Letto Relax',
+                'name': 'Camera da letto Relax',
                 'brightness': {
                   'led_sopra_al_letto': 35,
                   'led_camera_da_letto': 18
                 }
               },
               'camera_da_letto_lettura': {
-                'name': 'Letto Lettura',
+                'name': 'Camera da letto Lettura',
                 'brightness': {
                   'led_sopra_al_letto': 90,
                   'led_camera_da_letto': 0
                 }
               },
               'camera_da_letto_notte': {
-                'name': 'Letto Notte',
+                'name': 'Camera da letto Notte',
                 'brightness': {
                   'led_sopra_al_letto': 5,
                   'led_camera_da_letto': 0
                 }
               },
               'camera_da_letto_spenta': {
-                'name': 'Letto Spenta',
+                'name': 'Camera da letto Spenta',
                 'brightness': {
                   'led_sopra_al_letto': 0,
                   'led_camera_da_letto': 0

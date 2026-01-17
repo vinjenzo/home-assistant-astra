@@ -22,7 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_morning
+            entity_id: script.scene_soggiorno_risveglio
         styles:
           card:
             - background: rgba(255,152,0,0.10)
@@ -50,7 +50,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_balanced
+            entity_id: script.scene_soggiorno_bilanciato
         styles:
           card:
             - background: rgba(255,193,7,0.10)
@@ -130,7 +130,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_desk
+            entity_id: script.scene_soggiorno_lavoro
         styles:
           card:
             - background: rgba(33,150,243,0.10)
@@ -234,7 +234,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_nap
+            entity_id: script.scene_soggiorno_sonnellino
         styles:
           card:
             - background: rgba(156,39,176,0.10)
@@ -254,7 +254,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_sleep
+            entity_id: script.scene_soggiorno_sonno_notturno
         styles:
           card:
             - background: rgba(63,81,181,0.20)
@@ -318,7 +318,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_off
+            entity_id: script.scene_soggiorno_spento
         styles:
           card:
             - background: rgba(244,67,54,0.10)

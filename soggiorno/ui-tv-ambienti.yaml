@@ -40,7 +40,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_tv_football
+            entity_id: script.scene_tv_calcio
         styles:
           card:
             - background: rgba(76,175,80,0.08)

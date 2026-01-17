@@ -22,7 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_luminoso
+            entity_id: script.scene_casa_luminosa
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -87,7 +87,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_guests
+            entity_id: script.scene_casa_ospiti
         styles:
           card:
             - background: rgba(156,39,176,0.10)
@@ -112,7 +112,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_cleaning
+            entity_id: script.scene_casa_pulizie
         styles:
           card:
             - background: rgba(0,188,212,0.10)
@@ -159,7 +159,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_all_off
+            entity_id: script.scene_casa_spenta
         styles:
           card:
             - background: rgba(244,67,54,0.10)

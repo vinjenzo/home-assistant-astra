@@ -19,7 +19,7 @@ script:
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
 
-  scene_casa_luminoso:
+  scene_casa_luminosa:
     alias: "Luminoso"
     mode: queued
     sequence:
@@ -27,7 +27,7 @@ script:
         data:
           scene_key: "casa_luminosa"
 
-  scene_casa_guests:
+  scene_casa_ospiti:
     alias: "Ospiti"
     mode: queued
     sequence:
@@ -35,7 +35,7 @@ script:
         data:
           scene_key: "casa_ospiti"
 
-  scene_casa_cleaning:
+  scene_casa_pulizie:
     alias: "Pulizie"
     mode: queued
     sequence:
@@ -43,7 +43,7 @@ script:
         data:
           scene_key: "casa_pulizie"
 
-  scene_casa_all_off:
+  scene_casa_spenta:
     alias: "Spegni Tutto"
     mode: queued
     sequence:
@@ -146,14 +146,14 @@ script:
         data:
           scene_key: "soggiorno_spento"
 
-  scene_tv_football:
+  scene_tv_calcio:
     alias: "Calcio"
     mode: queued
     sequence:
-      - service: script.tv_football
+      - service: script.tv_calcio
       - service: script.set_ambiente
         data:
-          scene_key: "tv_football"
+          scene_key: "tv_calcio"
 
   scene_tv_cinema:
     alias: "Cinema"
