@@ -110,7 +110,7 @@ script:
   # ========================================
   # WRAPPER SCRIPTS - LUCE SOPRA AL LETTO
   # ========================================
-  camera_da_letto_sopra_al_letto_on:
+  camera_da_letto_sopra_al_letto_accesa:
     alias: "Accendi Luce Sopra al Letto"
     sequence:
       - service: script.zone_on
@@ -141,7 +141,7 @@ script:
           zone_key: "led_sopra_al_letto"
           preset_level: "high"
 
-  camera_da_letto_sopra_al_letto_off:
+  camera_da_letto_sopra_al_letto_spenta:
     alias: "Spegni Luce Sopra al Letto"
     sequence:
       - service: script.zone_off

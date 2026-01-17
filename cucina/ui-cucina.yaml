@@ -94,8 +94,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Gregg Cucina';
               
-              if (!zonaAccesa) return 'script.cucina_gregg_on';
-              if (zonaAccesa && isSelected) return 'script.cucina_gregg_off';
+              if (!zonaAccesa) return 'script.cucina_gregg_accesa';
+              if (zonaAccesa && isSelected) return 'script.cucina_gregg_spenta';
               return 'input_text.set_value';
             ]]]
           service_data: |
@@ -277,7 +277,7 @@ cards:
                     
                     const map = {
                       'Luce Cucina': 'script.cucina_led_spenta',
-                      'Gregg Cucina': 'script.cucina_gregg_off',
+                      'Gregg Cucina': 'script.cucina_gregg_spenta',
                     };
                     return map[zona];
                   ]]]

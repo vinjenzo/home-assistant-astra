@@ -94,8 +94,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Luce Sopra al Letto';
               
-              if (!zonaAccesa) return 'script.camera_da_letto_sopra_al_letto_on';
-              if (zonaAccesa && isSelected) return 'script.camera_da_letto_sopra_al_letto_off';
+              if (!zonaAccesa) return 'script.camera_da_letto_sopra_al_letto_accesa';
+              if (zonaAccesa && isSelected) return 'script.camera_da_letto_sopra_al_letto_spenta';
               return 'input_text.set_value';
             ]]]
           service_data: |
@@ -276,7 +276,7 @@ cards:
                     }
                     
                     const map = {
-                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_off',
+                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_spenta',
                       'Luce Camera da Letto': 'script.camera_da_letto_led_spenta',
                     };
                     return map[zona];
