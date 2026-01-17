@@ -143,6 +143,7 @@ script:
 
   cucina_led_bassa:
     alias: "Luce Cucina Bassa"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -151,6 +152,7 @@ script:
 
   cucina_led_media:
     alias: "Luce Cucina Media"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -159,6 +161,7 @@ script:
 
   cucina_led_alta:
     alias: "Luce Cucina Alta"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -174,6 +177,7 @@ script:
 
   cucina_led_alza:
     alias: "Aumenta Luce Cucina"
+    mode: queued
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -182,6 +186,7 @@ script:
 
   cucina_led_abbassa:
     alias: "Diminuisci Luce Cucina"
+    mode: queued
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -200,6 +205,7 @@ script:
 
   cucina_gregg_bassa:
     alias: "Gregg Cucina Bassa"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -208,6 +214,7 @@ script:
 
   cucina_gregg_media:
     alias: "Gregg Cucina Media"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -216,6 +223,7 @@ script:
 
   cucina_gregg_alta:
     alias: "Gregg Cucina Alta"
+    mode: queued
     sequence:
       - service: script.set_zone_preset
         data:
@@ -231,6 +239,7 @@ script:
 
   cucina_gregg_alza:
     alias: "Aumenta Gregg Cucina"
+    mode: queued
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -239,6 +248,7 @@ script:
 
   cucina_gregg_abbassa:
     alias: "Diminuisci Gregg Cucina"
+    mode: queued
     sequence:
       - service: script.adjust_zone_level
         data:

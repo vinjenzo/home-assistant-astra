@@ -159,6 +159,7 @@ script:
   # ========================================
   scene_cucina_luminosa:
     alias: "Cucina Luminosa"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -166,6 +167,7 @@ script:
 
   scene_cucina_lavoro:
     alias: "Cucina Preparazione"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -173,6 +175,7 @@ script:
 
   scene_cucina_cena:
     alias: "Cena in Cucina"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -180,6 +183,7 @@ script:
 
   scene_cucina_relax:
     alias: "Cucina Relax"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -187,6 +191,7 @@ script:
 
   scene_cucina_notte:
     alias: "Notte Cucina"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
@@ -194,6 +199,7 @@ script:
 
   scene_cucina_spenta:
     alias: "Spegni Cucina"
+    mode: queued
     sequence:
       - service: script.set_ambiente
         data:
