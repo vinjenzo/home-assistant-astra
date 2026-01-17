@@ -398,7 +398,7 @@ micro_wake_word:
 
 api:
   encryption:
-    key: 5DJQjBTrjVsMB6bQRZiwb8/lxfAf77lfblOGa7kQxf4=
+    key: !secret api_encryption_key_m5stack_atom_echo_a19044
 
 wifi:
   ssid: !secret wifi_ssid
