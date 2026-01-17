@@ -110,14 +110,6 @@ script:
         data:
           scene_key: "soggiorno_lettura"
 
-  scene_soggiorno_meditazione:
-    alias: "Meditazione"
-    mode: queued
-    sequence:
-      - service: script.set_ambiente
-        data:
-          scene_key: "soggiorno_meditazione"
-
   scene_soggiorno_lavoro:
     alias: "Scrivania"
     mode: queued

@@ -1,0 +1,27 @@
+# ============================================================
+# AUTOMAZIONI DND Atom Echo
+# ============================================================
+automation:
+  - alias: "DND Volume basso Atom Echo dopo le 20"
+    description: "Abbassa il volume dell'Atom Echo dopo le 20:00"
+    trigger:
+      - platform: time
+        at: "20:00:00"
+    action:
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.astra_bcfaf0_verde
+        data:
+          volume_level: 0.1
+
+  - alias: "Ripristina volume Atom Echo alle 9"
+    description: "Ripristina il volume dell'Atom Echo alle 9:00"
+    trigger:
+      - platform: time
+        at: "09:00:00"
+    action:
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.astra_bcfaf0_verde
+        data:
+          volume_level: 0.5
