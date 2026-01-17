@@ -22,7 +22,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_day
+            entity_id: script.scene_casa_luminoso
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -44,7 +44,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_casa_night
+            entity_id: script.scene_casa_notte
         styles:
           card:
             - background: rgba(55,71,79,0.20)

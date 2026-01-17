@@ -29,8 +29,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Soggiorno';
               
-              if (!zonaAccesa) return 'script.soggiorno_led_on';
-              if (zonaAccesa && isSelected) return 'script.soggiorno_led_off';
+              if (!zonaAccesa) return 'script.soggiorno_led_accesa';
+              if (zonaAccesa && isSelected) return 'script.soggiorno_led_spenta';
               return 'script.select_zone_soggiorno';
             ]]]
           service_data: |
@@ -408,11 +408,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.soggiorno_led_high',
-                      'TV': 'script.soggiorno_tv_high',
-                      'Museo': 'script.soggiorno_museo_high',
-                      'Libreria': 'script.soggiorno_libreria_high',
-                      'Gregg Soggiorno': 'script.soggiorno_gregg_high',
+                      'Soggiorno': 'script.soggiorno_led_alte',
+                      'TV': 'script.soggiorno_tv_alte',
+                      'Museo': 'script.soggiorno_museo_alte',
+                      'Libreria': 'script.soggiorno_libreria_alte',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_alte',
                     };
                     return map[zona];
                   ]]]
@@ -436,11 +436,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.soggiorno_led_medium',
-                      'TV': 'script.soggiorno_tv_medium',
-                      'Museo': 'script.soggiorno_museo_medium',
-                      'Libreria': 'script.soggiorno_libreria_medium',
-                      'Gregg Soggiorno': 'script.soggiorno_gregg_medium',
+                      'Soggiorno': 'script.soggiorno_led_medie',
+                      'TV': 'script.soggiorno_tv_medie',
+                      'Museo': 'script.soggiorno_museo_medie',
+                      'Libreria': 'script.soggiorno_libreria_medie',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_medie',
                     };
                     return map[zona];
                   ]]]
@@ -464,11 +464,11 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Soggiorno';
                     const map = {
-                      'Soggiorno': 'script.soggiorno_led_low',
-                      'TV': 'script.soggiorno_tv_low',
-                      'Museo': 'script.soggiorno_museo_low',
-                      'Libreria': 'script.soggiorno_libreria_low',
-                      'Gregg Soggiorno': 'script.soggiorno_gregg_low',
+                      'Soggiorno': 'script.soggiorno_led_basse',
+                      'TV': 'script.soggiorno_tv_basse',
+                      'Museo': 'script.soggiorno_museo_basse',
+                      'Libreria': 'script.soggiorno_libreria_basse',
+                      'Gregg Soggiorno': 'script.soggiorno_gregg_basse',
                     };
                     return map[zona];
                   ]]]
@@ -505,7 +505,7 @@ cards:
                     }
                     
                     const map = {
-                      'Soggiorno': 'script.soggiorno_led_off',
+                      'Soggiorno': 'script.soggiorno_led_spenta',
                       'TV': 'script.soggiorno_tv_off',
                       'Museo': 'script.soggiorno_museo_off',
                       'Libreria': 'script.soggiorno_libreria_off',

@@ -78,7 +78,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_day
+            entity_id: script.scene_soggiorno_luminoso
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -158,7 +158,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_reading
+            entity_id: script.scene_soggiorno_lettura
         styles:
           card:
             - background: rgba(255,111,0,0.10)
@@ -184,7 +184,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_soft
+            entity_id: script.scene_soggiorno_relax
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -274,7 +274,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_soggiorno_night
+            entity_id: script.scene_soggiorno_notte
         styles:
           card:
             - background: rgba(96,125,139,0.16)

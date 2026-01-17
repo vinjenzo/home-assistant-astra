@@ -14,31 +14,31 @@ cards:
         tap_action:
           action: none
       - type: custom:button-card
-        entity: binary_sensor.zona_led_camera_accesa
-        name: Camera
+        entity: binary_sensor.zona_led_cameretta_accesa
+        name: Cameretta
         icon: mdi:led-strip-variant
         tap_action:
           action: call-service
           service: |
             [[[
-              const zonaAccesa = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
+              const zonaAccesa = states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
-              const isSelected = last === 'Luce Camera';
+              const isSelected = last === 'Luce Cameretta';
               
-              if (!zonaAccesa) return 'script.hw_room_led_on';
-              if (zonaAccesa && isSelected) return 'script.hw_room_led_off';
+              if (!zonaAccesa) return 'script.cameretta_led_accesa';
+              if (zonaAccesa && isSelected) return 'script.cameretta_led_spenta';
               return 'input_text.set_value';
             ]]]
           service_data: |
             [[[
-              const zonaAccesa = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
+              const zonaAccesa = states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on';
               const last = states['input_text.ultima_zona_led']?.state || '';
-              const isSelected = last === 'Luce Camera';
+              const isSelected = last === 'Luce Cameretta';
               
               if (zonaAccesa && !isSelected) {
                 return {
                   entity_id: 'input_text.ultima_zona_led',
-                  value: 'Luce Camera'
+                  value: 'Luce Cameretta'
                 };
               }
               return {};
@@ -54,8 +54,8 @@ cards:
             - box-shadow: |
                 [[[
                   const last = states['input_text.ultima_zona_led']?.state || '';
-                  const binary = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
-                  const selected = last === 'Luce Camera' || binary;
+                  const binary = states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on';
+                  const selected = last === 'Luce Cameretta' || binary;
                   return selected ? '0 0 14px #90caf9' : 'none';
                 ]]]
           icon:
@@ -63,16 +63,16 @@ cards:
             - color: |
                 [[[
                   const last = states['input_text.ultima_zona_led']?.state || '';
-                  const binary = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
-                  const selected = last === 'Luce Camera' || binary;
+                  const binary = states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on';
+                  const selected = last === 'Luce Cameretta' || binary;
                   return selected ? '#90caf9' : 'rgba(255,255,255,0.4)';
                 ]]]
           name:
             - color: |
                 [[[
                   const last = states['input_text.ultima_zona_led']?.state || '';
-                  const binary = states['binary_sensor.zona_led_camera_accesa']?.state === 'on';
-                  const selected = last === 'Luce Camera' || binary;
+                  const binary = states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on';
+                  const selected = last === 'Luce Cameretta' || binary;
                   return selected ? '#90caf9' : 'white';
                 ]]]
             - margin-top: 8px
@@ -93,7 +93,7 @@ cards:
   # ============================================================
   - type: conditional
     conditions:
-      - entity: binary_sensor.zona_camera_slider_visibile
+      - entity: binary_sensor.zona_cameretta_slider_visibile
         state: "on"
     card:
       type: vertical-stack
@@ -120,7 +120,7 @@ cards:
                 action: call-service
                 service: |
                   [[[ 
-                    return 'script.hw_room_led_high';
+                    return 'script.cameretta_led_alte';
                   ]]]
               styles:
                 card:
@@ -140,7 +140,7 @@ cards:
                 action: call-service
                 service: |
                   [[[ 
-                    return 'script.hw_room_led_medium';
+                    return 'script.cameretta_led_medie';
                   ]]]
               styles:
                 card:
@@ -160,7 +160,7 @@ cards:
                 action: call-service
                 service: |
                   [[[ 
-                    return 'script.hw_room_led_low';
+                    return 'script.cameretta_led_basse';
                   ]]]
               styles:
                 card:
@@ -180,9 +180,9 @@ cards:
                 action: call-service
                 service: |
                   [[[ 
-                    const zona = states['input_text.ultima_zona_led']?.state || 'Luce Camera';
+                    const zona = states['input_text.ultima_zona_led']?.state || 'Luce Cameretta';
                     const binaries = {
-                      'Luce Camera': states['binary_sensor.zona_led_camera_accesa']?.state === 'on',
+                      'Luce Cameretta': states['binary_sensor.zona_led_cameretta_accesa']?.state === 'on',
                     };
                     
                     // Se la luce è già spenta, return noop
@@ -190,7 +190,7 @@ cards:
                       return 'script.noop';
                     }
                     
-                    return 'script.hw_room_led_off';
+                    return 'script.cameretta_led_spenta';
                   ]]]
               styles:
                 card:
@@ -239,7 +239,7 @@ cards:
                 action: none
             - type: light
               entity: light.luci
-              name: Luci Camera
+              name: Luci Cameretta
               card_mod:
                 style: |
                   ha-card {

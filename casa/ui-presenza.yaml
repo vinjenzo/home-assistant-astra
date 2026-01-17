@@ -43,7 +43,7 @@ cards:
               const stanza = states['input_select.stanza_attuale'].state;
               const icons = {
                 'Soggiorno': '#42a5f5',
-                'Camera': '#7e57c2',
+                'Cameretta': '#7e57c2',
                 'Camera da Letto': '#ec407a',
                 'Cucina': '#ff9800'
               };

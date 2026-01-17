@@ -1,13 +1,13 @@
 # Badge luci Letto
 - type: entity
-  entity: input_number.hw_bedroom_camera_da_letto_level
+  entity: input_number.camera_da_letto_led_level
   name: Camera da Letto
   icon: mdi:lightbulb-spot
   show_name: true
   show_state: true
   show_icon: true
 - type: entity
-  entity: input_number.hw_bedroom_sopra_al_letto_level
+  entity: input_number.camera_da_letto_sopra_al_letto_level
   name: Sopra al Letto
   icon: mdi:wall-sconce-round-variant
   show_name: true

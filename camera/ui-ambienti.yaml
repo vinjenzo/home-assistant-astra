@@ -20,7 +20,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_camera_day
+            entity_id: script.scene_cameretta_luminosa
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -64,7 +64,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_camera_soft
+            entity_id: script.scene_cameretta_relax
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -84,7 +84,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_camera_night
+            entity_id: script.scene_cameretta_notte
         styles:
           card:
             - background: rgba(96,125,139,0.16)
@@ -128,7 +128,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_camera_work
+            entity_id: script.scene_cameretta_lavoro
         styles:
           card:
             - background: rgba(144,164,174,0.08)
@@ -148,7 +148,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_camera_off
+            entity_id: script.scene_cameretta_spenta
         styles:
           card:
             - background: rgba(244,67,54,0.10)

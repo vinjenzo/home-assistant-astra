@@ -7,25 +7,25 @@ script:
   # ========================================
   # HOUSE SCENES
   # ========================================
-  scene_casa_night:
+  scene_casa_notte:
     alias: "Notte"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "home_night"
+          scene_key: "casa_notte"
       # Spegni TV
       - service: media_player.turn_off
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
 
-  scene_casa_day:
+  scene_casa_luminoso:
     alias: "Luminoso"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "home_day"
+          scene_key: "casa_luminosa"
 
   scene_casa_guests:
     alias: "Ospiti"
@@ -33,7 +33,7 @@ script:
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "home_guests"
+          scene_key: "casa_ospiti"
 
   scene_casa_cleaning:
     alias: "Pulizie"
@@ -41,7 +41,7 @@ script:
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "home_cleaning"
+          scene_key: "casa_pulizie"
 
   scene_casa_all_off:
     alias: "Spegni Tutto"
@@ -49,7 +49,7 @@ script:
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "home_off"
+          scene_key: "casa_spenta"
 
   # ========================================
   # SOGGIORNO SCENES
@@ -225,95 +225,95 @@ script:
           scene_key: "cucina_spenta"
 
   # ========================================
-  # CAMERA SCENES
+  # CAMERETTA SCENES
   # ========================================
-  scene_camera_day:
-    alias: "Camera Luminoso"
+  scene_cameretta_luminosa:
+    alias: "Cameretta Luminoso"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "camera_day"
+          scene_key: "cameretta_luminosa"
 
-  scene_camera_soft:
-    alias: "Camera Relax"
+  scene_cameretta_relax:
+    alias: "Cameretta Relax"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "camera_soft"
+          scene_key: "cameretta_relax"
 
-  scene_camera_night:
-    alias: "Camera Notte"
+  scene_cameretta_notte:
+    alias: "Cameretta Notte"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "camera_night"
+          scene_key: "cameretta_notte"
 
-  scene_camera_work:
-    alias: "Camera Lavoro"
+  scene_cameretta_lavoro:
+    alias: "Cameretta Lavoro"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "camera_work"
+          scene_key: "cameretta_lavoro"
 
-  scene_camera_off:
-    alias: "Spegni Camera"
+  scene_cameretta_spenta:
+    alias: "Spegni Cameretta"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "camera_off"
+          scene_key: "cameretta_spenta"
 
   # ========================================
   # BEDROOM SCENES
   # ========================================
-  scene_bed_day:
-    alias: "Letto Luminoso"
+  scene_camera_da_letto_luminosa:
+    alias: "Camera da letto Luminosa"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_day"
+          scene_key: "camera_da_letto_luminosa"
 
-  scene_bed_evening:
+  scene_camera_da_letto_sera:
     alias: "Letto Sera"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_evening"
+          scene_key: "camera_da_letto_sera"
 
-  scene_bed_read:
+  scene_camera_da_letto_lettura:
     alias: "Letto Lettura"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_read"
+          scene_key: "camera_da_letto_lettura"
 
-  scene_bed_relax:
+  scene_camera_da_letto_relax:
     alias: "Letto Relax"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_soft"
+          scene_key: "camera_da_letto_relax"
 
-  scene_bed_night:
+  scene_camera_da_letto_notte:
     alias: "Letto Notte"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_night"
+          scene_key: "camera_da_letto_notte"
 
-  scene_bed_off:
+  scene_camera_da_letto_spenta:
     alias: "Spegni Letto"
     mode: queued
     sequence:
       - service: script.set_ambiente
         data:
-          scene_key: "bed_off"
+          scene_key: "camera_da_letto_spenta"

@@ -29,8 +29,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Luce Cucina';
               
-              if (!zonaAccesa) return 'script.cucina_led_on';
-              if (zonaAccesa && isSelected) return 'script.cucina_led_off';
+              if (!zonaAccesa) return 'script.cucina_led_accesa';
+              if (zonaAccesa && isSelected) return 'script.cucina_led_spenta';
               return 'input_text.set_value';
             ]]]
           service_data: |
@@ -191,8 +191,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Cucina';
                     const map = {
-                      'Luce Cucina': 'script.cucina_led_high',
-                      'Gregg Cucina': 'script.cucina_gregg_high',
+                      'Luce Cucina': 'script.cucina_led_alte',
+                      'Gregg Cucina': 'script.cucina_gregg_alte',
                     };
                     return map[zona];
                   ]]]
@@ -216,8 +216,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Cucina';
                     const map = {
-                      'Luce Cucina': 'script.cucina_led_medium',
-                      'Gregg Cucina': 'script.cucina_gregg_medium',
+                      'Luce Cucina': 'script.cucina_led_medie',
+                      'Gregg Cucina': 'script.cucina_gregg_medie',
                     };
                     return map[zona];
                   ]]]
@@ -241,8 +241,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Cucina';
                     const map = {
-                      'Luce Cucina': 'script.cucina_led_low',
-                      'Gregg Cucina': 'script.cucina_gregg_low',
+                      'Luce Cucina': 'script.cucina_led_basse',
+                      'Gregg Cucina': 'script.cucina_gregg_basse',
                     };
                     return map[zona];
                   ]]]
@@ -276,7 +276,7 @@ cards:
                     }
                     
                     const map = {
-                      'Luce Cucina': 'script.cucina_led_off',
+                      'Luce Cucina': 'script.cucina_led_spenta',
                       'Gregg Cucina': 'script.cucina_gregg_off',
                     };
                     return map[zona];

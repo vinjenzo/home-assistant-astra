@@ -20,7 +20,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_day
+            entity_id: script.scene_camera_da_letto_luminosa
         styles:
           card:
             - background: rgba(255,235,59,0.10)
@@ -40,7 +40,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_evening
+            entity_id: script.scene_camera_da_letto_sera
         styles:
           card:
             - background: rgba(255,152,0,0.10)
@@ -84,7 +84,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_read
+            entity_id: script.scene_camera_da_letto_lettura
         styles:
           card:
             - background: rgba(255,111,0,0.10)
@@ -104,7 +104,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_relax
+            entity_id: script.scene_camera_da_letto_relax
         styles:
           card:
             - background: rgba(0,150,136,0.10)
@@ -148,7 +148,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_night
+            entity_id: script.scene_camera_da_letto_notte
         styles:
           card:
             - background: rgba(33,33,33,0.08)
@@ -168,7 +168,7 @@ cards:
           action: call-service
           service: script.turn_on
           service_data:
-            entity_id: script.scene_bed_off
+            entity_id: script.scene_camera_da_letto_spenta
         styles:
           card:
             - background: rgba(244,67,54,0.10)

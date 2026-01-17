@@ -29,8 +29,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Luce Camera da Letto';
               
-              if (!zonaAccesa) return 'script.hw_bedroom_camera_da_letto_on';
-              if (zonaAccesa && isSelected) return 'script.hw_bedroom_camera_da_letto_off';
+              if (!zonaAccesa) return 'script.camera_da_letto_led_accesa';
+              if (zonaAccesa && isSelected) return 'script.camera_da_letto_led_spenta';
               return 'input_text.set_value';
             ]]]
           service_data: |
@@ -94,8 +94,8 @@ cards:
               const last = states['input_text.ultima_zona_led']?.state || '';
               const isSelected = last === 'Luce Sopra al Letto';
               
-              if (!zonaAccesa) return 'script.hw_bedroom_sopra_al_letto_on';
-              if (zonaAccesa && isSelected) return 'script.hw_bedroom_sopra_al_letto_off';
+              if (!zonaAccesa) return 'script.camera_da_letto_sopra_al_letto_on';
+              if (zonaAccesa && isSelected) return 'script.camera_da_letto_sopra_al_letto_off';
               return 'input_text.set_value';
             ]]]
           service_data: |
@@ -191,8 +191,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Sopra al Letto';
                     const map = {
-                      'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_high',
-                      'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_high',
+                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_alte',
+                      'Luce Camera da Letto': 'script.camera_da_letto_led_alte',
                     };
                     return map[zona];
                   ]]]
@@ -216,8 +216,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Sopra al Letto';
                     const map = {
-                      'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_medium',
-                      'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_medium',
+                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_medie',
+                      'Luce Camera da Letto': 'script.camera_da_letto_led_medie',
                     };
                     return map[zona];
                   ]]]
@@ -241,8 +241,8 @@ cards:
                   [[[ 
                     const zona = states['input_text.ultima_zona_led']?.state || 'Luce Sopra al Letto';
                     const map = {
-                      'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_low',
-                      'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_low',
+                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_basse',
+                      'Luce Camera da Letto': 'script.camera_da_letto_led_basse',
                     };
                     return map[zona];
                   ]]]
@@ -276,8 +276,8 @@ cards:
                     }
                     
                     const map = {
-                      'Luce Sopra al Letto': 'script.hw_bedroom_sopra_al_letto_off',
-                      'Luce Camera da Letto': 'script.hw_bedroom_camera_da_letto_off',
+                      'Luce Sopra al Letto': 'script.camera_da_letto_sopra_al_letto_off',
+                      'Luce Camera da Letto': 'script.camera_da_letto_led_spenta',
                     };
                     return map[zona];
                   ]]]

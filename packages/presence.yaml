@@ -15,8 +15,8 @@ input_select:
     options:
       - Indeterminato
       - Soggiorno
-      - Camera
-      - Camera da Letto
+      - Cameretta
+      - Cameretta da Letto
       - Cucina
     initial: Indeterminato
     icon: mdi:home-search
@@ -126,7 +126,7 @@ automation:
             {% elif hour_now < 12 %}80
             {% else %}60
             {% endif %}
-          brightness_camera: >
+          brightness_cameretta: >
             {% if is_below_horizon %}60
             {% elif hour_now < 12 %}90
             {% else %}75
@@ -144,16 +144,16 @@ automation:
           zone_key: "gregg_cucina"
           brightness: "{{ brightness_soggiorno }}"
 
-      # Accendi Camera
+      # Accendi Cameretta
       - service: script.set_zone_brightness
         data:
-          zone_key: "led_camera"
-          brightness: "{{ brightness_camera }}"
+          zone_key: "led_cameretta"
+          brightness: "{{ brightness_cameretta }}"
       # Notifica
       - service: !secret notify_service
         data:
           title: "🏠 Rientro a casa"
-          message: "{{ trigger.entity_id }} è tornato: soggiorno {{ brightness_soggiorno }}%, camera {{ brightness_camera }}%"
+          message: "{{ trigger.entity_id }} è tornato: soggiorno {{ brightness_soggiorno }}%, cameretta {{ brightness_cameretta }}%"
 
   # ========================================
   # USCITA DA CASA

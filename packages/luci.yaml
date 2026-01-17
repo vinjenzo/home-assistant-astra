@@ -95,7 +95,7 @@ template:
               'led_sopra_al_letto': {
                 'name': 'Luce Sopra al Letto',
                 'scene': 'scene.led_a_u',
-                'input_number': 'input_number.hw_bedroom_sopra_al_letto_level',
+                'input_number': 'input_number.camera_da_letto_sopra_al_letto_level',
                 'presets': {
                   'low': 30,
                   'medium': 50,
@@ -106,7 +106,7 @@ template:
               'led_camera_da_letto': {
                 'name': 'Luce Camera da Letto',
                 'scene': 'scene.led_linea',
-                'input_number': 'input_number.hw_bedroom_camera_da_letto_level',
+                'input_number': 'input_number.camera_da_letto_led_level',
                 'presets': {
                   'low': 20,
                   'medium': 45,
@@ -115,10 +115,10 @@ template:
                 }
               },
 
-              'led_camera': {
-                'name': 'Luce Camera',
+              'led_cameretta': {
+                'name': 'Luce Cameretta',
                 'scene': 'scene.led_camera',
-                'input_number': 'input_number.hw_room_led_level',
+                'input_number': 'input_number.cameretta_led_level',
                 'presets': {
                   'low': 40,
                   'medium': 70,

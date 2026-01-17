@@ -1,7 +1,7 @@
-# Badge luci Camera
+# Badge luci Cameretta
 - type: entity
-  entity: input_number.hw_room_led_level
-  name: Luce Camera
+  entity: input_number.cameretta_led_level
+  name: Luce Cameretta
   icon: mdi:led-strip-variant
   show_name: true
   show_state: true
