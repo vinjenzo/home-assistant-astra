@@ -50,7 +50,7 @@ speaker:
     bits_per_sample: 16bit
     sample_rate: 16000
     channel: stereo # The Echo has poor playback audio quality when using mon audio
-    buffer_duration: 60ms
+    buffer_duration: 120ms
 
 media_player:
   - platform: speaker
@@ -60,8 +60,8 @@ media_player:
       speaker: echo_speaker
       format: WAV
     codec_support_enabled: false
-    buffer_size: 6000
-    volume_min: 0.4
+    buffer_size: 12000
+    volume_min: 0.1
     files:
       - id: timer_finished_wave_file
         file: media/timer_finished.wav
@@ -102,16 +102,18 @@ voice_assistant:
         red: 100%
         green: 70%
         blue: 20%
-        brightness: 60%
+        brightness: 80%
         effect: "Soft Pulse"
 
-  on_stt_vad_end:
+  on_stt_vad_end:    
+    - lambda: |-
+        ESP_LOGI("VA_STT", ">>> RECOGNIZED: %s", x.c_str());
     - light.turn_on:
         id: led
         red: 0%
         green: 80%
         blue: 60%
-        brightness: 50%
+        brightness: 80%
         effect: "Gentle Pulse"
 
   on_tts_start: 
@@ -122,7 +124,7 @@ voice_assistant:
         red: 0%
         green: 20%
         blue: 100%
-        brightness: 60%
+        brightness: 80%
         effect: none
 
   on_end:  
@@ -252,7 +254,7 @@ script:
                 red: 100%
                 green: 85%
                 blue: 60%
-                brightness: 40%
+                brightness: 80%
                 effect: none
           else:
             - if:
@@ -266,7 +268,7 @@ script:
                       red: 0%
                       green: 100%
                       blue: 100%
-                      brightness: 60%
+                      brightness: 80%
                       effect: none
                 else:
                   - light.turn_off: led
