@@ -86,14 +86,14 @@ script:
   # WRAPPER SCRIPTS - LUCE CAMERETTA
   # ========================================
   cameretta_led_accesa:
-    alias: "Accendi Luce Cameretta"
+    alias: "Accendi la Luce della Cameretta"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "led_cameretta"
 
   cameretta_led_basse:
-    alias: "Luce Cameretta Bassa"
+    alias: "la Luce della Cameretta Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -101,7 +101,7 @@ script:
           preset_level: "low"
 
   cameretta_led_medie:
-    alias: "Luce Cameretta Media"
+    alias: "la Luce della Cameretta Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -109,7 +109,7 @@ script:
           preset_level: "medium"
 
   cameretta_led_alte:
-    alias: "Luce Cameretta Alta"
+    alias: "la Luce della Cameretta Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -117,14 +117,14 @@ script:
           preset_level: "high"
 
   cameretta_led_spenta:
-    alias: "Spegni Luce Cameretta"
+    alias: "Spegni la Luce della Cameretta"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "led_cameretta"
 
   cameretta_led_alza:
-    alias: "Aumenta Luce Cameretta"
+    alias: "Aumenta la Luce della Cameretta"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -132,7 +132,7 @@ script:
           delta: 10
 
   cameretta_led_abbassa:
-    alias: "Diminuisci Luce Cameretta"
+    alias: "Diminuisci la Luce della Cameretta"
     sequence:
       - service: script.adjust_zone_level
         data:

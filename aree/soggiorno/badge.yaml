@@ -16,7 +16,7 @@
   show_icon: true
 
 - type: entity
-  entity: input_number.soggiorno_tv_level
+  entity: input_number.soggiorno_luce_tv_level
   name: TV
   icon: mdi:television-ambient-light
   show_name: true

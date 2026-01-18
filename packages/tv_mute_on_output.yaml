@@ -1,0 +1,18 @@
+alias: Muta TV quando output audio è TV o Ottico
+mode: parallel
+max_exceeded: silent
+trigger:
+  - platform: state
+    entity_id: media_player.lg_webos_tv_oled48c31la
+    attribute: sound_output
+    to: tv_speaker
+  - platform: state
+    entity_id: media_player.lg_webos_tv_oled48c31la
+    attribute: sound_output
+    to: external_optical
+action:
+  - service: webostv.button
+    target:
+      entity_id: media_player.lg_webos_tv_oled48c31la
+    data:
+      button: MUTE

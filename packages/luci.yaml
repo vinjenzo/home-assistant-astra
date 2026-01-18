@@ -27,7 +27,7 @@ template:
               'tv': {
                 'name': 'TV',
                 'scene': 'scene.led_tv',
-                'input_number': 'input_number.soggiorno_tv_level',
+                'input_number': 'input_number.soggiorno_luce_tv_level',
                 'presets': {
                   'low': 2,
                   'medium': 15,

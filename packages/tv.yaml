@@ -21,16 +21,6 @@ script:
         data:
           mac: !secret tv_mac_address
 
-  select_hdmi_1:
-    alias: "Seleziona HDMI 1"
-    sequence:
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI 1"
-        continue_on_error: true
-
   select_hdmi_2:
     alias: "Seleziona HDMI 2 (compatibile)"
     sequence:
@@ -40,14 +30,14 @@ script:
         data:
           source: "Home"
         continue_on_error: true
-      - delay: 1
+      - delay: 2
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
         data:
           source: "HDMI 2"
         continue_on_error: true
-      - delay: 1
+      - delay: 2
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
@@ -55,24 +45,14 @@ script:
           source: "HDMI2"
         continue_on_error: true
 
-  select_hdmi_3:
-    alias: "Seleziona HDMI 3"
+  select_set_top_box:
+    alias: "Seleziona Set-top box"
     sequence:
       - service: media_player.select_source
         target:
           entity_id: media_player.lg_webos_tv_oled48c31la
         data:
-          source: "HDMI 3"
-        continue_on_error: true
-
-  select_hdmi_4:
-    alias: "Seleziona HDMI 4"
-    sequence:
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.lg_webos_tv_oled48c31la
-        data:
-          source: "HDMI 4"
+          source: "UPC Set-top box"
         continue_on_error: true
 
   # ========================================
@@ -133,7 +113,7 @@ script:
 # ============================================================
 automation:
   - alias: "TV On - Accendi Luci TV a 1%"
-    description: "Quando la TV si accende (manualmente), imposta la luce TV a 1%"
+    description: "Quando la TV si accende (manualmente), imposta la  la luce della TV a 1%"
     trigger:
       - platform: state
         entity_id: media_player.lg_webos_tv_oled48c31la
@@ -143,8 +123,40 @@ automation:
       - condition: state
         entity_id: input_boolean.led_bulk_mode
         state: "off"
-    action:
-      - service: script.set_zone_brightness
-        data:
-          zone_key: "tv"
-          brightness: 1
+    automation:
+      - alias: "TV On - Accendi Luci TV a 1%"
+        description: "Quando la TV si accende (manualmente), imposta la  la luce della TV a 1%"
+        trigger:
+          - platform: state
+            entity_id: media_player.lg_webos_tv_oled48c31la
+            to: "playing"
+        condition:
+          # Non agire se una scena è in esecuzione (led_bulk_mode attivo)
+          - condition: state
+            entity_id: input_boolean.led_bulk_mode
+            state: "off"
+        action:
+          - service: script.set_zone_brightness
+            data:
+              zone_key: "tv"
+              brightness: 1
+
+      # Muta TV quando output audio è TV o Ottico
+      - alias: Muta TV quando output audio è TV o Ottico
+        mode: parallel
+        max_exceeded: silent
+        trigger:
+          - platform: state
+            entity_id: media_player.lg_webos_tv_oled48c31la
+            attribute: sound_output
+            to: tv_speaker
+          - platform: state
+            entity_id: media_player.lg_webos_tv_oled48c31la
+            attribute: sound_output
+            to: external_optical
+        action:
+          - service: webostv.button
+            target:
+              entity_id: media_player.lg_webos_tv_oled48c31la
+            data:
+              button: MUTE

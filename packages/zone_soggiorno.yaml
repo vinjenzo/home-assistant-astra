@@ -9,7 +9,7 @@ automation:
       - platform: state
         entity_id:
           - input_number.soggiorno_led_level
-          - input_number.soggiorno_tv_level
+          - input_number.soggiorno_luce_tv_level
           - input_number.soggiorno_museo_level
           - input_number.soggiorno_libreria_level
           - input_number.soggiorno_gregg_level
@@ -56,7 +56,7 @@ automation:
           input_map:
             {
               "Soggiorno": "input_number.soggiorno_led_level",
-              "TV": "input_number.soggiorno_tv_level",
+              "TV": "input_number.soggiorno_luce_tv_level",
               "Museo": "input_number.soggiorno_museo_level",
               "Libreria": "input_number.soggiorno_libreria_level",
               "Gregg Soggiorno": "input_number.soggiorno_gregg_level",
@@ -121,8 +121,8 @@ input_number:
     max: 100
     step: 1
 
-  soggiorno_tv_level:
-    name: "Livello TV"
+  soggiorno_luce_tv_level:
+    name: "Livello la luce della TV"
     min: 0
     max: 100
     step: 1
@@ -174,14 +174,14 @@ script:
   # WRAPPER SCRIPTS - LUCE SOGGIORNO
   # ========================================
   soggiorno_led_accesa:
-    alias: "Accendi Luce Soggiorno"
+    alias: "Accendi la Luce del Soggiorno"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "led_soggiorno"
 
   soggiorno_led_bassa:
-    alias: "Luce Soggiorno Bassa"
+    alias: "la Luce del Soggiorno Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -189,7 +189,7 @@ script:
           preset_level: "low"
 
   soggiorno_led_media:
-    alias: "Luce Soggiorno Media"
+    alias: "la Luce del Soggiorno Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -197,7 +197,7 @@ script:
           preset_level: "medium"
 
   soggiorno_led_alta:
-    alias: "Luce Soggiorno Alta"
+    alias: "la Luce del Soggiorno Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -205,14 +205,14 @@ script:
           preset_level: "high"
 
   soggiorno_led_spenta:
-    alias: "Spegni Luce Soggiorno"
+    alias: "Spegni la Luce del Soggiorno"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "led_soggiorno"
 
   soggiorno_led_alza:
-    alias: "Aumenta Luce Soggiorno"
+    alias: "Aumenta la Luce del Soggiorno"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -220,7 +220,7 @@ script:
           delta: 10
 
   soggiorno_led_abbassa:
-    alias: "Diminuisci Luce Soggiorno"
+    alias: "Diminuisci la Luce del Soggiorno"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -230,54 +230,54 @@ script:
   # ========================================
   # WRAPPER SCRIPTS - TV
   # ========================================
-  soggiorno_tv_accesa:
-    alias: "Accendi Luce TV"
+  soggiorno_luce_tv_accesa:
+    alias: "Accendi la luce della TV"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "tv"
 
-  soggiorno_tv_bassa:
-    alias: "Luce TV Bassa"
+  soggiorno_luce_tv_bassa:
+    alias: "la luce della TV Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
           zone_key: "tv"
           preset_level: "low"
 
-  soggiorno_tv_media:
-    alias: "Luce TV Media"
+  soggiorno_luce_tv_media:
+    alias: "la luce della TV Media"
     sequence:
       - service: script.set_zone_preset
         data:
           zone_key: "tv"
           preset_level: "medium"
 
-  soggiorno_tv_alta:
-    alias: "Luce TV Alta"
+  soggiorno_luce_tv_alta:
+    alias: "la luce della TV Alta"
     sequence:
       - service: script.set_zone_preset
         data:
           zone_key: "tv"
           preset_level: "high"
 
-  soggiorno_tv_spenta:
-    alias: "Spegni TV"
+  soggiorno_luce_tv_spenta:
+    alias: "Spegni la luce della TV"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "tv"
 
-  soggiorno_tv_alza:
-    alias: "Aumenta TV"
+  soggiorno_luce_tv_alza:
+    alias: "Aumenta la luce della TV"
     sequence:
       - service: script.adjust_zone_level
         data:
           zone_key: "tv"
           delta: 10
 
-  soggiorno_tv_abbassa:
-    alias: "Diminuisci TV"
+  soggiorno_luce_tv_abbassa:
+    alias: "Diminuisci la luce della TV"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -288,14 +288,14 @@ script:
   # WRAPPER SCRIPTS - MUSEO
   # ========================================
   soggiorno_museo_accesa:
-    alias: "Accendi Luce Museo"
+    alias: "Accendi la Luce del Museo"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "museo"
 
   soggiorno_museo_bassa:
-    alias: "Luce Museo Bassa"
+    alias: "la luce del Museo Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -303,7 +303,7 @@ script:
           preset_level: "low"
 
   soggiorno_museo_media:
-    alias: "Luce Museo Media"
+    alias: "la luce del Museo Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -311,7 +311,7 @@ script:
           preset_level: "medium"
 
   soggiorno_museo_alta:
-    alias: "Luce Museo Alta"
+    alias: "la luce del Museo Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -319,14 +319,14 @@ script:
           preset_level: "high"
 
   soggiorno_museo_spenta:
-    alias: "Spegni Museo"
+    alias: "Spegni la luce del Museo"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "museo"
 
   soggiorno_museo_alza:
-    alias: "Aumenta Museo"
+    alias: "Aumenta la luce del Museo"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -334,7 +334,7 @@ script:
           delta: 10
 
   soggiorno_museo_abbassa:
-    alias: "Diminuisci Museo"
+    alias: "Diminuisci la luce del Museo"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -345,14 +345,14 @@ script:
   # WRAPPER SCRIPTS - LIBRERIA
   # ========================================
   soggiorno_libreria_accesa:
-    alias: "Accendi Luce Libreria"
+    alias: "Accendi la luce della Libreria"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "libreria"
 
   soggiorno_libreria_bassa:
-    alias: "Luce Libreria Bassa"
+    alias: "la luce della Libreria Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -360,7 +360,7 @@ script:
           preset_level: "low"
 
   soggiorno_libreria_media:
-    alias: "Luce Libreria Media"
+    alias: "la luce della Libreria Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -368,7 +368,7 @@ script:
           preset_level: "medium"
 
   soggiorno_libreria_alta:
-    alias: "Luce Libreria Alta"
+    alias: "la luce della Libreria Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -376,14 +376,14 @@ script:
           preset_level: "high"
 
   soggiorno_libreria_spenta:
-    alias: "Spegni Libreria"
+    alias: "Spegni la luce della Libreria"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "libreria"
 
   soggiorno_libreria_alza:
-    alias: "Aumenta Libreria"
+    alias: "Aumenta la luce della Libreria"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -391,7 +391,7 @@ script:
           delta: 10
 
   soggiorno_libreria_abbassa:
-    alias: "Diminuisci Libreria"
+    alias: "Diminuisci la luce della Libreria"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -402,14 +402,14 @@ script:
   # WRAPPER SCRIPTS - GREGG SOGGIORNO
   # ========================================
   soggiorno_gregg_accesa:
-    alias: "Accendi Gregg Soggiorno"
+    alias: "Accendi la lampada Gregg del Soggiorno"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "gregg_soggiorno"
 
   soggiorno_gregg_bassa:
-    alias: "Gregg Soggiorno Bassa"
+    alias: "la lampada Gregg del Soggiorno Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -417,7 +417,7 @@ script:
           preset_level: "low"
 
   soggiorno_gregg_media:
-    alias: "Gregg Soggiorno Media"
+    alias: "la lampada Gregg del Soggiorno Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -425,7 +425,7 @@ script:
           preset_level: "medium"
 
   soggiorno_gregg_alta:
-    alias: "Gregg Soggiorno Alta"
+    alias: "la lampada Gregg del Soggiorno Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -433,14 +433,14 @@ script:
           preset_level: "high"
 
   soggiorno_gregg_spenta:
-    alias: "Spegni Gregg Soggiorno"
+    alias: "Spegni la lampada Gregg del Soggiorno"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "gregg_soggiorno"
 
   soggiorno_gregg_alza:
-    alias: "Aumenta Gregg Soggiorno"
+    alias: "Aumenta la lampada Gregg del Soggiorno"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -448,7 +448,7 @@ script:
           delta: 10
 
   soggiorno_gregg_abbassa:
-    alias: "Diminuisci Gregg Soggiorno"
+    alias: "Diminuisci la lampada Gregg del Soggiorno"
     sequence:
       - service: script.adjust_zone_level
         data:

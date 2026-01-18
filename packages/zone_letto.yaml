@@ -111,14 +111,14 @@ script:
   # WRAPPER SCRIPTS - LUCE SOPRA AL LETTO
   # ========================================
   camera_da_letto_sopra_al_letto_accesa:
-    alias: "Accendi Luce Sopra al Letto"
+    alias: "Accendi la Luce Sopra al Letto"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "led_sopra_al_letto"
 
   camera_da_letto_sopra_al_letto_basse:
-    alias: "Luce Sopra al Letto Bassa"
+    alias: "la Luce Sopra al Letto Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -126,7 +126,7 @@ script:
           preset_level: "low"
 
   camera_da_letto_sopra_al_letto_medie:
-    alias: "Luce Sopra al Letto Media"
+    alias: "la Luce Sopra al Letto Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -134,7 +134,7 @@ script:
           preset_level: "medium"
 
   camera_da_letto_sopra_al_letto_alte:
-    alias: "Luce Sopra al Letto Alta"
+    alias: "la Luce Sopra al Letto Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -142,14 +142,14 @@ script:
           preset_level: "high"
 
   camera_da_letto_sopra_al_letto_spenta:
-    alias: "Spegni Luce Sopra al Letto"
+    alias: "Spegni la Luce Sopra al Letto"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "led_sopra_al_letto"
 
   camera_da_letto_sopra_al_letto_alza:
-    alias: "Aumenta Luce Sopra al Letto"
+    alias: "Aumenta la Luce Sopra al Letto"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -157,7 +157,7 @@ script:
           delta: 10
 
   camera_da_letto_sopra_al_letto_abbassa:
-    alias: "Diminuisci Luce Sopra al Letto"
+    alias: "Diminuisci la Luce Sopra al Letto"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -168,14 +168,14 @@ script:
   # WRAPPER SCRIPTS - LUCE CAMERA DA LETTO
   # ========================================
   camera_da_letto_led_accesa:
-    alias: "Accendi Luce Camera da Letto"
+    alias: "Accendi la Luce della Camera da Letto"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "led_camera_da_letto"
 
   camera_da_letto_led_basse:
-    alias: "Luce Camera da Letto Bassa"
+    alias: "la Luce della Camera da Letto Bassa"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -183,7 +183,7 @@ script:
           preset_level: "low"
 
   camera_da_letto_led_medie:
-    alias: "Luce Camera da Letto Media"
+    alias: "la Luce della Camera da Letto Media"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -191,7 +191,7 @@ script:
           preset_level: "medium"
 
   camera_da_letto_led_alte:
-    alias: "Luce Camera da Letto Alta"
+    alias: "la Luce della Camera da Letto Alta"
     sequence:
       - service: script.set_zone_preset
         data:
@@ -199,14 +199,14 @@ script:
           preset_level: "high"
 
   camera_da_letto_led_spenta:
-    alias: "Spegni Luce Camera da Letto"
+    alias: "Spegni la Luce della Camera da Letto"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "led_camera_da_letto"
 
   camera_da_letto_led_alza:
-    alias: "Aumenta Luce Camera da Letto"
+    alias: "Aumenta la Luce della Camera da Letto"
     sequence:
       - service: script.adjust_zone_level
         data:
@@ -214,7 +214,7 @@ script:
           delta: 10
 
   camera_da_letto_led_abbassa:
-    alias: "Diminuisci Luce Camera da Letto"
+    alias: "Diminuisci la Luce della Camera da Letto"
     sequence:
       - service: script.adjust_zone_level
         data:

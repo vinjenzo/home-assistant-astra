@@ -135,14 +135,14 @@ script:
   # WRAPPER SCRIPTS - LUCE CUCINA
   # ========================================
   cucina_led_accesa:
-    alias: "Accendi Luce Cucina"
+    alias: "Accendi la Luce della Cucina"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "led_cucina"
 
   cucina_led_bassa:
-    alias: "Luce Cucina Bassa"
+    alias: "la Luce della Cucina Bassa"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -151,7 +151,7 @@ script:
           preset_level: "low"
 
   cucina_led_media:
-    alias: "Luce Cucina Media"
+    alias: "la Luce della Cucina Media"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -160,7 +160,7 @@ script:
           preset_level: "medium"
 
   cucina_led_alta:
-    alias: "Luce Cucina Alta"
+    alias: "la Luce della Cucina Alta"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -169,14 +169,14 @@ script:
           preset_level: "high"
 
   cucina_led_spenta:
-    alias: "Spegni Luce Cucina"
+    alias: "Spegni la Luce della Cucina"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "led_cucina"
 
   cucina_led_alza:
-    alias: "Aumenta Luce Cucina"
+    alias: "Aumenta la Luce della Cucina"
     mode: queued
     sequence:
       - service: script.adjust_zone_level
@@ -185,7 +185,7 @@ script:
           delta: 10
 
   cucina_led_abbassa:
-    alias: "Diminuisci Luce Cucina"
+    alias: "Diminuisci la Luce della Cucina"
     mode: queued
     sequence:
       - service: script.adjust_zone_level
@@ -197,14 +197,14 @@ script:
   # WRAPPER SCRIPTS - GREGG CUCINA
   # ========================================
   cucina_gregg_accesa:
-    alias: "Accendi Gregg Cucina"
+    alias: "Accendi la lampada Gregg della Cucina"
     sequence:
       - service: script.zone_on
         data:
           zone_key: "gregg_cucina"
 
   cucina_gregg_bassa:
-    alias: "Gregg Cucina Bassa"
+    alias: "la lampada Gregg della Cucina Bassa"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -213,7 +213,7 @@ script:
           preset_level: "low"
 
   cucina_gregg_media:
-    alias: "Gregg Cucina Media"
+    alias: "la lampada Gregg della Cucina Media"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -222,7 +222,7 @@ script:
           preset_level: "medium"
 
   cucina_gregg_alta:
-    alias: "Gregg Cucina Alta"
+    alias: "la lampada Gregg della Cucina Alta"
     mode: queued
     sequence:
       - service: script.set_zone_preset
@@ -231,14 +231,14 @@ script:
           preset_level: "high"
 
   cucina_gregg_spenta:
-    alias: "Spegni Gregg Cucina"
+    alias: "Spegni la lampada Gregg della Cucina"
     sequence:
       - service: script.zone_off
         data:
           zone_key: "gregg_cucina"
 
   cucina_gregg_alza:
-    alias: "Aumenta Gregg Cucina"
+    alias: "Aumenta la lampada Gregg della Cucina"
     mode: queued
     sequence:
       - service: script.adjust_zone_level
@@ -247,7 +247,7 @@ script:
           delta: 10
 
   cucina_gregg_abbassa:
-    alias: "Diminuisci Gregg Cucina"
+    alias: "Diminuisci la lampada Gregg della Cucina"
     mode: queued
     sequence:
       - service: script.adjust_zone_level
