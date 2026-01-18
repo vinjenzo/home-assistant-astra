@@ -1,34 +1,30 @@
 name: Build ESPHome firmware
 
 on:
+  push:
+    paths:
+      - 'esphome/m5stack-atom-echo-bcfaf0.yaml'
+      - '.github/workflows/build-esphome.yml'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create secrets.yaml
-        run: |
-          mkdir -p esphome
-          cat <<EOF > esphome/secrets.yaml
-          wifi_ssid: "${{ secrets.WIFI_SSID }}"
-          wifi_password: "${{ secrets.WIFI_PASSWORD }}"
-          api_encryption_key_m5stack_atom_echo_bcfaf0: "${{ secrets.API_KEY }}"
-          EOF
-
-      - name: ESPHome Builder
-        uses: esphome/build-action@v7.1.0
+      - name: Build ESPHome firmware
+        uses: esphome/build-action@v3
         with:
-          yaml-file: esphome/m5stack-atom-echo-bcfaf0--verde.yaml
-          version: 2025.12.7
-          complete-manifest: false
+          yaml-file: esphome/m5stack-atom-echo-bcfaf0.yaml
+          version: latest
 
-      - name: Upload firmware artifact
+      - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: firmware
-          path: esphome/.esphome/build/**/firmware*.bin
+          name: m5stack-atom-echo-firmware
+          path: |
+            esphome/.esphome/build/*/firmware.bin
+            esphome/.esphome/build/*/firmware.elf
+          retention-days: 30
