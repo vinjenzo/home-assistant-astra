@@ -25,12 +25,10 @@ jobs:
         with:
           yaml-file: esphome/m5stack-atom-echo-bcfaf0--verde.yaml
           version: 2025.12.7
-          platform: linux/amd64
-          secrets-file: esphome/secrets.yaml
           complete-manifest: false
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: .esphome/build/*.bin
+          path: esphome/.esphome/build/**/firmware*.bin
