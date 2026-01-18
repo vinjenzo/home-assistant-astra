@@ -49,8 +49,9 @@ speaker:
     dac_type: external
     bits_per_sample: 16bit
     sample_rate: 16000
-    channel: stereo # The Echo has poor playback audio quality when using mon audio
-    buffer_duration: 120ms
+    channel: mono
+    buffer_duration: 150ms 
+    timeout: 10s
 
 media_player:
   - platform: speaker
@@ -74,6 +75,7 @@ media_player:
             - microphone.is_capturing:
           then:
             - script.execute: stop_wake_word
+            - delay: 200ms
       - light.turn_on:
           id: led
           blue: 100%
@@ -84,6 +86,7 @@ media_player:
     on_idle:
       - script.execute: start_wake_word
       - script.execute: reset_led
+      
 
 voice_assistant:
   id: va
@@ -91,10 +94,10 @@ voice_assistant:
   microphone:
     microphone: echo_microphone
     channels: 0
-    gain_factor: 4
+    gain_factor: 2
   media_player: echo_media_player
   noise_suppression_level: 1
-  auto_gain: 27dBFS
+  auto_gain: 15dBFS
 
   on_listening:
     - light.turn_on:
@@ -115,6 +118,8 @@ voice_assistant:
         effect: "Gentle Pulse"
 
   on_tts_start: 
+    - micro_wake_word.stop:  # ← Ferma subito il wake word
+    - voice_assistant.stop:   # ← Ferma il VA
     - lambda: |-
         ESP_LOGI("VA_RESPONSE", ">>> RESPONSE: %s", x.c_str());
     - light.turn_on:
@@ -124,6 +129,7 @@ voice_assistant:
         blue: 100%
         brightness: 80%
         effect: none
+    - delay: 100ms
 
   on_end:  
     - lambda: |-
@@ -131,8 +137,12 @@ voice_assistant:
     # Handle the "nevermind" case where there is no announcement
     - wait_until:
         condition:
-          - media_player.is_announcing:
-        timeout: 0.5s
+          and:
+            - not: media_player.is_announcing
+            - not: voice_assistant.is_running
+            - not: speaker.is_playing
+        timeout: 5s  # ← Con timeout!
+    - delay: 1s      # ← Delay aggiuntivo
     # Restart only mWW if enabled; streaming wake words automatically restart
     - if:
         condition:
@@ -273,6 +283,8 @@ script:
 
   - id: start_wake_word
     then:
+      - wait_until:
+          not: speaker.is_playing  # ← Aspetta che lo speaker finisca!
       - if:
           condition:
             and:
