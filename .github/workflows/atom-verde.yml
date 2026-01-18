@@ -1,0 +1,30 @@
+name: Build ESPHome firmware
+
+on:
+  push:
+    paths:
+      - 'esphome/m5stack-atom-echo-bcfaf0.yaml'
+      - '.github/workflows/build-esphome.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build ESPHome firmware
+        uses: esphome/build-action@v3
+        with:
+          yaml-file: esphome/m5stack-atom-echo-bcfaf0.yaml
+          version: latest
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: m5stack-atom-echo-firmware
+          path: |
+            esphome/.esphome/build/*/firmware.bin
+            esphome/.esphome/build/*/firmware.elf
+          retention-days: 30
